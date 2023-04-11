@@ -1,5 +1,6 @@
 package com.poznan.put.rest.webservice.restapi.jpa;
 
+import com.poznan.put.rest.webservice.restapi.Tutor.Tutor;
 import com.poznan.put.rest.webservice.restapi.reservation.Reservation;
 import com.poznan.put.rest.webservice.restapi.student.Student;
 import com.poznan.put.rest.webservice.restapi.student.StudentNotFoundException;
@@ -12,18 +13,18 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-
 @RestController
 public class StudentJpaResource {
     // private fields
     private final StudentRepository StudentRepository;
     private final ReservationRepository ReservationRepository;
+    private final TutorsRepository TutorsRepository;
 
     // public Constructor
-    public StudentJpaResource(StudentRepository studentRepository, ReservationRepository reservationRepository) {
+    public StudentJpaResource(StudentRepository studentRepository, ReservationRepository reservationRepository, TutorsRepository tutorsRepository) {
         this.StudentRepository = studentRepository;
         this.ReservationRepository = reservationRepository;
+        this.TutorsRepository = tutorsRepository;
     }
 
     // display all Students details
@@ -107,5 +108,19 @@ public class StudentJpaResource {
         /* return the ResponseEntity when trying to
            create Student in location and build it   */
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping("/tutors")
+    public List<Tutor> retrieveAllTutors(){
+        return TutorsRepository.findAll();
+    }
+
+    @GetMapping("/tutors/{id}")
+    public Optional<Tutor> retrieveTutorById(@PathVariable Long id){
+        Optional<Tutor> Tutor = TutorsRepository.findById(id);
+        if(Tutor.isEmpty()){
+            throw new StudentNotFoundException("There is no tutor with id: "+id);
+        }
+        return Tutor;
     }
 }

@@ -1,11 +1,10 @@
 package com.poznan.put.rest.webservice.restapi.reservation;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.poznan.put.rest.webservice.restapi.Tutor.Tutor;
 import com.poznan.put.rest.webservice.restapi.student.Student;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
-import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -28,13 +27,10 @@ public class Reservation {
     @JsonBackReference
     private Student student;
 
-    public Reservation(Long id, LocalDate day, LocalTime startHour, LocalTime endHour, Student student) {
-        this.id = id;
-        this.day = day;
-        this.startHour = startHour;
-        this.endHour = endHour;
-        this.student = student;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tutor_id",foreignKey = @ForeignKey(name = "fk_reservation_tutor"))
+    @JsonBackReference
+    private Tutor tutor;
 
     public Reservation() {
 
@@ -44,7 +40,7 @@ public class Reservation {
         return id;
     }
 
-    public void setId(Long id) {
+    /*public void setId(Long id) {
         this.id = id;
     }
 
@@ -75,11 +71,19 @@ public class Reservation {
     public Student getStudent() {
         return student;
     }
-
+    */
     public void setStudent(Student student) {
         this.student = student;
     }
+    /*
+    public Tutor getTutor() {
+        return tutor;
+    }
 
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
+    }
+    */
     @Override
     public String toString() {
         return "Reservation{" +
@@ -88,6 +92,7 @@ public class Reservation {
                 ", startHour=" + startHour +
                 ", endHour=" + endHour +
                 ", student=" + student +
+                ", tutor=" + tutor +
                 '}';
     }
 }
