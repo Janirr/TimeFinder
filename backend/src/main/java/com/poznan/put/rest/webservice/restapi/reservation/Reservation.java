@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.poznan.put.rest.webservice.restapi.Tutor.Tutor;
 import com.poznan.put.rest.webservice.restapi.student.Student;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -17,18 +16,19 @@ public class Reservation {
     private Long id;
     @DateTimeFormat
     private LocalDate day;
-    @Future
     private LocalTime startHour;
-    @Future
     private LocalTime endHour;
+    private String location;
+    private String subject;
+    private String status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id",foreignKey = @ForeignKey(name = "fk_reservation_student"))
+    @ManyToOne(targetEntity = Student.class)
+    @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "fk_reservation_student"))
     @JsonBackReference
     private Student student;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tutor_id",foreignKey = @ForeignKey(name = "fk_reservation_tutor"))
+    @ManyToOne(targetEntity = Tutor.class)
+    @JoinColumn(name = "tutor_id", foreignKey = @ForeignKey(name = "fk_reservation_tutor"))
     @JsonBackReference
     private Tutor tutor;
 
@@ -36,11 +36,23 @@ public class Reservation {
 
     }
 
+    public Reservation(Long id, LocalDate day, LocalTime startHour, LocalTime endHour, String location, String subject, String status, Student student, Tutor tutor) {
+        this.id = id;
+        this.day = day;
+        this.startHour = startHour;
+        this.endHour = endHour;
+        this.location = location;
+        this.subject = subject;
+        this.status = status;
+        this.student = student;
+        this.tutor = tutor;
+    }
+
     public Long getId() {
         return id;
     }
 
-    /*public void setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -68,14 +80,38 @@ public class Reservation {
         this.endHour = endHour;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Student getStudent() {
         return student;
     }
-    */
+
     public void setStudent(Student student) {
         this.student = student;
     }
-    /*
+
     public Tutor getTutor() {
         return tutor;
     }
@@ -83,7 +119,7 @@ public class Reservation {
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
-    */
+
     @Override
     public String toString() {
         return "Reservation{" +
@@ -91,6 +127,9 @@ public class Reservation {
                 ", day=" + day +
                 ", startHour=" + startHour +
                 ", endHour=" + endHour +
+                ", location='" + location + '\'' +
+                ", subject='" + subject + '\'' +
+                ", status='" + status + '\'' +
                 ", student=" + student +
                 ", tutor=" + tutor +
                 '}';

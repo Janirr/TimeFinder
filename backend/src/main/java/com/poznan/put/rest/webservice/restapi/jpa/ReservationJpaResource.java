@@ -1,30 +1,69 @@
 package com.poznan.put.rest.webservice.restapi.jpa;
 
+import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventDateTime;
+import com.poznan.put.rest.webservice.restapi.calendar.AvailableTime;
+import com.poznan.put.rest.webservice.restapi.calendar.CalendarConfig;
+import com.poznan.put.rest.webservice.restapi.calendar.TimeManager;
+import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
 import com.poznan.put.rest.webservice.restapi.reservation.Reservation;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@RequestMapping("/reservations")
 public class ReservationJpaResource {
-    private final ReservationRepository ReservationRepository;
-    public ReservationJpaResource(ReservationRepository reservationRepository) {
-        this.ReservationRepository = reservationRepository;
+    private final ReservationRepository reservationRepository;
+    private final CalendarConfig calendarConfig;
+
+    public ReservationJpaResource(ReservationRepository reservationRepository, CalendarConfig calendarConfig){
+        this.reservationRepository = reservationRepository;
+        this.calendarConfig = calendarConfig;
     }
 
-    @GetMapping("/reservations")
+    @GetMapping
     public List<Reservation> retrieveAllReservations(){
-        return ReservationRepository.findAll();
+        return reservationRepository.findAll();
     }
 
-    @PostMapping("/reservations")
+    @GetMapping("/reservation/{reservationId}")
+    public Reservation retrieveReservationById(@PathVariable int reservationId){
+        return reservationRepository.findById(reservationId).orElseThrow(
+                () -> new ResourceNotFound("There is no reservation with id: "+reservationId)
+        );
+    }
+
+    @GetMapping("/google/tutor/{tutorId}/calendar/{calendarId}")
+    public List<Event> getCalendarEventsFromCalendarByIds(@PathVariable int tutorId, @PathVariable String calendarId)
+            throws GeneralSecurityException, IOException {
+        CalendarConfig calendarConfig = new CalendarConfig();
+
+        return calendarConfig.getEventsFromCalendarById(tutorId, calendarId);
+    }
+
+    @GetMapping("/tutor/{tutorId}/calendar/{calendarId}")
+    public ArrayList<ArrayList<AvailableTime>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId)
+            throws GeneralSecurityException, IOException {
+        TimeManager timeManager = new TimeManager();
+        return timeManager.getFreeTime(tutorId, calendarId);
+    }
+
+
+
+    @PostMapping
     public ResponseEntity<Reservation> createNewReservation(@Valid @RequestBody Reservation reservation){
         // add Student into the ArrayList in Service
-        Reservation savedReservation = ReservationRepository.save(reservation);
+        Reservation savedReservation = reservationRepository.save(reservation);
         // get new Location for the Student to be created in
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -36,5 +75,37 @@ public class ReservationJpaResource {
         return ResponseEntity.created(location).build();
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteStudentById(@PathVariable int id){
+        if (!reservationRepository.existsById(id)) {
+            throw new ResourceNotFound("There is no student with id: "+id);
+        }
+        reservationRepository.deleteById(id);
+    }
+
+    @PostMapping("/tutor/{tutorId}/calendar/{calendarId}")
+    public void addReservationToCalendar(@PathVariable int tutorId, @PathVariable String calendarId)
+            throws GeneralSecurityException, IOException {
+        Event event = new Event()
+                .setSummary("Google I/O 2015")
+                .setLocation("800 Howard St., San Francisco, CA 94103")
+                .setDescription("A chance to hear more about Google's developer products.");
+
+        DateTime startDateTime = new DateTime("2023-05-09T09:00:00-07:00");
+        EventDateTime start = new EventDateTime()
+                .setDateTime(startDateTime)
+                .setTimeZone("America/Los_Angeles");
+        event.setStart(start);
+
+        DateTime endDateTime = new DateTime("2023-05-09T10:00:00-07:00");
+        EventDateTime end = new EventDateTime()
+                .setDateTime(endDateTime)
+                .setTimeZone("America/Los_Angeles");
+        event.setEnd(end);
+
+        String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=2"};
+        event.setRecurrence(Arrays.asList(recurrence));
+//        calendarConfig.addEventToCalendar(tutorId, event, calendarId);
+    }
 
 }

@@ -1,6 +1,5 @@
 package com.poznan.put.rest.webservice.restapi.exception;
 
-import com.poznan.put.rest.webservice.restapi.student.StudentNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -25,7 +24,8 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         );
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    @ExceptionHandler(StudentNotFoundException.class)
+
+    @ExceptionHandler(ResourceNotFound.class)
     public final ResponseEntity<ErrorDetails> handleUserNotFoundException(Exception ex, WebRequest request){
         ErrorDetails errorDetails = new ErrorDetails(
                 LocalDateTime.now(),

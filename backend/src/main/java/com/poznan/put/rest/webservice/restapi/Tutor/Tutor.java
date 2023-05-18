@@ -4,40 +4,28 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.poznan.put.rest.webservice.restapi.reservation.Reservation;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 public class Tutor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     private String name;
     private String surname;
-    private LocalDate birthDay;
     private String phoneNumber;
     private String email;
-
-    @OneToMany
+    @OneToMany(mappedBy = "tutor")
     @JsonManagedReference
     private List<Reservation> reservationList;
 
     public Tutor() {
+
     }
 
     public String getName() {
         return name;
     }
-
-    /*public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-
 
     public void setName(String name) {
         this.name = name;
@@ -49,14 +37,6 @@ public class Tutor {
 
     public void setSurname(String surname) {
         this.surname = surname;
-    }
-
-    public LocalDate getBirthDay() {
-        return birthDay;
-    }
-
-    public void setBirthDay(LocalDate birthDay) {
-        this.birthDay = birthDay;
     }
 
     public String getPhoneNumber() {
@@ -81,7 +61,24 @@ public class Tutor {
 
     public void setReservationList(List<Reservation> reservationList) {
         this.reservationList = reservationList;
-    }*/
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Tutor(int id, String name, String surname, String phoneNumber, String email, List<Reservation> reservationList) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.reservationList = reservationList;
+    }
 
     @Override
     public String toString() {
@@ -89,7 +86,6 @@ public class Tutor {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", birthDay=" + birthDay +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", reservationList=" + reservationList +

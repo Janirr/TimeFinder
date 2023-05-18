@@ -1,7 +1,5 @@
 package com.poznan.put.rest.webservice.restapi.student;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.poznan.put.rest.webservice.restapi.reservation.Reservation;
 import jakarta.persistence.*;
@@ -14,7 +12,7 @@ import java.util.List;
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     @Size(min = 3, max = 20, message = "Your name has to contain between 3 to 20 characters")
     private String name;
     @Size(min = 2, max = 30, message = "Your surnname has to contain between 3 to 20 characters")
@@ -22,8 +20,6 @@ public class Student {
     private String typeOfSchool;
     @Max(value = 5, message = "your year of school is really above 5?")
     private int yearOfSchool;
-    @Size(min = 3, max = 30, message = "Subject should contain less than 30 characters and more than 2 characters")
-    private String subject;
     private boolean advanced;
     @OneToMany(mappedBy = "student")
     @JsonManagedReference
@@ -33,11 +29,11 @@ public class Student {
 
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -73,14 +69,6 @@ public class Student {
         this.yearOfSchool = yearOfSchool;
     }
 
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
     public boolean isAdvanced() {
         return advanced;
     }
@@ -89,13 +77,12 @@ public class Student {
         this.advanced = advanced;
     }
 
-    public Student(Long id, String name, String surname, String typeOfSchool, int yearOfSchool, String subject, boolean advanced, List<Reservation> reservationList) {
+    public Student(int id, String name, String surname, String typeOfSchool, int yearOfSchool, boolean advanced, List<Reservation> reservationList) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.typeOfSchool = typeOfSchool;
         this.yearOfSchool = yearOfSchool;
-        this.subject = subject;
         this.advanced = advanced;
         this.reservationList = reservationList;
     }
@@ -116,7 +103,6 @@ public class Student {
                 ", surname='" + surname + '\'' +
                 ", typeOfSchool='" + typeOfSchool + '\'' +
                 ", yearOfSchool=" + yearOfSchool +
-                ", subject='" + subject + '\'' +
                 ", advanced=" + advanced +
                 ", reservationList=" + reservationList +
                 '}';
