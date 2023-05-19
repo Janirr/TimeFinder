@@ -55,7 +55,7 @@ public class ReservationJpaResource {
     public ArrayList<ArrayList<AvailableTime>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId)
             throws GeneralSecurityException, IOException {
         TimeManager timeManager = new TimeManager();
-        return timeManager.getFreeTime(tutorId, calendarId);
+        return timeManager.getFreeTime(tutorId, calendarId, 60);
     }
 
 

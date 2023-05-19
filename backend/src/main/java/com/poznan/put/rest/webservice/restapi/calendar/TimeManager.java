@@ -31,9 +31,10 @@ public class TimeManager {
         return days;
     }
 
-    public ArrayList<ArrayList<AvailableTime>> getFreeTime(int tutorId, String calendarId) throws GeneralSecurityException, IOException {
+    public ArrayList<ArrayList<AvailableTime>> getFreeTime(int tutorId, String calendarId, int minutesForLesson) throws GeneralSecurityException, IOException {
         CalendarConfig calendarConfig = new CalendarConfig();
         Date[] days = getNextDays(14);
+        // Generate free and busy times
         for (Event event : calendarConfig.getEventsFromCalendarById(tutorId, calendarId)) {
             long dateValue = event.getStart().getDateTime().getValue();
             Date date = new Date(dateValue);
@@ -52,7 +53,7 @@ public class TimeManager {
                 freeTimes.add(timestamp);
             }
         }
-
+        // Generate available times
         for (Date date : days) {
             ArrayList<AvailableTime> freeTimesInDay = new ArrayList<>();
             LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -68,8 +69,11 @@ public class TimeManager {
                             LocalTime busyStartTime = busyEvent.startHour();
                             if (freeStartTime != null && busyStartTime != null) {
                                 long availableMinutes = ChronoUnit.MINUTES.between(freeStartTime, busyStartTime);
-                                if (availableMinutes >= 60) {
-                                    freeTimesInDay.add(new AvailableTime(date, freeStartTime, busyStartTime));
+                                while (availableMinutes >= minutesForLesson) {
+                                    LocalTime lessonEnd = freeStartTime.plusMinutes(minutesForLesson);
+                                    freeTimesInDay.add(new AvailableTime(date, freeStartTime, lessonEnd));
+                                    freeStartTime = freeStartTime.plusMinutes(10);
+                                    availableMinutes = ChronoUnit.MINUTES.between(freeStartTime, busyStartTime);
                                 }
                                 freeStartTime = busyEvent.endHour();
                             }

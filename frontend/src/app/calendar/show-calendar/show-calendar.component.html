@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <th></th>
-      <th class="text-center" *ngFor="let date of uniqueDates">{{ date.day }}.{{date.month}}</th>
+      <th class="text-center" *ngFor="let date of uniqueDates">{{ date.day }}.05</th>
     </tr>
   </thead>
   <tbody>
@@ -10,7 +10,7 @@
       <td class="text-bold">Free time:</td>
       <td *ngFor="let day of responseData">
         <div *ngFor="let free of day" class="text-center">
-          {{ free.fromHour }} - {{ free.untilHour }}
+          {{ free.fromHour }}/{{ free.untilHour }}
         </div>
       </td>
     </tr>
