@@ -14,9 +14,18 @@ import java.util.Date;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * This class is responsible for managing time in the application.
+ * It is used to generate free and busy times for the tutor.
+ * TODO: - instead of markedFreeTimes and takenTimes use one ArrayList of Length of Days..
+ * TODO: ..and then use DayTimestamp to mark free and busy times inside of it.
+ * It will be easier this way to check if there is a free time for the lesson.
+ */
+
+
 public class TimeManager {
-    private final ArrayList<DayTimestamp> freeTimes = new ArrayList<>();
-    private final ArrayList<DayTimestamp> busyTimes = new ArrayList<>();
+    private final ArrayList<DayTimestamp> markedFreeTimes = new ArrayList<>();
+    private final ArrayList<DayTimestamp> takenTimes = new ArrayList<>();
     private final ArrayList<ArrayList<AvailableTime>> availableTimes = new ArrayList<>();
 
     public Date[] getNextDays(int numberOfDays){
@@ -47,43 +56,58 @@ public class TimeManager {
             LocalTime endHour = LocalTime.parse(event.getEnd().getDateTime().toStringRfc3339().substring(11, 16), formatter);
 
             DayTimestamp timestamp = new DayTimestamp(dayNumber, startHour, endHour);
+            System.out.println(timestamp);
             if (event.getTransparency() == null) {
-                busyTimes.add(timestamp);
+                takenTimes.add(timestamp);
             } else {
-                freeTimes.add(timestamp);
+                markedFreeTimes.add(timestamp);
             }
         }
         // Generate available times
         for (Date date : days) {
-            ArrayList<AvailableTime> freeTimesInDay = new ArrayList<>();
-            LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            int dayNumber = localDate.getDayOfMonth();
+            ArrayList<AvailableTime> markedFreeTimesInDay = new ArrayList<>();
+            LocalDate today = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            int dayNumber = today.getDayOfMonth();
+            int countTakenTimes = 0;
+            LocalTime possibleStartHour = null;
+            LocalTime maximumEndHour = null;
 
-            for (DayTimestamp freeEvent : freeTimes) {
-                if (dayNumber == freeEvent.dayNumber()) {
-                    LocalTime freeStartTime = freeEvent.startHour();
-                    LocalTime freeEndTime = freeEvent.endHour();
 
-                    for (DayTimestamp busyEvent : busyTimes) {
-                        if (dayNumber == busyEvent.dayNumber()) {
-                            LocalTime busyStartTime = busyEvent.startHour();
-                            if (freeStartTime != null && busyStartTime != null) {
-                                long availableMinutes = ChronoUnit.MINUTES.between(freeStartTime, busyStartTime);
-                                while (availableMinutes >= minutesForLesson) {
-                                    LocalTime lessonEnd = freeStartTime.plusMinutes(minutesForLesson);
-                                    freeTimesInDay.add(new AvailableTime(date, freeStartTime, lessonEnd));
-                                    freeStartTime = freeStartTime.plusMinutes(10);
-                                    availableMinutes = ChronoUnit.MINUTES.between(freeStartTime, busyStartTime);
+            for (DayTimestamp freeEventTimeStamp : markedFreeTimes) {
+                if (dayNumber == freeEventTimeStamp.dayNumber()) {
+                    possibleStartHour = freeEventTimeStamp.startHour();
+                    maximumEndHour = freeEventTimeStamp.endHour();
+
+                    for (DayTimestamp takenEventTimeStamp : takenTimes) {
+                        LocalTime takenEventStartTime = takenEventTimeStamp.startHour();
+                        if (dayNumber == takenEventTimeStamp.dayNumber()) {
+                            countTakenTimes++;
+                            if (possibleStartHour != null && takenEventStartTime != null){
+                                long availableMinutesForLesson = ChronoUnit.MINUTES.between(possibleStartHour, takenEventStartTime);
+                                while (availableMinutesForLesson >= minutesForLesson) {
+                                    LocalTime lessonEndLocalTime = possibleStartHour.plusMinutes(minutesForLesson);
+                                    markedFreeTimesInDay.add(new AvailableTime(date, possibleStartHour, lessonEndLocalTime));
+                                    possibleStartHour = possibleStartHour.plusMinutes(10);
+                                    availableMinutesForLesson = ChronoUnit.MINUTES.between(possibleStartHour, takenEventStartTime);
                                 }
-                                freeStartTime = busyEvent.endHour();
+                                possibleStartHour = takenEventTimeStamp.endHour();
                             }
                         }
                     }
-                    freeTimesInDay.add(new AvailableTime(date, freeStartTime, freeEndTime));
+                    System.out.println(dayNumber+""+countTakenTimes);
+                    if (possibleStartHour != null && maximumEndHour != null){
+                        long availableMinutesForLesson = ChronoUnit.MINUTES.between(possibleStartHour, maximumEndHour);
+                        while (availableMinutesForLesson >= minutesForLesson) {
+                            LocalTime lessonEndLocalTime = possibleStartHour.plusMinutes(minutesForLesson);
+                            markedFreeTimesInDay.add(new AvailableTime(date, possibleStartHour, lessonEndLocalTime));
+                            possibleStartHour = possibleStartHour.plusMinutes(10);
+                            availableMinutesForLesson = ChronoUnit.MINUTES.between(possibleStartHour, maximumEndHour);
+                        }
+                    }
                 }
             }
 
-            availableTimes.add(freeTimesInDay);
+            availableTimes.add(markedFreeTimesInDay);
         }
 
         return availableTimes;

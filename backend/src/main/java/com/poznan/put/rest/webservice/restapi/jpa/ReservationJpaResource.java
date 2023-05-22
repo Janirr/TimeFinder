@@ -46,8 +46,6 @@ public class ReservationJpaResource {
     @GetMapping("/google/tutor/{tutorId}/calendar/{calendarId}")
     public List<Event> getCalendarEventsFromCalendarByIds(@PathVariable int tutorId, @PathVariable String calendarId)
             throws GeneralSecurityException, IOException {
-        CalendarConfig calendarConfig = new CalendarConfig();
-
         return calendarConfig.getEventsFromCalendarById(tutorId, calendarId);
     }
 
@@ -55,7 +53,7 @@ public class ReservationJpaResource {
     public ArrayList<ArrayList<AvailableTime>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId)
             throws GeneralSecurityException, IOException {
         TimeManager timeManager = new TimeManager();
-        return timeManager.getFreeTime(tutorId, calendarId, 60);
+        return timeManager.getFreeTime(tutorId, calendarId, 90);
     }
 
 
