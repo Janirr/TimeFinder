@@ -49,11 +49,11 @@ public class ReservationJpaResource {
         return calendarConfig.getEventsFromCalendarById(tutorId, calendarId);
     }
 
-    @GetMapping("/tutor/{tutorId}/calendar/{calendarId}")
-    public ArrayList<ArrayList<AvailableTime>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId)
+    @GetMapping("/tutor/{tutorId}/calendar/{calendarId}/{minutesForLesson}")
+    public ArrayList<ArrayList<AvailableTime>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId, @PathVariable int minutesForLesson)
             throws GeneralSecurityException, IOException {
         TimeManager timeManager = new TimeManager();
-        return timeManager.getFreeTime(tutorId, calendarId, 90);
+        return timeManager.getFreeTime(tutorId, calendarId, minutesForLesson);
     }
 
 

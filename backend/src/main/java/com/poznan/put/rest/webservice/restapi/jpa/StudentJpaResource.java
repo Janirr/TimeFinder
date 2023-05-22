@@ -24,12 +24,12 @@ public class StudentJpaResource {
     }
 
     @GetMapping
-    public List<Student> retrieveAllStudents(){
+    public List<Student> retrieveAllStudents() {
         return studentRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Optional<Student> retrieveStudentById(@PathVariable int id){
+    public Optional<Student> retrieveStudentById(@PathVariable int id) {
         Optional<Student> Student = studentRepository.findById(id);
         if(Student.isEmpty()){
             throw new ResourceNotFound("There is no student with id: "+id);
@@ -38,7 +38,7 @@ public class StudentJpaResource {
     }
 
     @GetMapping("/{id}/reservations")
-    public List<Reservation> retrieveReservationsForStudent(@PathVariable int id){
+    public List<Reservation> retrieveReservationsForStudent(@PathVariable int id) {
         Optional<Student> Student = studentRepository.findById(id);
         if(Student.isEmpty()){
             throw new ResourceNotFound("There is no student with id: "+id);
@@ -47,7 +47,7 @@ public class StudentJpaResource {
     }
 
     @PostMapping
-    public ResponseEntity<Student> createNewStudent(@Valid @RequestBody Student student){
+    public ResponseEntity<Student> createNewStudent(@Valid @RequestBody Student student) {
         // add Student into the ArrayList in Service
         Student savedStudent = studentRepository.save(student);
         // get new Location for the Student to be created in
@@ -62,7 +62,7 @@ public class StudentJpaResource {
     }
 
     @PostMapping("/{id}/reservations")
-    public ResponseEntity<Object> createReservationForStudent(@PathVariable int id, @Valid @RequestBody Reservation reservation){
+    public ResponseEntity<Object> createReservationForStudent(@PathVariable int id, @Valid @RequestBody Reservation reservation) {
         Optional<Student> Student = studentRepository.findById(id);
         if(Student.isEmpty()){
             throw new ResourceNotFound("There is not student with id: "+id);
@@ -78,7 +78,7 @@ public class StudentJpaResource {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteStudentById2(@PathVariable int id){
+    public void deleteStudentById2(@PathVariable int id) {
         if (!studentRepository.existsById(id)) {
             throw new ResourceNotFound("There is no student with id: "+id);
         }

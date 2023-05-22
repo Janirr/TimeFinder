@@ -56,7 +56,7 @@ public class TimeManager {
             LocalTime endHour = LocalTime.parse(event.getEnd().getDateTime().toStringRfc3339().substring(11, 16), formatter);
 
             DayTimestamp timestamp = new DayTimestamp(dayNumber, startHour, endHour);
-            System.out.println(timestamp);
+
             if (event.getTransparency() == null) {
                 takenTimes.add(timestamp);
             } else {
@@ -68,10 +68,8 @@ public class TimeManager {
             ArrayList<AvailableTime> markedFreeTimesInDay = new ArrayList<>();
             LocalDate today = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             int dayNumber = today.getDayOfMonth();
-            int countTakenTimes = 0;
             LocalTime possibleStartHour = null;
             LocalTime maximumEndHour = null;
-
 
             for (DayTimestamp freeEventTimeStamp : markedFreeTimes) {
                 if (dayNumber == freeEventTimeStamp.dayNumber()) {
@@ -81,35 +79,30 @@ public class TimeManager {
                     for (DayTimestamp takenEventTimeStamp : takenTimes) {
                         LocalTime takenEventStartTime = takenEventTimeStamp.startHour();
                         if (dayNumber == takenEventTimeStamp.dayNumber()) {
-                            countTakenTimes++;
                             if (possibleStartHour != null && takenEventStartTime != null){
-                                long availableMinutesForLesson = ChronoUnit.MINUTES.between(possibleStartHour, takenEventStartTime);
-                                while (availableMinutesForLesson >= minutesForLesson) {
-                                    LocalTime lessonEndLocalTime = possibleStartHour.plusMinutes(minutesForLesson);
-                                    markedFreeTimesInDay.add(new AvailableTime(date, possibleStartHour, lessonEndLocalTime));
-                                    possibleStartHour = possibleStartHour.plusMinutes(10);
-                                    availableMinutesForLesson = ChronoUnit.MINUTES.between(possibleStartHour, takenEventStartTime);
-                                }
+                                generateFreeTimestamps(minutesForLesson, date, markedFreeTimesInDay, possibleStartHour, takenEventStartTime);
                                 possibleStartHour = takenEventTimeStamp.endHour();
                             }
                         }
                     }
-                    System.out.println(dayNumber+""+countTakenTimes);
+
                     if (possibleStartHour != null && maximumEndHour != null){
-                        long availableMinutesForLesson = ChronoUnit.MINUTES.between(possibleStartHour, maximumEndHour);
-                        while (availableMinutesForLesson >= minutesForLesson) {
-                            LocalTime lessonEndLocalTime = possibleStartHour.plusMinutes(minutesForLesson);
-                            markedFreeTimesInDay.add(new AvailableTime(date, possibleStartHour, lessonEndLocalTime));
-                            possibleStartHour = possibleStartHour.plusMinutes(10);
-                            availableMinutesForLesson = ChronoUnit.MINUTES.between(possibleStartHour, maximumEndHour);
-                        }
+                        generateFreeTimestamps(minutesForLesson, date, markedFreeTimesInDay, possibleStartHour, maximumEndHour);
                     }
                 }
             }
-
             availableTimes.add(markedFreeTimesInDay);
         }
-
         return availableTimes;
+    }
+
+    private void generateFreeTimestamps(int minutesForLesson, Date date, ArrayList<AvailableTime> freeTimes, LocalTime minStartHour, LocalTime maxEndHour) {
+        long availableMinutesForLesson = ChronoUnit.MINUTES.between(minStartHour, maxEndHour);
+        while (availableMinutesForLesson >= minutesForLesson) {
+            LocalTime lessonEndLocalTime = minStartHour.plusMinutes(minutesForLesson);
+            freeTimes.add(new AvailableTime(date, minStartHour, lessonEndLocalTime));
+            minStartHour = minStartHour.plusMinutes(10);
+            availableMinutesForLesson = ChronoUnit.MINUTES.between(minStartHour, maxEndHour);
+        }
     }
 }
