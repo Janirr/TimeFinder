@@ -44,6 +44,9 @@ public class TimeManager {
         CalendarConfig calendarConfig = new CalendarConfig();
         Date[] days = getNextDays(14);
         // Generate free and busy times
+        if (calendarConfig.getEventsFromCalendarById(tutorId, calendarId) == null) {
+            throw new NullPointerException("Calendar is empty");
+        }
         for (Event event : calendarConfig.getEventsFromCalendarById(tutorId, calendarId)) {
             long dateValue = event.getStart().getDateTime().getValue();
             Date date = new Date(dateValue);
@@ -101,7 +104,7 @@ public class TimeManager {
         while (availableMinutesForLesson >= minutesForLesson) {
             LocalTime lessonEndLocalTime = minStartHour.plusMinutes(minutesForLesson);
             freeTimes.add(new AvailableTime(date, minStartHour, lessonEndLocalTime));
-            minStartHour = minStartHour.plusMinutes(10);
+            minStartHour = minStartHour.plusMinutes(15);
             availableMinutesForLesson = ChronoUnit.MINUTES.between(minStartHour, maxEndHour);
         }
     }

@@ -29,9 +29,10 @@
   <tbody>
     <ng-container *ngFor="let reservation of reservations">
       <tr *ngIf="reservation.transparency !== 'transparent'">
-        <td>{{reservation.start.dateTime.value | date: 'HH:mm'}}</td>
+        <td>{{reservation.start.dateTime.value | date: 'dd-MM HH:mm'}}</td>
         <td>{{reservation.end.dateTime.value | date: 'HH:mm'}}</td>
         <td>{{reservation.summary}}</td>
+        <td>{{reservation.id}}</td>
         <td><button class="btn btn-primary btn-warning">Edytuj</button></td>
         <td><button class="btn btn-primary btn-danger">Usuń</button></td>
       </tr>

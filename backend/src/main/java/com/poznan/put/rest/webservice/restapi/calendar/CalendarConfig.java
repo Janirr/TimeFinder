@@ -6,6 +6,7 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
@@ -13,10 +14,7 @@ import com.google.api.client.util.DateTime;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.calendar.model.CalendarList;
-import com.google.api.services.calendar.model.CalendarListEntry;
-import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.Events;
+import com.google.api.services.calendar.model.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -78,24 +77,34 @@ public class CalendarConfig {
 
     public List<Event> getEventsFromCalendarById(int tutorId, String calendarId)
             throws GeneralSecurityException, IOException {
-        // Build a new authorized API client service.
-        Calendar service = getAuthorization(tutorId);
+        try {
+            // Build a new authorized API client service.
+            Calendar service = getAuthorization(tutorId);
 
-        // Set the timeMin to current time and timeMax to 2 weeks from current time
-        LocalDateTime now = LocalDateTime.now();
-        DateTime timeMin = new DateTime(System.currentTimeMillis());
-        DateTime timeMax = new DateTime(now.plusWeeks(2).toString());
+            // Set the timeMin to current time and timeMax to 2 weeks from current time
+            LocalDateTime now = LocalDateTime.now();
+            DateTime timeMin = new DateTime(System.currentTimeMillis());
+            DateTime timeMax = new DateTime(now.plusWeeks(2).toString());
 
-        Events events = service.events().list(calendarId)
-                .setTimeMin(timeMin)
-                .setTimeMax(timeMax)
-                .setOrderBy("startTime")
-                .setSingleEvents(true)
-                .setPrettyPrint(true)
-                .setFields("items(id,summary,start,end,transparency)")
-                .execute();
+            Events events = service.events().list(calendarId)
+                    .setTimeMin(timeMin)
+                    .setTimeMax(timeMax)
+                    .setOrderBy("startTime")
+                    .setSingleEvents(true)
+                    .setPrettyPrint(true)
+                    .setFields("items(id,summary,start,end,transparency)")
+                    .execute();
 
-        return events.getItems();
+            return events.getItems();
+        } catch (GoogleJsonResponseException e) {
+            if (e.getStatusCode() == 404) {
+                // Handle 404 error here
+                throw new IOException("Calendar not found: " + calendarId);
+            } else {
+                throw new IOException("Error retrieving events from calendar: " + e.getMessage());
+            }
+        }
+
     }
 
     public List<CalendarListEntry> getAllCalendarsForTutor(int tutorId)
@@ -118,6 +127,17 @@ public class CalendarConfig {
         Calendar service = getAuthorization(tutorId);
 
         service.events().insert(calendarId, event).execute();
+    }
+
+    public void editEventById(int tutorId, String calendarId, String eventId, EventDateTime start, EventDateTime end)
+            throws GeneralSecurityException, IOException {
+        Calendar service = getAuthorization(tutorId);
+
+        Event event = service.events().get(calendarId, eventId).execute();
+        event.setEnd(end);
+        event.setStart(start);
+        Event updatedEvent = service.events().update(calendarId, eventId, event).execute();
+        System.out.println(updatedEvent.getUpdated());
     }
 
     public static void main(String[] args) throws GeneralSecurityException, IOException {

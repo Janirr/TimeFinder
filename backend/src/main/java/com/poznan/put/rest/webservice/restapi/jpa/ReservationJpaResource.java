@@ -106,4 +106,17 @@ public class ReservationJpaResource {
 //        calendarConfig.addEventToCalendar(tutorId, event, calendarId);
     }
 
+    @PutMapping("/calendar/{calendarId}/event/{eventId}")
+    public void updateEvent(@PathVariable String calendarId, @PathVariable String eventId)
+            throws GeneralSecurityException, IOException {
+        EventDateTime start = new EventDateTime()
+                .setDateTime(new DateTime("2023-05-09T14:00:00-07:00"))
+                .setTimeZone("Poland");
+        EventDateTime end = new EventDateTime()
+                .setDateTime(new DateTime("2023-05-09T16:00:00-07:00"))
+                .setTimeZone("Poland");
+
+        calendarConfig.editEventById(1, calendarId, eventId, start, end);
+    }
+
 }
