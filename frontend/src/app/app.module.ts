@@ -9,6 +9,9 @@ import { ShowCalendarComponent } from './calendar/show-calendar/show-calendar.co
 import { MakeReservationComponent } from './reservation/make-reservation/make-reservation.component';
 import { EditReservationComponent } from './reservation/edit-reservation/edit-reservation.component';
 import { FormsModule } from '@angular/forms';
+import { PricingComponent } from './pricing/pricing.component';
+import { ContactComponent } from './contact/contact.component';
+import { ReservationsComponent } from './reservations/reservations.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +19,10 @@ import { FormsModule } from '@angular/forms';
     HeaderComponent,
     ShowCalendarComponent,
     MakeReservationComponent,
-    EditReservationComponent
+    EditReservationComponent,
+    PricingComponent,
+    ContactComponent,
+    ReservationsComponent
   ],
   imports: [
     BrowserModule,
