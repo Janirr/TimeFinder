@@ -7,7 +7,8 @@ import { ReservationsComponent } from './reservations/reservations.component';
 const routes: Routes = [
   { path: 'pricing', component: PricingComponent },
   { path: 'contact', component: ContactComponent },
-  { path: 'reservations', component: ReservationsComponent }
+  { path: 'reservations', component: ReservationsComponent },
+  { path: '', redirectTo: '/reservations', pathMatch: 'full' } // Domyślna trasa
 ];
 
 @NgModule({

@@ -109,6 +109,7 @@ public class ReservationJpaResource {
     @PutMapping("/calendar/{calendarId}/event/{eventId}")
     public void updateEvent(@PathVariable String calendarId, @PathVariable String eventId)
             throws GeneralSecurityException, IOException {
+        System.out.printf("Updating event %s\n", eventId);
         EventDateTime start = new EventDateTime()
                 .setDateTime(new DateTime("2023-05-09T14:00:00-07:00"))
                 .setTimeZone("Poland");
@@ -117,6 +118,13 @@ public class ReservationJpaResource {
                 .setTimeZone("Poland");
 
         calendarConfig.editEventById(1, calendarId, eventId, start, end);
+    }
+
+    @GetMapping("/calendar/{calendarId}/event/{eventId}")
+    public Event getEvent(@PathVariable String calendarId, @PathVariable String eventId)
+            throws GeneralSecurityException, IOException {
+        System.out.printf("Getting event %s\n", eventId);
+        return calendarConfig.getEventById(1, calendarId, eventId);
     }
 
 }

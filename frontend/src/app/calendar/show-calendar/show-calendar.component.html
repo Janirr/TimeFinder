@@ -9,9 +9,10 @@
     <tr>
       <td class="text-bold">Free time:</td>
       <td *ngFor="let day of responseData">
-        <div *ngFor="let free of day" class="text-center">
-          <button class="button btn-primary">{{ free.fromHour }}</button>
+        <div *ngFor="let free of day" class="text-center" style="margin-top: 10px;">
+          <button class="btn">{{ free.fromHour }}</button>
         </div>
+
       </td>
     </tr>
   </tbody>

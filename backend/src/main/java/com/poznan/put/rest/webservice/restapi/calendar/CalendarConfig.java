@@ -120,7 +120,12 @@ public class CalendarConfig {
         return calendarList.getItems();
     }
 
+    public Event getEventById(int tutorId, String calendarId, String eventId)
+            throws GeneralSecurityException, IOException {
+        Calendar service = getAuthorization(tutorId);
 
+        return service.events().get(calendarId, eventId).execute();
+    }
 
     public void addEventToCalendar(int tutorId, Event event, String calendarId)
             throws GeneralSecurityException, IOException {
@@ -139,6 +144,22 @@ public class CalendarConfig {
         Event updatedEvent = service.events().update(calendarId, eventId, event).execute();
         System.out.println(updatedEvent.getUpdated());
     }
+
+    public void deleteEventById(int tutorId, String calendarId, String eventId)
+            throws GeneralSecurityException, IOException {
+        Calendar service = getAuthorization(tutorId);
+
+        service.events().delete(calendarId, eventId).execute();
+    }
+
+    public void deleteCalendarById(int tutorId, String calendarId)
+            throws GeneralSecurityException, IOException {
+        Calendar service = getAuthorization(tutorId);
+
+        service.calendars().delete(calendarId).execute();
+    }
+
+
 
     public static void main(String[] args) throws GeneralSecurityException, IOException {
         getAuthorization(1);
