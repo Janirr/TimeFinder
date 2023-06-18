@@ -18,6 +18,7 @@ import java.net.URI;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -103,18 +104,19 @@ public class ReservationJpaResource {
 
         String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=2"};
         event.setRecurrence(Arrays.asList(recurrence));
-//        calendarConfig.addEventToCalendar(tutorId, event, calendarId);
+        calendarConfig.addEventToCalendar(tutorId, event, calendarId);
     }
 
     @PutMapping("/calendar/{calendarId}/event/{eventId}")
     public void updateEvent(@PathVariable String calendarId, @PathVariable String eventId)
             throws GeneralSecurityException, IOException {
         System.out.printf("Updating event %s\n", eventId);
+
         EventDateTime start = new EventDateTime()
-                .setDateTime(new DateTime("2023-05-09T14:00:00-07:00"))
+                .setDateTime(new DateTime("2023-06-24T14:00:00-07:00"))
                 .setTimeZone("Poland");
         EventDateTime end = new EventDateTime()
-                .setDateTime(new DateTime("2023-05-09T16:00:00-07:00"))
+                .setDateTime(new DateTime("2023-06-24T16:00:00-07:00"))
                 .setTimeZone("Poland");
 
         calendarConfig.editEventById(1, calendarId, eventId, start, end);

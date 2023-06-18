@@ -1,1 +1,22 @@
-<p>edit-reservation works!</p>
+<div class="container">
+  <h1>Edytuj rezerwację</h1>
+  <form class="form">
+      <div class="form-group">
+        <label for="startDate">Start Date:</label>
+        <input type="datetime-local" class="form-control" id="startDate" [(ngModel)]="event.start.dateTime.value" [placeholder]="formatDateTime(event.start.dateTime.value)" name="start">
+      </div>
+      <div class="form-group">
+        <label for="endDate">End Date:</label>
+        <input type="datetime-local" class="form-control" id="endDate" [(ngModel)]="event.end.dateTime.value" [placeholder]="formatDateTime(event.end.dateTime.value)" name="end">
+      </div>
+      <div class="form-group hidden">
+        <label for="summary">Summary:</label>
+        <input type="text" class="form-control" id="summary" [(ngModel)]="event.summary" [placeholder]="event.summary" name="summary">
+      </div>
+      <div class="form-group hidden">
+        <label for="id">ID:</label>
+        <input type="text" class="form-control" id="id" [(ngModel)]="event.id" [placeholder]="event.id" name="id">
+      </div>
+      <button type="submit" class="btn btn-primary">Wyślij</button>
+  </form>
+  </div>

@@ -1,28 +1,39 @@
+<h1>Kalendarz</h1>
 <table class="table table-striped table-bordered" >
   <thead>
     <tr>
       <th></th>
-      <th class="text-center" *ngFor="let date of uniqueDates">{{date.day}}.{{date.month + 1}}</th>
+      <th class="text-center" *ngFor="let date of uniqueDates">{{date.day}}.0{{date.month + 1}}</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td class="text-bold">Free time:</td>
+      <td class="text-bold">Wolne terminy:</td>
       <td *ngFor="let day of responseData">
-        <div *ngFor="let free of day" class="text-center" style="margin-top: 10px;">
-          <button class="btn">{{ free.fromHour }}</button>
-        </div>
-
+        <form class="form">
+          <div class="form-group text-center">
+            <select class="form-control text-center" name="select">
+              <ng-container *ngFor="let free of day">
+                <option>{{ free.fromHour }}</option>
+              </ng-container>
+            </select>
+            <br/>
+            <button type="submit" class="btn btn-primary">Wyślij</button>
+          </div>
+        </form>
       </td>
+
     </tr>
   </tbody>
 </table>
+<h1>Rezerwacje</h1>
 <table class="table table-striped table-bordered" >
   <thead>
     <tr>
       <th>Start</th>
       <th>Koniec</th>
       <th>Opis</th>
+      <th>Id</th>
       <th>Edytuj</th>
       <th>Usuń</th>
     </tr>
@@ -30,7 +41,7 @@
   <tbody>
     <ng-container *ngFor="let reservation of reservations">
       <tr *ngIf="reservation.transparency !== 'transparent'">
-        <td>{{reservation.start.dateTime.value | date: 'dd-MM HH:mm'}}</td>
+        <td>{{reservation.start.dateTime.value | date: 'HH:mm'}}</td>
         <td>{{reservation.end.dateTime.value | date: 'HH:mm'}}</td>
         <td>{{reservation.summary}}</td>
         <td>{{reservation.id}}</td>

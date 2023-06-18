@@ -137,7 +137,6 @@ public class CalendarConfig {
     public void editEventById(int tutorId, String calendarId, String eventId, EventDateTime start, EventDateTime end)
             throws GeneralSecurityException, IOException {
         Calendar service = getAuthorization(tutorId);
-
         Event event = service.events().get(calendarId, eventId).execute();
         event.setEnd(end);
         event.setStart(start);

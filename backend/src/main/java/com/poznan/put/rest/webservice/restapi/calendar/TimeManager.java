@@ -47,7 +47,7 @@ public class TimeManager {
         if (calendarConfig.getEventsFromCalendarById(tutorId, calendarId) == null) {
             throw new NullPointerException("Calendar is empty");
         }
-        for (Event event : calendarConfig.getEventsFromCalendarById(tutorId, calendarId)) {
+            for (Event event : calendarConfig.getEventsFromCalendarById(tutorId, calendarId)) {
             long dateValue = event.getStart().getDateTime().getValue();
             Date date = new Date(dateValue);
             Calendar calendar = Calendar.getInstance();

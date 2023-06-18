@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { PricingComponent } from './pricing/pricing.component';
 import { ContactComponent } from './contact/contact.component';
 import { ReservationsComponent } from './reservations/reservations.component';
-import { SingleEventComponent } from './single-event/single-event.component';
+import { MainPageComponent } from './main-page/main-page.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,7 @@ import { SingleEventComponent } from './single-event/single-event.component';
     PricingComponent,
     ContactComponent,
     ReservationsComponent,
-    SingleEventComponent
+    MainPageComponent
   ],
   imports: [
     BrowserModule,
