@@ -13,9 +13,13 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Size(min = 3, max = 20, message = "Login must be between 3 and 20 characters")
+    private String login;
+    @Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters")
+    private String password;
     @Size(min = 3, max = 20, message = "Your name has to contain between 3 to 20 characters")
     private String name;
-    @Size(min = 2, max = 30, message = "Your surnname has to contain between 3 to 20 characters")
+    @Size(min = 2, max = 30, message = "Your surname has to contain between 3 to 20 characters")
     private String surname;
     private String typeOfSchool;
     @Max(value = 5, message = "your year of school is really above 5?")
@@ -77,8 +81,10 @@ public class Student {
         this.advanced = advanced;
     }
 
-    public Student(int id, String name, String surname, String typeOfSchool, int yearOfSchool, boolean advanced, List<Reservation> reservationList) {
+    public Student(int id, String login, String password, String name, String surname, String typeOfSchool, int yearOfSchool, boolean advanced, List<Reservation> reservationList) {
         this.id = id;
+        this.login = login;
+        this.password = password;
         this.name = name;
         this.surname = surname;
         this.typeOfSchool = typeOfSchool;
@@ -93,6 +99,22 @@ public class Student {
 
     public void setReservationList(List<Reservation> reservationList) {
         this.reservationList = reservationList;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

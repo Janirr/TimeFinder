@@ -83,28 +83,27 @@ public class ReservationJpaResource {
     }
 
     @PostMapping("/tutor/{tutorId}/calendar/{calendarId}")
-    public void addReservationToCalendar(@PathVariable int tutorId, @PathVariable String calendarId)
+    public void addReservationToCalendar(@PathVariable int tutorId, @PathVariable String calendarId, @RequestBody ShortEvent shortEvent)
             throws GeneralSecurityException, IOException {
-        Event event = new Event()
-                .setSummary("Google I/O 2015")
-                .setLocation("800 Howard St., San Francisco, CA 94103")
-                .setDescription("A chance to hear more about Google's developer products.");
 
-        DateTime startDateTime = new DateTime("2023-05-09T09:00:00-07:00");
+        Event event = new Event().setSummary(shortEvent.getSummary());
+        System.out.println("test test");
+        DateTime startDateTime = new DateTime(shortEvent.getStart());
         EventDateTime start = new EventDateTime()
                 .setDateTime(startDateTime)
-                .setTimeZone("America/Los_Angeles");
+                .setTimeZone("Poland");
         event.setStart(start);
 
-        DateTime endDateTime = new DateTime("2023-05-09T10:00:00-07:00");
+        DateTime endDateTime = new DateTime(shortEvent.getEnd());
         EventDateTime end = new EventDateTime()
                 .setDateTime(endDateTime)
-                .setTimeZone("America/Los_Angeles");
+                .setTimeZone("Poland");
         event.setEnd(end);
-
-        String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=2"};
-        event.setRecurrence(Arrays.asList(recurrence));
         calendarConfig.addEventToCalendar(tutorId, event, calendarId);
+    }
+
+    private DateTime parseDateTime(long value) {
+        return new DateTime(value);
     }
 
     @PutMapping("/calendar/{calendarId}/event/{eventId}")
