@@ -6,6 +6,14 @@ public class ShortEvent {
     private String summary;
     private Date start;
     private Date end;
+    private String attendee;
+
+    public ShortEvent(String summary, Date start, Date end, String attendee) {
+        this.summary = summary;
+        this.start = start;
+        this.end = end;
+        this.attendee = attendee;
+    }
 
     public String getSummary() {
         return summary;
@@ -29,5 +37,13 @@ public class ShortEvent {
 
     public void setEnd(Date end) {
         this.end = end;
+    }
+
+    public String getAttendee() {
+        return attendee;
+    }
+
+    public void setAttendee(String attendee) {
+        this.attendee = attendee;
     }
 }

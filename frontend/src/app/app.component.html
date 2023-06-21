@@ -1,8 +1,11 @@
-<app-header></app-header>
-<!--
-  <app-edit-reservation></app-edit-reservation>
-  <app-make-reservation></app-make-reservation>
-  <app-show-calendar></app-show-calendar>
--->
-<router-outlet></router-outlet>
+
 <!-- -->
+<div *ngIf="authService.isAuthenticated(); else login">
+  <app-header></app-header>
+  <router-outlet></router-outlet>
+</div>
+
+<ng-template #login>
+  <!-- Show the login component -->
+  <app-login></app-login>
+</ng-template>

@@ -92,7 +92,6 @@ public class CalendarConfig {
                     .setOrderBy("startTime")
                     .setSingleEvents(true)
                     .setPrettyPrint(true)
-                    .setFields("items(id,summary,start,end,transparency)")
                     .execute();
 
             return events.getItems();

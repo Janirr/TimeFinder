@@ -5,12 +5,14 @@ import { ContactComponent } from './contact/contact.component';
 import { ReservationsComponent } from './reservations/reservations.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { EditReservationComponent } from './reservation/edit-reservation/edit-reservation.component';
+import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
   { path: 'pricing', component: PricingComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'reservations', component: ReservationsComponent },
   { path: 'reservation', component: EditReservationComponent},
+  { path: 'login', component: LoginComponent},
   { path: '', component: MainPageComponent } // Domyślna trasa
 ];
 

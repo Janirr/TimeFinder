@@ -41,13 +41,14 @@ public class TimeManager {
     }
 
     public ArrayList<ArrayList<AvailableTime>> getFreeTime(int tutorId, String calendarId, int minutesForLesson) throws GeneralSecurityException, IOException {
+        long startTime = System.currentTimeMillis();
         CalendarConfig calendarConfig = new CalendarConfig();
         Date[] days = getNextDays(14);
         // Generate free and busy times
         if (calendarConfig.getEventsFromCalendarById(tutorId, calendarId) == null) {
             throw new NullPointerException("Calendar is empty");
         }
-            for (Event event : calendarConfig.getEventsFromCalendarById(tutorId, calendarId)) {
+        for (Event event : calendarConfig.getEventsFromCalendarById(tutorId, calendarId)) {
             long dateValue = event.getStart().getDateTime().getValue();
             Date date = new Date(dateValue);
             Calendar calendar = Calendar.getInstance();
@@ -71,13 +72,11 @@ public class TimeManager {
             ArrayList<AvailableTime> markedFreeTimesInDay = new ArrayList<>();
             LocalDate today = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             int dayNumber = today.getDayOfMonth();
-            LocalTime possibleStartHour = null;
-            LocalTime maximumEndHour = null;
 
             for (DayTimestamp freeEventTimeStamp : markedFreeTimes) {
                 if (dayNumber == freeEventTimeStamp.dayNumber()) {
-                    possibleStartHour = freeEventTimeStamp.startHour();
-                    maximumEndHour = freeEventTimeStamp.endHour();
+                    LocalTime possibleStartHour = freeEventTimeStamp.startHour();
+                    LocalTime maximumEndHour = freeEventTimeStamp.endHour();
 
                     for (DayTimestamp takenEventTimeStamp : takenTimes) {
                         LocalTime takenEventStartTime = takenEventTimeStamp.startHour();
@@ -96,6 +95,9 @@ public class TimeManager {
             }
             availableTimes.add(markedFreeTimesInDay);
         }
+        long endTime = System.currentTimeMillis();
+        long runtime = endTime - startTime;
+        System.out.println("Function runtime: " + runtime + " milliseconds");
         return availableTimes;
     }
 

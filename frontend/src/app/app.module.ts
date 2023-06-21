@@ -13,6 +13,7 @@ import { PricingComponent } from './pricing/pricing.component';
 import { ContactComponent } from './contact/contact.component';
 import { ReservationsComponent } from './reservations/reservations.component';
 import { MainPageComponent } from './main-page/main-page.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { MainPageComponent } from './main-page/main-page.component';
     PricingComponent,
     ContactComponent,
     ReservationsComponent,
-    MainPageComponent
+    MainPageComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div *ngIf="!authService.isAuthenticated()">
+        <h2 class="text-center mb-4">Zaloguj</h2>
+        <form (submit)="login()" class="p-4 bg-light rounded">
+          <div class="form-group">
+            <label for="username">
+              <img src="assets/login.png" alt="Ikona loginu" width="32px">
+              Login:
+            </label>
+            <input type="text" id="username" name="username" [(ngModel)]="username" required class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="password">
+              <img src="assets/password.png" alt="Ikona hasła" width="32px">
+              Hasło:
+            </label>
+            <input type="password" id="password" name="password" [(ngModel)]="password" required class="form-control">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+      </div>
+      <div *ngIf="authService.isAuthenticated()">
+        <form (submit)="logout()" class="p-4 bg-light rounded">
+          <button type="submit" class="btn btn-primary btn-block">Wyloguj się</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

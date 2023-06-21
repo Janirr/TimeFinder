@@ -76,12 +76,4 @@ public class StudentJpaResource {
                 .toUri();
         return ResponseEntity.created(location).build();
     }
-
-    @DeleteMapping("/{id}")
-    public void deleteStudentById2(@PathVariable int id) {
-        if (!studentRepository.existsById(id)) {
-            throw new ResourceNotFound("There is no student with id: "+id);
-        }
-        studentRepository.deleteById(id);
-    }
 }

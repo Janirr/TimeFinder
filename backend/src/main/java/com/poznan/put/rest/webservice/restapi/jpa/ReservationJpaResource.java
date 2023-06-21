@@ -2,6 +2,7 @@ package com.poznan.put.rest.webservice.restapi.jpa;
 
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.poznan.put.rest.webservice.restapi.calendar.AvailableTime;
 import com.poznan.put.rest.webservice.restapi.calendar.CalendarConfig;
@@ -50,6 +51,7 @@ public class ReservationJpaResource {
         return calendarConfig.getEventsFromCalendarById(tutorId, calendarId);
     }
 
+    // Display free time
     @GetMapping("/tutor/{tutorId}/calendar/{calendarId}/{minutesForLesson}")
     public ArrayList<ArrayList<AvailableTime>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId, @PathVariable int minutesForLesson)
             throws GeneralSecurityException, IOException {
@@ -87,7 +89,6 @@ public class ReservationJpaResource {
             throws GeneralSecurityException, IOException {
 
         Event event = new Event().setSummary(shortEvent.getSummary());
-        System.out.println("test test");
         DateTime startDateTime = new DateTime(shortEvent.getStart());
         EventDateTime start = new EventDateTime()
                 .setDateTime(startDateTime)
@@ -99,11 +100,13 @@ public class ReservationJpaResource {
                 .setDateTime(endDateTime)
                 .setTimeZone("Poland");
         event.setEnd(end);
-        calendarConfig.addEventToCalendar(tutorId, event, calendarId);
-    }
 
-    private DateTime parseDateTime(long value) {
-        return new DateTime(value);
+        List<EventAttendee> attendees = new ArrayList<>();
+        attendees.add(new EventAttendee().setEmail(shortEvent.getAttendee()));
+        attendees.add(new EventAttendee().setEmail("janir3g@gmail.com"));
+        event.setAttendees(attendees);
+
+        calendarConfig.addEventToCalendar(tutorId, event, calendarId);
     }
 
     @PutMapping("/calendar/{calendarId}/event/{eventId}")

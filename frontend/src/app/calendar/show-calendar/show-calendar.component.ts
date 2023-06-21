@@ -1,3 +1,4 @@
+import { UserService } from './../../user.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Injectable } from '@angular/core';
@@ -31,7 +32,7 @@ export class ShowCalendarComponent implements OnInit {
     })
   };
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, public userService: UserService) {
     this.displayCalendar();
     this.displayCalendarEvents();
   }
@@ -96,12 +97,16 @@ export class ShowCalendarComponent implements OnInit {
 
       console.log("Start Date:", startDate);
       console.log("End Date:", endDate);
+      console.log("mail:"+this.userService.email);
+      console.log("user:"+this.userService.username);
 
       const event = {
         summary: 'Korepetycje',
         start: startDate,
-        end: endDate
+        end: endDate,
+        attendee: this.userService.email
       };
+
 
       const URL = this.urlTemplate + '/reservations/tutor/' + this.tutorId + '/calendar/' + this.calendarId;
     console.log(event);
@@ -115,7 +120,7 @@ export class ShowCalendarComponent implements OnInit {
 
     confirmReservation(startDateTime: any) {
       console.log(startDateTime);
-      const confirmation = window.confirm('Czy na pewno chcesz dokonać rezerwacji od \n'+startDateTime.fromHour+' do '+startDateTime.untilHour+'?');
+      const confirmation = window.confirm('Czy na pewno chcesz dokonać rezerwacji od '+startDateTime.fromHour+' do '+startDateTime.untilHour+'?');
 
       if (confirmation) {
         this.addReservationToCalendar(startDateTime);
