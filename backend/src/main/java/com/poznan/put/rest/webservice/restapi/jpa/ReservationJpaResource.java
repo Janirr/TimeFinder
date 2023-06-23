@@ -103,7 +103,6 @@ public class ReservationJpaResource {
 
         List<EventAttendee> attendees = new ArrayList<>();
         attendees.add(new EventAttendee().setEmail(shortEvent.getAttendee()));
-        attendees.add(new EventAttendee().setEmail("janir3g@gmail.com"));
         event.setAttendees(attendees);
 
         calendarConfig.addEventToCalendar(tutorId, event, calendarId);

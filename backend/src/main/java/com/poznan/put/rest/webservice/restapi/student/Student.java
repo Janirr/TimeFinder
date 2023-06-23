@@ -14,8 +14,6 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Size(min = 3, max = 20, message = "Login must be between 3 and 20 characters")
-    private String login;
     @Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters")
     @JsonIgnore
     private String password;
@@ -38,13 +36,6 @@ public class Student {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
 
     public String getPassword() {
         return password;
@@ -94,9 +85,8 @@ public class Student {
         this.reservationList = reservationList;
     }
 
-    public Student(int id, String login, String password, String name, String surname, String email, String school, List<Reservation> reservationList) {
+    public Student(int id, String password, String name, String surname, String email, String school, List<Reservation> reservationList) {
         this.id = id;
-        this.login = login;
         this.password = password;
         this.name = name;
         this.surname = surname;

@@ -89,4 +89,8 @@ public class TutorJpaResource {
 
         return events;
     }
+    @GetMapping("/subject/{subject}")
+    public Tutor getTutorBySubject(@PathVariable String subject){
+        return tutorsRepository.findBySubject(subject);
+    }
 }

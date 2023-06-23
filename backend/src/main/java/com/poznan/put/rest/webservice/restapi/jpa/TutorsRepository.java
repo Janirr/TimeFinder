@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TutorsRepository extends JpaRepository<Tutor, Long> {
+    Tutor findByEmail(String email);
+    Tutor findBySubject(String subject);
 }

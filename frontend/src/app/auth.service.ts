@@ -22,12 +22,12 @@ export class AuthService {
 
   constructor(private http: HttpClient, private userService: UserService) {}
 
-  login(username: string, password: string): Observable<any> {
+  login(email: string, password: string): Observable<any> {
     const credentials = {
-      username,
+      email,
       password
     };
-    return this.http.post(this.Url, credentials, {
+    return this.http.post(this.Url + '/student', credentials, {
       ...this.httpOptions,
       responseType: 'text' // Set the response type to 'text'
     })
@@ -37,8 +37,33 @@ export class AuthService {
             const student = JSON.parse(response);
             console.log(student)
             this.loggedIn = true;
-            this.userService.username = username;
             this.userService.email = student.email; // Assign the response string directly to email
+          } else {
+            this.loggedIn = false;
+          }
+        }),
+        catchError((error: HttpErrorResponse) => {
+          console.error('Login failed', error);
+          return throwError('Login failed'); // Use throwError to create an error observable
+        })
+      );
+  }
+  tutorLogin(email: string, password: string): Observable<any> {
+    const credentials = {
+      email,
+      password
+    };
+    return this.http.post(this.Url + '/tutor', credentials, {
+      ...this.httpOptions,
+      responseType: 'text' // Set the response type to 'text'
+    })
+      .pipe(
+        tap((response: any) => {
+          if (response !== null && response !== 'UNAUTHORIZED') {
+            const tutor = JSON.parse(response);
+            console.log(tutor)
+            this.loggedIn = true;
+            this.userService.email = tutor.email; // Assign the response string directly to email
           } else {
             this.loggedIn = false;
           }
