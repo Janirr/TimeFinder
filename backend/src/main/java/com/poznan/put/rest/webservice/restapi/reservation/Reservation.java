@@ -1,6 +1,7 @@
 package com.poznan.put.rest.webservice.restapi.reservation;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.google.api.services.calendar.model.EventDateTime;
 import com.poznan.put.rest.webservice.restapi.Tutor.Tutor;
 import com.poznan.put.rest.webservice.restapi.student.Student;
 import jakarta.persistence.*;
@@ -8,19 +9,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
+import java.util.Optional;
 
 @Entity
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @DateTimeFormat
-    private LocalDate day;
-    private LocalTime startHour;
-    private LocalTime endHour;
-    private String location;
-    private String subject;
-    private String status;
+    private int id;
+    private Date start;
+    private Date end;
+    private String summary;
 
     @ManyToOne(targetEntity = Student.class)
     @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "fk_reservation_student"))
@@ -36,72 +35,53 @@ public class Reservation {
 
     }
 
-    public Reservation(Long id, LocalDate day, LocalTime startHour, LocalTime endHour, String location, String subject, String status, Student student, Tutor tutor) {
+    public Reservation(int id, Date start, Date end, String summary, Student student, Tutor tutor) {
         this.id = id;
-        this.day = day;
-        this.startHour = startHour;
-        this.endHour = endHour;
-        this.location = location;
-        this.subject = subject;
-        this.status = status;
+        this.start = start;
+        this.end = end;
+        this.summary = summary;
         this.student = student;
         this.tutor = tutor;
     }
 
-    public Long getId() {
+    public Reservation(Date start, Date end, String summary, Student student, Tutor tutor) {
+        this.start = start;
+        this.end = end;
+        this.summary = summary;
+        this.student = student;
+        this.tutor = tutor;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public LocalDate getDay() {
-        return day;
+    public Date getStart() {
+        return start;
     }
 
-    public void setDay(LocalDate day) {
-        this.day = day;
+    public void setStart(Date start) {
+        this.start = start;
     }
 
-    public LocalTime getStartHour() {
-        return startHour;
+    public Date getEnd() {
+        return end;
     }
 
-    public void setStartHour(LocalTime startHour) {
-        this.startHour = startHour;
+    public void setEnd(Date end) {
+        this.end = end;
     }
 
-    public LocalTime getEndHour() {
-        return endHour;
+    public String getSummary() {
+        return summary;
     }
 
-    public void setEndHour(LocalTime endHour) {
-        this.endHour = endHour;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public Student getStudent() {
@@ -118,20 +98,5 @@ public class Reservation {
 
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
-    }
-
-    @Override
-    public String toString() {
-        return "Reservation{" +
-                "id=" + id +
-                ", day=" + day +
-                ", startHour=" + startHour +
-                ", endHour=" + endHour +
-                ", location='" + location + '\'' +
-                ", subject='" + subject + '\'' +
-                ", status='" + status + '\'' +
-                ", student=" + student +
-                ", tutor=" + tutor +
-                '}';
     }
 }

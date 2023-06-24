@@ -4,11 +4,13 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
+import com.poznan.put.rest.webservice.restapi.Tutor.Tutor;
 import com.poznan.put.rest.webservice.restapi.calendar.AvailableTime;
 import com.poznan.put.rest.webservice.restapi.calendar.CalendarConfig;
 import com.poznan.put.rest.webservice.restapi.calendar.TimeManager;
 import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
 import com.poznan.put.rest.webservice.restapi.reservation.Reservation;
+import com.poznan.put.rest.webservice.restapi.student.Student;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,20 +19,21 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/reservations")
 public class ReservationJpaResource {
     private final ReservationRepository reservationRepository;
     private final CalendarConfig calendarConfig;
+    private final StudentRepository studentRepository;
+    private final TutorsRepository tutorsRepository;
 
-    public ReservationJpaResource(ReservationRepository reservationRepository, CalendarConfig calendarConfig){
+    public ReservationJpaResource(TutorsRepository tutorsRepository, ReservationRepository reservationRepository, CalendarConfig calendarConfig, StudentRepository studentRepository){
         this.reservationRepository = reservationRepository;
         this.calendarConfig = calendarConfig;
+        this.studentRepository = studentRepository;
+        this.tutorsRepository = tutorsRepository;
     }
 
     @GetMapping
@@ -59,7 +62,10 @@ public class ReservationJpaResource {
         return timeManager.getFreeTime(tutorId, calendarId, minutesForLesson);
     }
 
-
+    @GetMapping
+    public List<Reservation> retrieveAllReservationsForStudent(@RequestParam String email){
+        return reservationRepository.findAllByStudentEmail(email);
+    }
 
     @PostMapping
     public ResponseEntity<Reservation> createNewReservation(@Valid @RequestBody Reservation reservation){
@@ -77,7 +83,7 @@ public class ReservationJpaResource {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteStudentById(@PathVariable int id){
+    public void deleteReservationById(@PathVariable int id){
         if (!reservationRepository.existsById(id)) {
             throw new ResourceNotFound("There is no student with id: "+id);
         }
@@ -105,7 +111,11 @@ public class ReservationJpaResource {
         attendees.add(new EventAttendee().setEmail(shortEvent.getAttendee()));
         event.setAttendees(attendees);
 
+        Student student = studentRepository.findByEmail(shortEvent.getAttendee());
+        Tutor tutor = tutorsRepository.findById(tutorId);
         calendarConfig.addEventToCalendar(tutorId, event, calendarId);
+        Reservation reservation = new Reservation(shortEvent.getStart(), shortEvent.getEnd(), event.getSummary(),student,tutor);
+        reservationRepository.save(reservation);
     }
 
     @PutMapping("/calendar/{calendarId}/event/{eventId}")

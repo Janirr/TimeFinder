@@ -18,7 +18,8 @@ export class AuthService {
     })
   };
   private Url = 'http://localhost:8080/login'; // Update with your API URL
-  private loggedIn: boolean = false;
+  private studentLoggedIn: boolean = false;
+  private tutorLoggedIn: boolean = false;
 
   constructor(private http: HttpClient, private userService: UserService) {}
 
@@ -36,10 +37,10 @@ export class AuthService {
           if (response !== null && response !== 'UNAUTHORIZED') {
             const student = JSON.parse(response);
             console.log(student)
-            this.loggedIn = true;
-            this.userService.email = student.email; // Assign the response string directly to email
+            this.studentLoggedIn = true;
+            this.userService.student = student; // Assign the response string directly to email
           } else {
-            this.loggedIn = false;
+            this.studentLoggedIn = false;
           }
         }),
         catchError((error: HttpErrorResponse) => {
@@ -62,10 +63,10 @@ export class AuthService {
           if (response !== null && response !== 'UNAUTHORIZED') {
             const tutor = JSON.parse(response);
             console.log(tutor)
-            this.loggedIn = true;
-            this.userService.email = tutor.email; // Assign the response string directly to email
+            this.tutorLoggedIn = true;
+            this.userService.tutor = tutor; // Assign the response string directly to email
           } else {
-            this.loggedIn = false;
+            this.tutorLoggedIn = false;
           }
         }),
         catchError((error: HttpErrorResponse) => {
@@ -76,10 +77,19 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return this.loggedIn;
+    return this.studentLoggedIn || this.tutorLoggedIn;
+  }
+
+  isTutorLoggedIn(): boolean {
+    return this.tutorLoggedIn;
+  }
+
+  isStudentLoggedIn(): boolean {
+    return this.studentLoggedIn;
   }
 
   logout(){
-    this.loggedIn = false;
+    this.studentLoggedIn = false;
+    this.tutorLoggedIn = false;
   }
 }

@@ -2,6 +2,7 @@ package com.poznan.put.rest.webservice.restapi.student;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.google.api.services.calendar.model.Event;
 import com.poznan.put.rest.webservice.restapi.reservation.Reservation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -24,7 +25,7 @@ public class Student {
     @Email(message = "Email should be valid")
     private String email;
     private String school;
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Reservation> reservationList;
 
@@ -96,6 +97,10 @@ public class Student {
     }
 
     public Student() {
+
+    }
+
+    public void addReservation(Event event) {
 
     }
 }

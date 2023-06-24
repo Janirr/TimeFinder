@@ -6,20 +6,30 @@
       <th>Start</th>
       <th>Koniec</th>
       <th>Opis</th>
-      <th>Id</th>
       <th>Edytuj</th>
       <th>Usuń</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody *ngIf="authService.isTutorLoggedIn()">
     <ng-container *ngFor="let reservation of reservations">
       <tr *ngIf="reservation.transparency !== 'transparent'">
         <td>{{reservation.start.dateTime.value | date: 'dd.MM'}}</td>
         <td>{{reservation.start.dateTime.value | date: 'HH:mm'}}</td>
         <td>{{reservation.end.dateTime.value | date: 'HH:mm'}}</td>
         <td>{{reservation.summary}}</td>
-        <td>{{reservation.id}}</td>
-        <td><button class="btn btn-primary btn-warning" [routerLink]="'/reservation'">Edytuj</button></td>
+        <td><button class="btn btn-primary btn-warning" [routerLink]="'/reservation'" disabled>Edytuj</button></td>
+        <td><button class="btn btn-primary btn-danger" disabled>Usuń</button></td>
+      </tr>
+    </ng-container>
+  </tbody>
+  <tbody *ngIf="authService.isStudentLoggedIn()">
+    <ng-container *ngFor="let reservation of studentReservations">
+      <tr *ngIf="reservation.transparency !== 'transparent'">
+        <td>{{reservation.start | date: 'dd.MM'}}</td>
+        <td>{{reservation.start | date: 'HH:mm'}}</td>
+        <td>{{reservation.end | date: 'HH:mm'}}</td>
+        <td>{{reservation.summary}}</td>
+        <td><button class="btn btn-primary btn-warning" [routerLink]="'/reservation'" disabled>Edytuj</button></td>
         <td><button class="btn btn-primary btn-danger" disabled>Usuń</button></td>
       </tr>
     </ng-container>

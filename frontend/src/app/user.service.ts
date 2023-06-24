@@ -4,8 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class UserService {
-  username: string = '';
-  email: string = '';
-  // Add other attributes as needed
+  student: any;
+  tutor: any;
   constructor() { }
 }

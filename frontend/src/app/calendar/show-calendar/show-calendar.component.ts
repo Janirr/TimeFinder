@@ -88,16 +88,11 @@ export class ShowCalendarComponent implements OnInit {
     endDate.setMinutes(parseInt(endTime[1], 10));
     endDate.setSeconds(parseInt(endTime[2], 10));
 
-    console.log('Start Date:', startDate);
-    console.log('End Date:', endDate);
-    console.log('mail:' + this.userService.email);
-    console.log('user:' + this.userService.username);
-
     const event = {
       summary: 'Korepetycje',
       start: startDate,
       end: endDate,
-      attendee: this.userService.email
+      attendee: this.userService.student.email
     };
 
     const URL = `/reservations/tutor/${this.tutorId}/calendar/${this.calendarId}`;

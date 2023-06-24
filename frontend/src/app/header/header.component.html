@@ -1,20 +1,17 @@
-<nav class="navbar navbar-default">
+<!-- STUDENT -->
+<nav class="navbar navbar-default" *ngIf="authService.isStudentLoggedIn()">
   <div class="container-fluid">
-
-    <!-- Brand/logo -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#example-1" aria-expanded="false">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#example-2" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Korepetycje Poznań</a>
+      <a class="navbar-brand" routerLink="calendar">Korepetycje Poznań</a>
     </div>
-
-    <!-- Collapsible Navbar -->
-    <div class="collapse navbar-collapse" id="example-1">
+    <div class="collapse navbar-collapse" id="example-2">
       <ul class="nav navbar-nav">
         <li routerLinkActive="active"><a routerLink="calendar">Rezerwuj termin</a></li>
         <li routerLinkActive="active"><a routerLink="reservations">Aktualne Rezerwacje</a></li>
@@ -23,6 +20,29 @@
         <li routerLinkActive="active"><a routerLink="login">Konto</a></li>
       </ul>
     </div>
-
+  </div>
+</nav>
+<!-- TUTOR -->
+<nav class="navbar navbar-default" *ngIf="authService.isTutorLoggedIn()">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#example-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" routerLink="calendar">Korepetycje Poznań</a>
+    </div>
+    <div class="collapse navbar-collapse" id="example-1">
+      <ul class="nav navbar-nav">
+        <!-- <li routerLinkActive="active"><a routerLink="calendar">Rezerwuj termin</a></li> -->
+        <li routerLinkActive="active"><a routerLink="reservations">Aktualne Rezerwacje</a></li>
+        <li routerLinkActive="active"><a routerLink="pricing">Cennik</a></li>
+        <li routerLinkActive="active"><a routerLink="contact">Kontakt</a></li>
+        <li routerLinkActive="active"><a routerLink="login">Konto</a></li>
+      </ul>
+    </div>
   </div>
 </nav>
