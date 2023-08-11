@@ -36,10 +36,10 @@ public class ReservationJpaResource {
         this.tutorsRepository = tutorsRepository;
     }
 
-    @GetMapping
-    public List<Reservation> retrieveAllReservations(){
-        return reservationRepository.findAll();
-    }
+//    @GetMapping(...)
+//    public List<Reservation> retrieveAllReservations(){
+//        return reservationRepository.findAll();
+//    }
 
     @GetMapping("/reservation/{reservationId}")
     public Reservation retrieveReservationById(@PathVariable int reservationId){
@@ -112,32 +112,40 @@ public class ReservationJpaResource {
         event.setAttendees(attendees);
 
         Student student = studentRepository.findByEmail(shortEvent.getAttendee());
+        if (student == null) {
+            throw new ResourceNotFound("There is no student with email: "+shortEvent.getAttendee());
+        }
         Tutor tutor = tutorsRepository.findById(tutorId);
+        if (tutor == null) {
+            throw new ResourceNotFound("There is no tutor with id: "+tutorId);
+        }
         calendarConfig.addEventToCalendar(tutorId, event, calendarId);
         Reservation reservation = new Reservation(shortEvent.getStart(), shortEvent.getEnd(), event.getSummary(),student,tutor);
         reservationRepository.save(reservation);
     }
 
-    @PutMapping("/calendar/{calendarId}/event/{eventId}")
-    public void updateEvent(@PathVariable String calendarId, @PathVariable String eventId)
-            throws GeneralSecurityException, IOException {
-        System.out.printf("Updating event %s\n", eventId);
+//    @PutMapping("/calendar/{calendarId}/event/{eventId}")
+//    public void updateEvent(@PathVariable String calendarId, @PathVariable String eventId)
+//            throws GeneralSecurityException, IOException {
+//        System.out.printf("Updating event %s\n", eventId);
+//
+//        EventDateTime start = new EventDateTime()
+//                .setDateTime(new DateTime("2023-06-24T14:00:00-07:00"))
+//                .setTimeZone("Poland");
+//        EventDateTime end = new EventDateTime()
+//                .setDateTime(new DateTime("2023-06-24T16:00:00-07:00"))
+//                .setTimeZone("Poland");
+//
+//        calendarConfig.editEventById(1, calendarId, eventId, start, end);
+//    }
 
-        EventDateTime start = new EventDateTime()
-                .setDateTime(new DateTime("2023-06-24T14:00:00-07:00"))
-                .setTimeZone("Poland");
-        EventDateTime end = new EventDateTime()
-                .setDateTime(new DateTime("2023-06-24T16:00:00-07:00"))
-                .setTimeZone("Poland");
-
-        calendarConfig.editEventById(1, calendarId, eventId, start, end);
-    }
-
-    @GetMapping("/calendar/{calendarId}/event/{eventId}")
-    public Event getEvent(@PathVariable String calendarId, @PathVariable String eventId)
+    @GetMapping("/tutor/{tutorId}/calendar/{calendarId}/event/{eventId}")
+    public Event getEvent(@PathVariable String calendarId,
+                          @PathVariable int tutorId,
+                          @PathVariable String eventId)
             throws GeneralSecurityException, IOException {
         System.out.printf("Getting event %s\n", eventId);
-        return calendarConfig.getEventById(1, calendarId, eventId);
+        return calendarConfig.getEventById(tutorId, calendarId, eventId);
     }
 
 }

@@ -62,7 +62,7 @@ public class StudentJpaResource {
     }
 
     @PostMapping("/{id}/reservations")
-    public ResponseEntity<Object> createReservationForStudent(@PathVariable int id, @Valid @RequestBody Reservation reservation) {
+    public ResponseEntity<Reservation> createReservationForStudent(@PathVariable int id, @Valid @RequestBody Reservation reservation) {
         Optional<Student> Student = studentRepository.findById(id);
         if(Student.isEmpty()){
             throw new ResourceNotFound("There is not student with id: "+id);
