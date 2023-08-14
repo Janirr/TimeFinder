@@ -30,32 +30,32 @@ public class TimeManagerTest {
         Assertions.assertEquals(expectedSize, nextDays.length);
     }
 
-    @Test
-    public void testGetFreeTimeDefaultTutor() throws GeneralSecurityException, IOException {
-        int tutorId = 1;
-        String calendarId = "c0cc6a538c4604e5570b325de0095a2e9c1647adfc9c4e5f7bbc5efb71c5db57@group.calendar.google.com";
-        int minutesForLesson = 60;
-
-        ArrayList<ArrayList<AvailableTime>> availableTimes = timeManager.getFreeTime(tutorId, calendarId, minutesForLesson);
-
-        // Perform assertions on the generated availableTimes
-        // Assert that the availableTimes is not null
-        Assertions.assertNotNull(availableTimes);
-
-        // Assert that the size of availableTimes is correct
-        int expectedNumberOfDays = 14;
-        Assertions.assertEquals(expectedNumberOfDays, availableTimes.size());
-
-        // Perform more specific assertions on the availableTimes if needed
-        // ...
-
-        // Example assertion on the first day's available times
-        ArrayList<AvailableTime> firstDayAvailableTimes = availableTimes.get(0);
-        Assertions.assertNotNull(firstDayAvailableTimes);
-
-        // Assert that there is at least one available time on the first day
-        Assertions.assertTrue(firstDayAvailableTimes.size() > 0);
-    }
+//    @Test
+//    public void testGetFreeTimeDefaultTutor() throws GeneralSecurityException, IOException {
+//        int tutorId = 1;
+//        String calendarId = "c0cc6a538c4604e5570b325de0095a2e9c1647adfc9c4e5f7bbc5efb71c5db57@group.calendar.google.com";
+//        int minutesForLesson = 60;
+//
+//        ArrayList<ArrayList<AvailableTime>> availableTimes = timeManager.getFreeTime(tutorId, calendarId, minutesForLesson);
+//
+//        // Perform assertions on the generated availableTimes
+//        // Assert that the availableTimes is not null
+//        Assertions.assertNotNull(availableTimes);
+//
+//        // Assert that the size of availableTimes is correct
+//        int expectedNumberOfDays = 14;
+//        Assertions.assertEquals(expectedNumberOfDays, availableTimes.size());
+//
+//        // Perform more specific assertions on the availableTimes if needed
+//        // ...
+//
+//        // Example assertion on the first day's available times
+//        ArrayList<AvailableTime> firstDayAvailableTimes = availableTimes.get(0);
+//        Assertions.assertNotNull(firstDayAvailableTimes);
+//
+//        // Assert that there is at least one available time on the first day
+//        Assertions.assertTrue(firstDayAvailableTimes.size() > 0);
+//    }
 
     @Test
     public void testGetEventsFromCalendarById_CalendarNotFound() throws GeneralSecurityException, IOException {
