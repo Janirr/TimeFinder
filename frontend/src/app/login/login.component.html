@@ -1,7 +1,8 @@
+
 <div class="container">
   <div class="row">
-    <div class="col-md-6">
-      <div *ngIf="!authService.isAuthenticated()">
+    <div class="col-md-4">
+      <div *ngIf="!authService.isAuthenticated()" class="login-form">
         <h2 class="text-center mb-4">Logowanie ucznia</h2>
         <form (submit)="login()" class="p-4 bg-light rounded">
           <div class="form-group">
@@ -21,14 +22,17 @@
           <button type="submit" class="btn btn-primary btn-block">Login</button>
         </form>
       </div>
-      <div *ngIf="authService.isAuthenticated()">
+      <div *ngIf="authService.isAuthenticated()" class="logout-form">
         <form (submit)="logout()" class="p-4 bg-light rounded">
           <button type="submit" class="btn btn-primary btn-block">Logout</button>
         </form>
       </div>
     </div>
-    <div class="col-md-6">
-      <div *ngIf="!authService.isAuthenticated()">
+    <div class="row">
+
+    </div>
+    <div class="col-md-4">
+      <div *ngIf="!authService.isAuthenticated()" class="login-form">
         <h2 class="text-center mb-4">Logowanie nauczyciela</h2>
         <form (submit)="tutorLogin()" class="p-4 bg-light rounded">
           <div class="form-group">
@@ -48,7 +52,7 @@
           <button type="submit" class="btn btn-primary btn-block">Login</button>
         </form>
       </div>
-      <div *ngIf="authService.isAuthenticated()">
+      <div *ngIf="authService.isAuthenticated()" class="logout-form">
         <form (submit)="logout()" class="p-4 bg-light rounded">
           <button type="submit" class="btn btn-primary btn-block">Logout</button>
         </form>

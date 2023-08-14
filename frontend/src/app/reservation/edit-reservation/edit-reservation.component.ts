@@ -23,7 +23,7 @@ export class EditReservationComponent implements OnInit {
     const username = 'janir';
     const password = 'root';
     const credentials = btoa(username + ':' + password); // Encode the username and password
-    const urlTemplate =  'http://localhost:8080';
+    const urlTemplate =  'http://timefind.eu-central-1.elasticbeanstalk.com';
     const calendarId = 'c0cc6a538c4604e5570b325de0095a2e9c1647adfc9c4e5f7bbc5efb71c5db57@group.calendar.google.com';
 
     const httpOptions = {

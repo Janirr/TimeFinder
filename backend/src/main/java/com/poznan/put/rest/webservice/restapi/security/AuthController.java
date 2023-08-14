@@ -17,6 +17,7 @@ public class AuthController {
     private final TutorsRepository tutorsRepository;
 
     public AuthController(StudentRepository studentRepository, TutorsRepository tutorsRepository) {
+        // Constructor injection
         this.studentRepository = studentRepository;
         this.tutorsRepository = tutorsRepository;
     }
@@ -27,9 +28,10 @@ public class AuthController {
         String password = loginRequest.getPassword();
 
         Student student = studentRepository.findByEmail(email);
-        if (student != null && student.getPassword().equals(password)) {
+        if (student != null && student.getPassword().equals(password)) { // if
             return ResponseEntity.ok(student);
         } else {
+            //
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
