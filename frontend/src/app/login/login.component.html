@@ -28,9 +28,6 @@
         </form>
       </div>
     </div>
-    <div class="row">
-
-    </div>
     <div class="col-md-4">
       <div *ngIf="!authService.isAuthenticated()" class="login-form">
         <h2 class="text-center mb-4">Logowanie nauczyciela</h2>
@@ -52,11 +49,11 @@
           <button type="submit" class="btn btn-primary btn-block">Login</button>
         </form>
       </div>
-      <div *ngIf="authService.isAuthenticated()" class="logout-form">
+      <!-- <div *ngIf="authService.isAuthenticated()" class="logout-form">
         <form (submit)="logout()" class="p-4 bg-light rounded">
           <button type="submit" class="btn btn-primary btn-block">Logout</button>
         </form>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>

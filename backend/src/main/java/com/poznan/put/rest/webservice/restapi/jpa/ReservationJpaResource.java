@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.security.GeneralSecurityException;
+import java.time.LocalDate;
 import java.util.*;
 
 @RestController
@@ -56,7 +57,7 @@ public class ReservationJpaResource {
 
     // Display free time
     @GetMapping("/tutor/{tutorId}/calendar/{calendarId}/{minutesForLesson}")
-    public ArrayList<ArrayList<AvailableTime>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId, @PathVariable int minutesForLesson)
+    public HashMap<LocalDate, ArrayList<AvailableTime>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId, @PathVariable int minutesForLesson)
             throws GeneralSecurityException, IOException {
         TimeManager timeManager = new TimeManager();
         return timeManager.getFreeTime(tutorId, calendarId, minutesForLesson);

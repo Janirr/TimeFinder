@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../../http.service';
 import { UserService } from '../../user.service';
+import { waitForAsync } from '@angular/core/testing';
 
 @Component({
   selector: 'app-show-calendar',
@@ -9,17 +10,20 @@ import { UserService } from '../../user.service';
 })
 export class ShowCalendarComponent implements OnInit {
   calendarDates: any;
+  tutor: any;
   uniqueDates: Array<any> = [];
+  tutors: any;
   reservations: any;
-  minutesForLesson: number = 90;
+  lessonTime = 60;
+  lessonTimes = [45,60,90,120];
   tutorId: number = 1;
-  subject: string = 'Matematyka';
-  calendarId: string = 'c0cc6a538c4604e5570b325de0095a2e9c1647adfc9c4e5f7bbc5efb71c5db57@group.calendar.google.com';
+  calendarId: string = '';
   startDateTime: any;
   formSubmitted: boolean = false;
 
   constructor(private httpService: HttpService, public userService: UserService) {
-    this.displayCalendar();
+    // this.displayCalendar();
+    this.getTutors();
   }
 
   ngOnInit(): void {
@@ -29,25 +33,31 @@ export class ShowCalendarComponent implements OnInit {
   onSubmitForm() {
     // Set the flag to true when the form is submitted
     this.formSubmitted = true;
-    this.getCalendarId();
     this.displayCalendar();
   }
 
-  getCalendarId() {
-    this.httpService.get(`/tutors/subject/${this.subject}`)
-    .subscribe(response => {
-      const tutorResponse: any = response;
-      this.calendarId = tutorResponse.calendarId;
-      this.tutorId = tutorResponse.id;
-    });
-  }
-
   displayCalendar() {
-    this.httpService.get(`/reservations/tutor/${this.tutorId}/calendar/${this.calendarId}/${this.minutesForLesson}`)
+    this.httpService.get(`/tutors/${this.tutorId}`)
+    .subscribe(response => {
+      this.tutor = response;
+      this.tutorId = this.tutor.id;
+      this.calendarId = this.tutor.calendarId;
+      this.httpService.get(`/reservations/tutor/${this.tutorId}/calendar/${this.calendarId}/${this.lessonTime}`)
       .subscribe(response => {
         this.calendarDates = response; // Assign the response data to the variable
         console.log(response);
+        // console.log(this.calendarId);
       });
+    });
+
+  }
+
+  getTutors() {
+    this.httpService.get(`/tutors`)
+    .subscribe(response => {
+      this.tutors = response; // Assign the response data to the variable
+      // console.log(response);
+    });
   }
 
   getDatesTwoWeeksFromNow() {
@@ -74,9 +84,9 @@ export class ShowCalendarComponent implements OnInit {
     const startTime = startDateTime.fromHour.split(':');
     const endTime = startDateTime.untilHour.split(':');
 
-    console.log('Date Components:', dateComponents);
-    console.log('Start Time:', startTime);
-    console.log('End Time:', endTime);
+    // console.log('Date Components:', dateComponents);
+    // console.log('Start Time:', startTime);
+    // console.log('End Time:', endTime);
 
     const startDate = new Date(dateComponents);
     startDate.setHours(parseInt(startTime[0], 10));

@@ -13,6 +13,7 @@ import java.util.Date;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 
 /**
  * This class is responsible for managing time in the application.
@@ -40,7 +41,8 @@ public class TimeManager {
         return days;
     }
 
-    public ArrayList<ArrayList<AvailableTime>> getFreeTime(int tutorId, String calendarId, int minutesForLesson) throws GeneralSecurityException, IOException {
+    public HashMap<LocalDate, ArrayList<AvailableTime>> getFreeTime(int tutorId, String calendarId, int minutesForLesson) throws GeneralSecurityException, IOException {
+        HashMap<LocalDate, ArrayList<AvailableTime>> availableTime = new HashMap<>();
         long startTime = System.currentTimeMillis();
         CalendarConfig calendarConfig = new CalendarConfig();
         Date[] days = getNextDays(14);
@@ -69,6 +71,7 @@ public class TimeManager {
         }
         // Generate available times
         for (Date date : days) {
+
             ArrayList<AvailableTime> markedFreeTimesInDay = new ArrayList<>();
             LocalDate today = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             int dayNumber = today.getDayOfMonth();
@@ -93,12 +96,12 @@ public class TimeManager {
                     }
                 }
             }
-            availableTimes.add(markedFreeTimesInDay);
+            availableTime.put(today, markedFreeTimesInDay);
         }
         long endTime = System.currentTimeMillis();
         long runtime = endTime - startTime;
         System.out.println("Function runtime: " + runtime + " milliseconds");
-        return availableTimes;
+        return availableTime;
     }
 
     private void generateFreeTimestamps(int minutesForLesson, Date date, ArrayList<AvailableTime> freeTimes, LocalTime minStartHour, LocalTime maxEndHour) {
