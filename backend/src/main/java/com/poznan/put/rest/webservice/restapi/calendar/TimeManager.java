@@ -60,20 +60,20 @@ public class TimeManager {
             ArrayList<AvailableTime> markedFreeTimesInDay = new ArrayList<>();
             LocalDate day = getLocalDateFromDate(date);
             for (DayTimestamp freeEventTimeStamp : markedFreeTimes) {
-                if (day == freeEventTimeStamp.date()) {
+                if (day.equals(freeEventTimeStamp.date())) {
                     LocalTime possibleStartHour = freeEventTimeStamp.startHour();
                     LocalTime maximumEndHour = freeEventTimeStamp.endHour();
                     for (DayTimestamp takenEventTimeStamp : takenTimes) {
                         LocalTime takenEventStartTime = takenEventTimeStamp.startHour();
-                        if (day == takenEventTimeStamp.date()) {
+                        if (day.equals(takenEventTimeStamp.date())) {
                             if (possibleStartHour != null && takenEventStartTime != null) {
-                                generateFreeTimestamps(minutesForLesson, date, markedFreeTimesInDay, possibleStartHour, takenEventStartTime);
+                                generateFreeTimestamps(minutesForLesson, markedFreeTimesInDay, possibleStartHour, takenEventStartTime);
                                 possibleStartHour = takenEventTimeStamp.endHour();
                             }
                         }
                     }
                     if (possibleStartHour != null && maximumEndHour != null) {
-                        generateFreeTimestamps(minutesForLesson, date, markedFreeTimesInDay, possibleStartHour, maximumEndHour);
+                        generateFreeTimestamps(minutesForLesson, markedFreeTimesInDay, possibleStartHour, maximumEndHour);
                     }
                 }
             }
@@ -87,10 +87,10 @@ public class TimeManager {
             LocalTime startHour = getLocalTime(event.getStart());
             LocalTime endHour = getLocalTime(event.getEnd());
             DayTimestamp timestamp = new DayTimestamp(eventDay, startHour, endHour);
-            if (event.getTransparency() == null || event.getSummary().equals("Free times")) {
-                takenTimes.add(timestamp);
-            } else {
+            if (event.getTransparency() != null || event.getSummary().equals("Czas wolny")) {
                 markedFreeTimes.add(timestamp);
+            } else {
+                takenTimes.add(timestamp);
             }
         }
     }
@@ -104,11 +104,11 @@ public class TimeManager {
         return LocalTime.parse(eventDateTime.getDateTime().toStringRfc3339().substring(11, 16), formatter);
     }
 
-    public void generateFreeTimestamps(int minutesForLesson, Date date, ArrayList<AvailableTime> freeTimes, LocalTime minStartHour, LocalTime maxEndHour) {
+    public void generateFreeTimestamps(int minutesForLesson, ArrayList<AvailableTime> freeTimes, LocalTime minStartHour, LocalTime maxEndHour) {
         long availableMinutesForLesson = ChronoUnit.MINUTES.between(minStartHour, maxEndHour);
         while (availableMinutesForLesson >= minutesForLesson) {
             LocalTime lessonEndLocalTime = minStartHour.plusMinutes(minutesForLesson);
-            freeTimes.add(new AvailableTime(date, minStartHour, lessonEndLocalTime));
+            freeTimes.add(new AvailableTime(minStartHour, lessonEndLocalTime));
             minStartHour = minStartHour.plusMinutes(MINUTES_TO_ADD);
             availableMinutesForLesson = ChronoUnit.MINUTES.between(minStartHour, maxEndHour);
         }
