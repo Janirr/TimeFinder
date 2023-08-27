@@ -1,14 +1,15 @@
 package com.poznan.put.rest.webservice.restapi.calendar;
 
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
-public record DayTimestamp(int dayNumber, LocalTime startHour, LocalTime endHour) {
+public record DayTimestamp(LocalDate date, LocalTime startHour, LocalTime endHour) {
 
-    @Override
+@Override
     public String toString() {
-        return "EventInfo{" +
-                "dayNumber=" + dayNumber +
+        return "DayTimestamp{" +
+                "date=" + date +
                 ", startHour=" + startHour +
                 ", endHour=" + endHour +
                 '}';

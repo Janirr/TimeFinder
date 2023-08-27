@@ -15,17 +15,14 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.*;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import org.springframework.context.annotation.Configuration;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,6 +33,7 @@ public class CalendarConfig {
     static final String TOKENS_DIRECTORY_PATH = "tokens";
     static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
+
     /**
      * Creates an authorized Credential object.
      *
@@ -72,7 +70,6 @@ public class CalendarConfig {
                 .setApplicationName(APPLICATION_NAME)
                 .build();
     }
-
 
 
     public List<Event> getEventsFromCalendarById(int tutorId, String calendarId)
@@ -156,7 +153,6 @@ public class CalendarConfig {
 
         service.calendars().delete(calendarId).execute();
     }
-
 
 
     public static void main(String[] args) throws GeneralSecurityException, IOException {

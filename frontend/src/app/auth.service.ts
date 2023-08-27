@@ -17,7 +17,7 @@ export class AuthService {
       'Authorization': 'Basic ' + this.credentials // Add the Basic Authentication header
     })
   };
-  private Url = 'http://timefind.eu-central-1.elasticbeanstalk.com/login'; // Update with your API URL
+  private Url = 'http://localhost:8080/login'; // Update with your API URL
   private studentLoggedIn: boolean = false;
   private tutorLoggedIn: boolean = false;
 

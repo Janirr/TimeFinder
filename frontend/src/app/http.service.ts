@@ -8,7 +8,7 @@ export class HttpService {
   private username = 'janir';
   private password = 'root';
   private credentials = btoa(this.username + ':' + this.password); // Encode the username and password
-  private urlTemplate = 'http://timefind.eu-central-1.elasticbeanstalk.com/';
+  private urlTemplate = 'http://localhost:8080';
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',

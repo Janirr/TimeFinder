@@ -20,7 +20,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/reservations")
@@ -30,7 +32,7 @@ public class ReservationJpaResource {
     private final StudentRepository studentRepository;
     private final TutorsRepository tutorsRepository;
 
-    public ReservationJpaResource(TutorsRepository tutorsRepository, ReservationRepository reservationRepository, CalendarConfig calendarConfig, StudentRepository studentRepository){
+    public ReservationJpaResource(TutorsRepository tutorsRepository, ReservationRepository reservationRepository, CalendarConfig calendarConfig, StudentRepository studentRepository) {
         this.reservationRepository = reservationRepository;
         this.calendarConfig = calendarConfig;
         this.studentRepository = studentRepository;
@@ -43,9 +45,9 @@ public class ReservationJpaResource {
 //    }
 
     @GetMapping("/reservation/{reservationId}")
-    public Reservation retrieveReservationById(@PathVariable int reservationId){
+    public Reservation retrieveReservationById(@PathVariable int reservationId) {
         return reservationRepository.findById(reservationId).orElseThrow(
-                () -> new ResourceNotFound("There is no reservation with id: "+reservationId)
+                () -> new ResourceNotFound("There is no reservation with id: " + reservationId)
         );
     }
 
@@ -57,19 +59,18 @@ public class ReservationJpaResource {
 
     // Display free time
     @GetMapping("/tutor/{tutorId}/calendar/{calendarId}/{minutesForLesson}")
-    public HashMap<LocalDate, ArrayList<AvailableTime>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId, @PathVariable int minutesForLesson)
-            throws GeneralSecurityException, IOException {
+    public HashMap<LocalDate, ArrayList<AvailableTime>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId, @PathVariable int minutesForLesson) {
         TimeManager timeManager = new TimeManager();
         return timeManager.getFreeTime(tutorId, calendarId, minutesForLesson);
     }
 
     @GetMapping
-    public List<Reservation> retrieveAllReservationsForStudent(@RequestParam String email){
+    public List<Reservation> retrieveAllReservationsForStudent(@RequestParam String email) {
         return reservationRepository.findAllByStudentEmail(email);
     }
 
     @PostMapping
-    public ResponseEntity<Reservation> createNewReservation(@Valid @RequestBody Reservation reservation){
+    public ResponseEntity<Reservation> createNewReservation(@Valid @RequestBody Reservation reservation) {
         // add Student into the ArrayList in Service
         Reservation savedReservation = reservationRepository.save(reservation);
         // get new Location for the Student to be created in
@@ -84,9 +85,9 @@ public class ReservationJpaResource {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteReservationById(@PathVariable int id){
+    public void deleteReservationById(@PathVariable int id) {
         if (!reservationRepository.existsById(id)) {
-            throw new ResourceNotFound("There is no student with id: "+id);
+            throw new ResourceNotFound("There is no student with id: " + id);
         }
         reservationRepository.deleteById(id);
     }
@@ -114,14 +115,14 @@ public class ReservationJpaResource {
 
         Student student = studentRepository.findByEmail(shortEvent.getAttendee());
         if (student == null) {
-            throw new ResourceNotFound("There is no student with email: "+shortEvent.getAttendee());
+            throw new ResourceNotFound("There is no student with email: " + shortEvent.getAttendee());
         }
         Tutor tutor = tutorsRepository.findById(tutorId);
         if (tutor == null) {
-            throw new ResourceNotFound("There is no tutor with id: "+tutorId);
+            throw new ResourceNotFound("There is no tutor with id: " + tutorId);
         }
         calendarConfig.addEventToCalendar(tutorId, event, calendarId);
-        Reservation reservation = new Reservation(shortEvent.getStart(), shortEvent.getEnd(), event.getSummary(),student,tutor);
+        Reservation reservation = new Reservation(shortEvent.getStart(), shortEvent.getEnd(), event.getSummary(), student, tutor);
         reservationRepository.save(reservation);
     }
 

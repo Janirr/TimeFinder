@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/students")
 public class StudentJpaResource {
     private final StudentRepository studentRepository;
@@ -31,8 +32,8 @@ public class StudentJpaResource {
     @GetMapping("/{id}")
     public Optional<Student> retrieveStudentById(@PathVariable int id) {
         Optional<Student> Student = studentRepository.findById(id);
-        if(Student.isEmpty()){
-            throw new ResourceNotFound("There is no student with id: "+id);
+        if (Student.isEmpty()) {
+            throw new ResourceNotFound("There is no student with id: " + id);
         }
         return Student;
     }
@@ -40,8 +41,8 @@ public class StudentJpaResource {
     @GetMapping("/{id}/reservations")
     public List<Reservation> retrieveReservationsForStudent(@PathVariable int id) {
         Optional<Student> Student = studentRepository.findById(id);
-        if(Student.isEmpty()){
-            throw new ResourceNotFound("There is no student with id: "+id);
+        if (Student.isEmpty()) {
+            throw new ResourceNotFound("There is no student with id: " + id);
         }
         return Student.get().getReservationList();
     }
@@ -64,8 +65,8 @@ public class StudentJpaResource {
     @PostMapping("/{id}/reservations")
     public ResponseEntity<Reservation> createReservationForStudent(@PathVariable int id, @Valid @RequestBody Reservation reservation) {
         Optional<Student> Student = studentRepository.findById(id);
-        if(Student.isEmpty()){
-            throw new ResourceNotFound("There is not student with id: "+id);
+        if (Student.isEmpty()) {
+            throw new ResourceNotFound("There is not student with id: " + id);
         }
         reservation.setStudent(Student.get());
         Reservation savedReservation = reservationRepository.save(reservation);

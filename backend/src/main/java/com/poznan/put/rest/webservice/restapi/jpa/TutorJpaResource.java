@@ -53,22 +53,22 @@ public class TutorJpaResource {
 
     @GetMapping("/{id}/calendar/{calendarId}")
     public List<Event> getTutorCustomCalendarById(@PathVariable Long id, @PathVariable String calendarId) throws GeneralSecurityException, IOException {
-        Optional<Tutor> Tutor = tutorsRepository.findById(id);
+        Optional<Tutor> tutor = tutorsRepository.findById(id);
 
-        if(Tutor.isEmpty()){
+        if(tutor.isEmpty()){
             throw new ResourceNotFound("There is no tutor with id: "+id);
         }
-        return calendarConfig.getEventsFromCalendarById(Tutor.get().getId(),calendarId);
+        return calendarConfig.getEventsFromCalendarById(tutor.get().getId(),calendarId);
     }
 
     @GetMapping("/{id}/calendars")
     public List<CalendarListEntry> getTutorCalendars(@PathVariable Long id) throws GeneralSecurityException, IOException {
-        Optional<Tutor> Tutor = tutorsRepository.findById(id);
+        Optional<Tutor> tutor = tutorsRepository.findById(id);
 
-        if(Tutor.isEmpty()){
+        if(tutor.isEmpty()){
             throw new ResourceNotFound("There is no tutor with id: "+id);
         }
-        return calendarConfig.getAllCalendarsForTutor(Tutor.get().getId());
+        return calendarConfig.getAllCalendarsForTutor(tutor.get().getId());
     }
 
     @GetMapping("/{id}/calendars/events")
