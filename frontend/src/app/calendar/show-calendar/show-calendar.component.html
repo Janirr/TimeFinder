@@ -1,14 +1,14 @@
 <div class="container">
 <h1>Zarezerwuj termin</h1>
-<form #userForm="ngForm" [id]="" (ngSubmit)="onSubmitForm()">
+<form #userForm="ngForm" (ngSubmit)="onSubmitForm()">
   <div class="form-group">
-    <label for="lessonTime">Czas trwania zajęć:</label>
+    <label>Czas trwania zajęć:</label>
     <select class="form-control" [(ngModel)]="lessonTime" [ngModelOptions]="{standalone: true}">
       <option [id]="lessonTime" *ngFor="let lessonTime of lessonTimes" [ngValue]="lessonTime">{{ lessonTime }} minut</option>
     </select>
   </div>
   <div class="form-group">
-    <label for="tutor">Nauczyciel:</label>
+    <label>Nauczyciel:</label>
     <select class="form-control" [(ngModel)]="tutorId" [ngModelOptions]="{standalone: true}">
       <option [id]="tutor.id" *ngFor="let tutor of tutors" [ngValue]="tutor.id">{{ tutor.name }} {{ tutor.surname }}</option>
     </select>
@@ -16,24 +16,24 @@
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 </div>
+<!-- Godziny + zatwierdź -->
 <div *ngIf="formSubmitted">
 <table class="table table-striped table-bordered" >
-  <thead>
-    <tr>
-      <th class="text-center" *ngFor="let date of uniqueDates">{{date.day}}.0{{date.month + 1}}</th>
-    </tr>
-  </thead>
   <tbody>
     <tr>
       <div class="d-flex flex-wrap">
       <td *ngFor="let day of calendarDates | keyvalue">
-        {{day.key}}
-        <form class="form" #userForm="ngForm" [id]="day.key" (submit)="confirmReservation(startDateTime)">
+          <thead>
+            <tr>
+              {{day.key}}
+            </tr>
+          </thead>
+        <form class="form" #userForm="ngForm" [id]="day.key" (submit)="confirmReservation(startDateTime,day.key)">
           <div class="form-group text-center">
             <select class="form-control text-center" [id]="'select' + day.key" [(ngModel)]="startDateTime" [ngModelOptions]="{standalone: true}" [name]="'select' + day.key">
-
-              <!-- <option *ngFor="let free of day.value" [ngValue]="free">{{ free.fromHour }}</option> -->
-              <option [ngValue]="day.value">{{ day.value }}</option>
+              <ng-container *ngFor="let dayValues of day.value">
+                <option [ngValue]="dayValues.fromHour">{{ dayValues.fromHour }}</option>
+              </ng-container>
             </select>
             <br/>
             <button type="submit" class="btn btn-primary">Zatwierdź</button>
@@ -44,4 +44,4 @@
     </tr>
   </tbody>
 </table>
-
+</div>

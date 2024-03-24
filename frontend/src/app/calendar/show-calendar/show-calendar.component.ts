@@ -1,25 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../../http.service';
 import { UserService } from '../../user.service';
-import { waitForAsync } from '@angular/core/testing';
+import {AvailableTime, CalendarResponse, LESSON_TIME, LESSON_TIMES, TUTOR_ID} from './calendar.model';
+import { Observable, tap } from 'rxjs';
 
 @Component({
   selector: 'app-show-calendar',
   templateUrl: './show-calendar.component.html',
   styleUrls: ['./show-calendar.component.css']
 })
+
 export class ShowCalendarComponent implements OnInit {
-  calendarDates: any;
+
+  calendarDates = new Map<string, CalendarResponse>();
   tutor: any;
   uniqueDates: Array<any> = [];
   tutors: any;
   reservations: any;
-  lessonTime = 60;
-  lessonTimes = [45,60,90,120];
-  tutorId: number = 1;
-  calendarId: string = '';
+  lessonTime = LESSON_TIME;
+  lessonTimes = LESSON_TIMES;
+  tutorId = TUTOR_ID;
+  calendarId = '';
   startDateTime: any;
-  formSubmitted: boolean = false;
+  formSubmitted = false;
 
   constructor(private httpService: HttpService, public userService: UserService) {
     // this.displayCalendar();
@@ -30,27 +33,37 @@ export class ShowCalendarComponent implements OnInit {
     this.getDatesTwoWeeksFromNow();
   }
 
-  onSubmitForm() {
+  async onSubmitForm() {
     // Set the flag to true when the form is submitted
     this.formSubmitted = true;
-    this.displayCalendar();
+
+    await this.getTutorCalendar().toPromise(); // Wait for getTutorCalendar to complete
+
+    this.getCalendar();
   }
 
-  displayCalendar() {
-    this.httpService.get(`/tutors/${this.tutorId}`)
-    .subscribe(response => {
-      this.tutor = response;
-      this.tutorId = this.tutor.id;
-      this.calendarId = this.tutor.calendarId;
-      this.httpService.get(`/reservations/tutor/${this.tutorId}/calendar/${this.calendarId}/${this.lessonTime}`)
-      .subscribe(response => {
-        this.calendarDates = response; // Assign the response data to the variable
-        console.log(response);
-        // console.log(this.calendarId);
+  getTutorCalendar(): Observable<any> {
+    return this.httpService.get(`/tutors/${this.tutorId}`)
+      .pipe(
+        tap((response2: any) => {
+          this.tutor = response2;
+          this.tutorId = this.tutor.id;
+          this.calendarId = this.tutor.calendarId;
+        })
+      );
+  }
+
+  getCalendar() {
+    this.httpService.get(`/reservations/tutor/${this.tutorId}/calendar/${this.calendarId}/${this.lessonTime}`)
+      .subscribe((calendarResponse: any) => {
+        // Explicitly cast the response to CalendarResponse
+        this.calendarDates = new Map(Object.entries(calendarResponse));
+        console.log(this.calendarDates);
       });
-    });
-
   }
+
+
+
 
   getTutors() {
     this.httpService.get(`/tutors`)
@@ -79,21 +92,21 @@ export class ShowCalendarComponent implements OnInit {
     this.uniqueDates = dates;
   }
 
-  addReservationToCalendar(startDateTime: any) {
-    const dateComponents = startDateTime.date.split('T')[0];
-    const startTime = startDateTime.fromHour.split(':');
-    const endTime = startDateTime.untilHour.split(':');
+  addReservationToCalendar(timestamp: AvailableTime, date: string) {
+    const startTime = timestamp.fromHour;
+    const endTime = timestamp.untilHour;
 
     // console.log('Date Components:', dateComponents);
     // console.log('Start Time:', startTime);
     // console.log('End Time:', endTime);
 
-    const startDate = new Date(dateComponents);
+    const day: Date = new Date(date);
+    const startDate = day;
     startDate.setHours(parseInt(startTime[0], 10));
     startDate.setMinutes(parseInt(startTime[1], 10));
     startDate.setSeconds(parseInt(startTime[2], 10));
 
-    const endDate = new Date(dateComponents);
+    const endDate = day;
     endDate.setHours(parseInt(endTime[0], 10));
     endDate.setMinutes(parseInt(endTime[1], 10));
     endDate.setSeconds(parseInt(endTime[2], 10));
@@ -115,12 +128,12 @@ export class ShowCalendarComponent implements OnInit {
       });
   }
 
-  confirmReservation(startDateTime: any) {
+  confirmReservation(startDateTime: any, date: string) {
     console.log(startDateTime);
     const confirmation = window.confirm('Czy na pewno chcesz dokonać rezerwacji od ' + startDateTime.fromHour + ' do ' + startDateTime.untilHour + '?');
 
     if (confirmation) {
-      this.addReservationToCalendar(startDateTime);
+      this.addReservationToCalendar(startDateTime,date);
     }
   }
 }

@@ -7,7 +7,7 @@ import com.google.api.services.calendar.model.EventDateTime;
 import com.poznan.put.rest.webservice.restapi.Tutor.Tutor;
 import com.poznan.put.rest.webservice.restapi.calendar.AvailableTime;
 import com.poznan.put.rest.webservice.restapi.calendar.CalendarConfig;
-import com.poznan.put.rest.webservice.restapi.calendar.TimeManager;
+import com.poznan.put.rest.webservice.restapi.calendar.TimeManagerUtil;
 import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
 import com.poznan.put.rest.webservice.restapi.reservation.Reservation;
 import com.poznan.put.rest.webservice.restapi.student.Student;
@@ -60,8 +60,8 @@ public class ReservationJpaResource {
     // Display free time
     @GetMapping("/tutor/{tutorId}/calendar/{calendarId}/{minutesForLesson}")
     public HashMap<LocalDate, ArrayList<AvailableTime>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId, @PathVariable int minutesForLesson) {
-        TimeManager timeManager = new TimeManager();
-        return timeManager.getFreeTime(tutorId, calendarId, minutesForLesson);
+        TimeManagerUtil timeManagerUtil = new TimeManagerUtil();
+        return timeManagerUtil.getFreeTime(tutorId, calendarId, minutesForLesson);
     }
 
     @GetMapping

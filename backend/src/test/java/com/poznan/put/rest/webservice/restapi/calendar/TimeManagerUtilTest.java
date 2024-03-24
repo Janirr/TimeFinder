@@ -28,7 +28,6 @@ class TimeManagerTest {
             date = date.plusDays(1);
             LocalTime takenStartHour = LocalTime.of(15, 0);
             LocalTime takenEndHour = LocalTime.of(16, 30);
-            DayTimestamp dayTimestamp = new DayTimestamp(date, takenStartHour, takenEndHour);
 
             LocalTime freeStartHour = LocalTime.of(14, 0);
             LocalTime freeEndHour = LocalTime.of(20, 0);

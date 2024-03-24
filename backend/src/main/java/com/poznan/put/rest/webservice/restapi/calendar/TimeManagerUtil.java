@@ -23,7 +23,7 @@ import java.util.HashMap;
  * It will be easier this way to check if there is a free time for the lesson.
  */
 
-public class TimeManager {
+public class TimeManagerUtil {
     public static final int NUMBER_OF_DAYS = 14;
     public static final int MINUTES_TO_ADD = 15;
     private final ArrayList<DayTimestamp> markedFreeTimes = new ArrayList<>();
