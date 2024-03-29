@@ -59,7 +59,7 @@ public class ReservationJpaResource {
 
     // Display free time
     @GetMapping("/tutor/{tutorId}/calendar/{calendarId}/{minutesForLesson}")
-    public HashMap<LocalDate, ArrayList<AvailableTime>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId, @PathVariable int minutesForLesson) {
+    public HashMap<LocalDate, List<AvailableTime>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId, @PathVariable int minutesForLesson) {
         TimeManagerUtil timeManagerUtil = new TimeManagerUtil();
         return timeManagerUtil.getFreeTime(tutorId, calendarId, minutesForLesson);
     }
