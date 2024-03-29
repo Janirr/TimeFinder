@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpService } from '../../http.service';
-import { UserService } from '../../user.service';
+import {Component, OnInit} from '@angular/core';
+import {HttpService} from '../../http.service';
+import {UserService} from '../../user.service';
 import {AvailableTime, CalendarResponse, LESSON_TIME, LESSON_TIMES, TUTOR_ID} from './calendar.model';
-import { Observable, tap } from 'rxjs';
+import {Observable, tap} from 'rxjs';
 
 @Component({
   selector: 'app-show-calendar',
@@ -63,14 +63,12 @@ export class ShowCalendarComponent implements OnInit {
   }
 
 
-
-
   getTutors() {
     this.httpService.get(`/tutors`)
-    .subscribe(response => {
-      this.tutors = response; // Assign the response data to the variable
-      // console.log(response);
-    });
+      .subscribe(response => {
+        this.tutors = response; // Assign the response data to the variable
+        // console.log(response);
+      });
   }
 
   getDatesTwoWeeksFromNow() {
@@ -92,29 +90,24 @@ export class ShowCalendarComponent implements OnInit {
     this.uniqueDates = dates;
   }
 
-  addReservationToCalendar(timestamp: AvailableTime, date: string) {
-    const startTime = timestamp.fromHour;
-    const endTime = timestamp.untilHour;
+  addReservationToCalendar(timestamp: AvailableTime, date: Date) {
+    const startTime: string = timestamp.fromHour;
+    const endTime: string = timestamp.untilHour;
 
-    // console.log('Date Components:', dateComponents);
-    // console.log('Start Time:', startTime);
-    // console.log('End Time:', endTime);
-
-    const day: Date = new Date(date);
-    const startDate = day;
+    const startDate: Date = date;
     startDate.setHours(parseInt(startTime[0], 10));
     startDate.setMinutes(parseInt(startTime[1], 10));
     startDate.setSeconds(parseInt(startTime[2], 10));
 
-    const endDate = day;
+    const endDate: Date = date;
     endDate.setHours(parseInt(endTime[0], 10));
     endDate.setMinutes(parseInt(endTime[1], 10));
     endDate.setSeconds(parseInt(endTime[2], 10));
 
     const event = {
       summary: 'Korepetycje',
-      start: startDate,
-      end: endDate,
+      start: new Date(startTime),
+      end: new Date(endTime),
       attendee: this.userService.student.email
     };
 
@@ -133,7 +126,7 @@ export class ShowCalendarComponent implements OnInit {
     const confirmation = window.confirm('Czy na pewno chcesz dokonać rezerwacji od ' + startDateTime.fromHour + ' do ' + startDateTime.untilHour + '?');
 
     if (confirmation) {
-      this.addReservationToCalendar(startDateTime,date);
+      this.addReservationToCalendar(startDateTime, new Date(date));
     }
   }
 }
