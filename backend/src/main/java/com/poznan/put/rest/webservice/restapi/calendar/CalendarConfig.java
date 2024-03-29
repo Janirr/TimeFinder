@@ -71,9 +71,11 @@ public class CalendarConfig {
                 .build();
     }
 
+    public static void main(String[] args) throws GeneralSecurityException, IOException {
+        getAuthorization(1);
+    }
 
-    public List<Event> getEventsFromCalendarById(int tutorId, String calendarId)
-            throws GeneralSecurityException, IOException {
+    public List<Event> getEventsFromCalendarById(int tutorId, String calendarId) throws GeneralSecurityException, IOException {
         try {
             // Build a new authorized API client service.
             Calendar service = getAuthorization(tutorId);
@@ -152,11 +154,6 @@ public class CalendarConfig {
         Calendar service = getAuthorization(tutorId);
 
         service.calendars().delete(calendarId).execute();
-    }
-
-
-    public static void main(String[] args) throws GeneralSecurityException, IOException {
-        getAuthorization(1);
     }
 
 }
