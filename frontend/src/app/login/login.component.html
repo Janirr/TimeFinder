@@ -1,59 +1,39 @@
-
 <div class="container">
   <div class="row">
-    <div class="col-md-4">
-      <div *ngIf="!authService.isAuthenticated()" class="login-form">
-        <h2 class="text-center mb-4">Logowanie ucznia</h2>
+    <div class="col-md-12">
+      <div *ngIf="!authService.isAuthenticated()" class="col-md-4 col-md-offset-4 login-form">
+        <h2 class="text-center mb-4">Zaloguj się</h2>
         <form (submit)="login()" class="p-4 bg-light rounded">
           <div class="form-group">
             <label for="studentEmail">
-              <img src="assets/login.png" alt="Ikona loginu" width="32px">
+              <!--              <img alt="Ikona loginu" src="assets/login.png" width="32px">-->
               E-mail:
             </label>
-            <input type="text" id="studentEmail" name="studentEmail" [(ngModel)]="studentEmail" required class="form-control">
+            <input [(ngModel)]="email" class="form-control" id="studentEmail" name="studentEmail" required
+                   type="text">
           </div>
           <div class="form-group">
             <label for="studentPassword">
-              <img src="assets/password.png" alt="Ikona hasła" width="32px">
+              <!--              <img alt="Ikona hasła" src="assets/password.png" width="32px">-->
               Hasło:
             </label>
-            <input type="password" id="studentPassword" name="studentPassword" [(ngModel)]="studentPassword" required class="form-control">
+            <input [(ngModel)]="password" class="form-control" id="studentPassword" name="studentPassword"
+                   required
+                   type="password">
           </div>
-          <button type="submit" class="btn btn-primary btn-block">Login</button>
+          <div class="checkbox">
+            <label>
+              <input [(ngModel)]="isTutor" [ngModelOptions]="{standalone: true}" type="checkbox">Jestem nauczycielem
+            </label>
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">Login</button>
         </form>
       </div>
       <div *ngIf="authService.isAuthenticated()" class="logout-form">
         <form (submit)="logout()" class="p-4 bg-light rounded">
-          <button type="submit" class="btn btn-primary btn-block">Logout</button>
+          <button class="btn btn-primary btn-block" type="submit">Logout</button>
         </form>
       </div>
-    </div>
-    <div class="col-md-4">
-      <div *ngIf="!authService.isAuthenticated()" class="login-form">
-        <h2 class="text-center mb-4">Logowanie nauczyciela</h2>
-        <form (submit)="tutorLogin()" class="p-4 bg-light rounded">
-          <div class="form-group">
-            <label for="tutorEmail">
-              <img src="assets/login.png" alt="Ikona loginu" width="32px">
-              E-mail:
-            </label>
-            <input type="text" id="tutorEmail" name="tutorEmail" [(ngModel)]="tutorEmail" required class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="tutorPassword">
-              <img src="assets/password.png" alt="Ikona hasła" width="32px">
-              Hasło:
-            </label>
-            <input type="password" id="tutorPassword" name="tutorPassword" [(ngModel)]="tutorPassword" required class="form-control">
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">Login</button>
-        </form>
-      </div>
-      <!-- <div *ngIf="authService.isAuthenticated()" class="logout-form">
-        <form (submit)="logout()" class="p-4 bg-light rounded">
-          <button type="submit" class="btn btn-primary btn-block">Logout</button>
-        </form>
-      </div> -->
     </div>
   </div>
 </div>

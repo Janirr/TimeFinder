@@ -22,6 +22,7 @@ export class ShowCalendarComponent implements OnInit {
   tutorId = TUTOR_ID;
   calendarId = '';
   startDateTime: any;
+  endDateTime: any;
   formSubmitted = false;
 
   constructor(private httpService: HttpService, public userService: UserService) {
@@ -94,20 +95,20 @@ export class ShowCalendarComponent implements OnInit {
     const startTime: string = timestamp.fromHour;
     const endTime: string = timestamp.untilHour;
 
-    const startDate: Date = date;
-    startDate.setHours(parseInt(startTime[0], 10));
-    startDate.setMinutes(parseInt(startTime[1], 10));
-    startDate.setSeconds(parseInt(startTime[2], 10));
+    const startUnits = startTime.split(':');
+    const endUnits = endTime.split(':');
 
-    const endDate: Date = date;
-    endDate.setHours(parseInt(endTime[0], 10));
-    endDate.setMinutes(parseInt(endTime[1], 10));
-    endDate.setSeconds(parseInt(endTime[2], 10));
+    // Create separate date objects for startDate and endDate
+    let startDate: Date = new Date(date);
+    startDate.setHours(parseInt(startUnits[0]), parseInt(startUnits[1], parseInt(startUnits[2])));
+
+    let endDate: Date = new Date(date);
+    endDate.setHours(parseInt(endUnits[0]), parseInt(endUnits[1], parseInt(endUnits[2])));
 
     const event = {
       summary: 'Korepetycje',
-      start: new Date(startTime),
-      end: new Date(endTime),
+      start: startDate,
+      end: endDate,
       attendee: this.userService.student.email
     };
 
@@ -121,12 +122,18 @@ export class ShowCalendarComponent implements OnInit {
       });
   }
 
-  confirmReservation(startDateTime: any, date: string) {
-    console.log(startDateTime);
-    const confirmation = window.confirm('Czy na pewno chcesz dokonać rezerwacji od ' + startDateTime.fromHour + ' do ' + startDateTime.untilHour + '?');
+  confirmReservation(userForm: any, day: any) {
+    const startDateTime = userForm.value.startDateTime;
+    const endDateTime = userForm.value.endDateTime;
+    const confirmation = window.confirm('Czy na pewno chcesz dokonać rezerwacji od ' + startDateTime + ' do ' + endDateTime + '?');
+
+    const timeStamp: AvailableTime = {
+      fromHour: startDateTime,
+      untilHour: endDateTime
+    };
 
     if (confirmation) {
-      this.addReservationToCalendar(startDateTime, new Date(date));
+      this.addReservationToCalendar(timeStamp, new Date(day));
     }
   }
 }

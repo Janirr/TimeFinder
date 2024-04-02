@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../auth.service';
+import {Component} from '@angular/core';
+import {AuthService} from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -7,30 +7,23 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  studentEmail = '';
-  studentPassword = '';
-  tutorEmail = '';
-  tutorPassword = '';
+  email = '';
+  password = '';
+  isTutor = false;
 
-  constructor(public authService: AuthService) {}
-
-  login() {
-    this.authService.login(this.studentEmail, this.studentPassword).subscribe(
-      response => {
-        // Handle successful login response
-        localStorage.setItem('token', response.token); // Change 'token' to your token key
-        // Redirect the user or perform any additional actions
-      },
-      error => {
-        // Handle login error
-        console.error('Student login failed:', error);
-        // Display error message or perform any additional actions
-      }
-    );
+  constructor(public authService: AuthService) {
   }
 
-  tutorLogin() {
-    this.authService.tutorLogin(this.tutorEmail, this.tutorPassword).subscribe(
+  login() {
+    if (this.isTutor) {
+      this.tutorLogin(this.email, this.password);
+    } else {
+      this.studentLogin(this.email, this.password);
+    }
+  }
+
+  tutorLogin(email: string, password: string) {
+    this.authService.tutorLogin(email, password).subscribe(
       response => {
         // Handle successful tutor login response
         localStorage.setItem('token', response.token); // Change 'token' to your token key
@@ -39,6 +32,21 @@ export class LoginComponent {
       error => {
         // Handle tutor login error
         console.error('Tutor login failed:', error);
+        // Display error message or perform any additional actions
+      }
+    );
+  }
+
+  studentLogin(email: string, password: string) {
+    this.authService.login(email, password).subscribe(
+      response => {
+        // Handle successful login response
+        localStorage.setItem('token', response.token); // Change 'token' to your token key
+        // Redirect the user or perform any additional actions
+      },
+      error => {
+        // Handle login error
+        console.error('Student login failed:', error);
         // Display error message or perform any additional actions
       }
     );

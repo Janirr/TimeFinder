@@ -18,22 +18,29 @@
     <button class="btn btn-primary" type="submit">Wyszukaj terminy</button>
   </form>
 </div>
+<hr>
 <!-- Godziny + zatwierdź -->
 <div *ngIf="formSubmitted">
   <div
-    style="display: flex; height: 400px; width: 100%; padding-left: 15px; padding-right: 15px; flex-wrap: wrap; justify-content: space-between">
-    <div *ngFor="let day of calendarDates | keyvalue">
-      {{ day.key }}
-      <form #userForm="ngForm" (submit)="confirmReservation(startDateTime,day.key)" [id]="day.key" class="form">
-        <div class="">
-          <select [(ngModel)]="startDateTime" [id]="'select' + day.key" [name]="'select' + day.key"
-                  [ngModelOptions]="{standalone: true}" class="form-control text-center">
-            <ng-container *ngFor="let dayValues of day.value">
-              <option [ngValue]="dayValues">{{ dayValues.fromHour }}</option>
-            </ng-container>
-          </select>
+    style="display: flex; width: 100%; padding-left: 15px; padding-right: 15px; flex-wrap: wrap; justify-content: space-between">
+    <div *ngFor="let day of calendarDates | keyvalue" class="col-md-3" style="text-align: center">
+      <h4>{{ day.key | date:'fullDate' }}</h4>
+      <hr>
+      <form #userForm="ngForm"
+            (submit)="confirmReservation(userForm, day.key)"
+            [id]="day.key"
+            class="form">
+        <div>
+          <div *ngFor="let dayValues of day.value">
+            <input [ngModel]="startDateTime" name="startDateTime" type="hidden">
+            <input [ngModel]="endDateTime" name="endDateTime" type="hidden">
+            <button
+              (click)="userForm.value.startDateTime = dayValues.fromHour; userForm.value.endDateTime = dayValues.untilHour"
+              class="btn btn-primary col-md-8 col-md-offset-2" style="margin-top: 4px"
+              type="submit">{{ dayValues.fromHour }}
+            </button>
+          </div>
           <br/>
-          <button class="btn btn-primary" type="submit">Zatwierdź</button>
         </div>
       </form>
     </div>
