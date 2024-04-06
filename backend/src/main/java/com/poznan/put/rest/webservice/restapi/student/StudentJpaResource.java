@@ -1,8 +1,9 @@
-package com.poznan.put.rest.webservice.restapi.jpa;
+package com.poznan.put.rest.webservice.restapi.student;
 
 import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
+import com.poznan.put.rest.webservice.restapi.jpa.ReservationRepository;
+import com.poznan.put.rest.webservice.restapi.jpa.StudentRepository;
 import com.poznan.put.rest.webservice.restapi.reservation.Reservation;
-import com.poznan.put.rest.webservice.restapi.student.Student;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
