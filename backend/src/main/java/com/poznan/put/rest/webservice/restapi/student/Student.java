@@ -24,10 +24,25 @@ public class Student {
     private String surname;
     @Email(message = "Email should be valid")
     private String email;
-    private String school;
+    @Size(min = 9, max = 15, message = "Your phone number has to contain between 9 to 15 characters")
+    private String phoneNumber;
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Reservation> reservationList;
+
+    public Student(int id, String password, String name, String surname, String email, String phoneNumber, List<Reservation> reservationList) {
+        this.id = id;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.reservationList = reservationList;
+    }
+
+    public Student() {
+
+    }
 
     public int getId() {
         return id;
@@ -36,7 +51,6 @@ public class Student {
     public void setId(int id) {
         this.id = id;
     }
-
 
     public String getPassword() {
         return password;
@@ -70,14 +84,6 @@ public class Student {
         this.email = email;
     }
 
-    public String getSchool() {
-        return school;
-    }
-
-    public void setSchool(String school) {
-        this.school = school;
-    }
-
     public List<Reservation> getReservationList() {
         return reservationList;
     }
@@ -86,21 +92,15 @@ public class Student {
         this.reservationList = reservationList;
     }
 
-    public Student(int id, String password, String name, String surname, String email, String school, List<Reservation> reservationList) {
-        this.id = id;
-        this.password = password;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.school = school;
-        this.reservationList = reservationList;
-    }
-
-    public Student() {
-
-    }
-
     public void addReservation(Event event) {
 
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }
