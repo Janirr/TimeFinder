@@ -1,4 +1,4 @@
-package com.poznan.put.rest.webservice.restapi.jpa;
+package com.poznan.put.rest.webservice.restapi.reservation;
 
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
@@ -9,7 +9,9 @@ import com.poznan.put.rest.webservice.restapi.calendar.AvailableTime;
 import com.poznan.put.rest.webservice.restapi.calendar.CalendarConfig;
 import com.poznan.put.rest.webservice.restapi.calendar.TimeManagerUtil;
 import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
-import com.poznan.put.rest.webservice.restapi.reservation.Reservation;
+import com.poznan.put.rest.webservice.restapi.jpa.ReservationRepository;
+import com.poznan.put.rest.webservice.restapi.jpa.StudentRepository;
+import com.poznan.put.rest.webservice.restapi.jpa.TutorsRepository;
 import com.poznan.put.rest.webservice.restapi.student.Student;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;

@@ -1,10 +1,12 @@
-package com.poznan.put.rest.webservice.restapi.jpa;
+package com.poznan.put.rest.webservice.restapi.Tutor;
 
 import com.google.api.services.calendar.model.CalendarListEntry;
 import com.google.api.services.calendar.model.Event;
-import com.poznan.put.rest.webservice.restapi.Tutor.Tutor;
 import com.poznan.put.rest.webservice.restapi.calendar.CalendarConfig;
 import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
+import com.poznan.put.rest.webservice.restapi.jpa.PricingRepository;
+import com.poznan.put.rest.webservice.restapi.jpa.TutorsRepository;
+import com.poznan.put.rest.webservice.restapi.pricing.Pricing;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -18,10 +20,12 @@ import java.util.Optional;
 public class TutorJpaResource {
     private final TutorsRepository tutorsRepository;
     private final CalendarConfig calendarConfig;
+    private final PricingRepository pricingRepository;
 
-    public TutorJpaResource(TutorsRepository tutorsRepository, CalendarConfig calendarConfig) {
+    public TutorJpaResource(TutorsRepository tutorsRepository, CalendarConfig calendarConfig, PricingRepository pricingRepository) {
         this.tutorsRepository = tutorsRepository;
         this.calendarConfig = calendarConfig;
+        this.pricingRepository = pricingRepository;
     }
 
     @GetMapping
@@ -103,5 +107,11 @@ public class TutorJpaResource {
         Tutor tutor = tutorOptional.get();
         tutor.setCalendarId(calendarId);
         tutorsRepository.save(tutor);
+    }
+
+    @GetMapping("/{id}/pricings")
+    public List<Pricing> getPricingsForTutor(@PathVariable Long id) {
+        Optional<Tutor> tutor = tutorsRepository.findById(id);
+        return tutor.map(pricingRepository::findAllByTutor).orElse(null);
     }
 }
