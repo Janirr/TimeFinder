@@ -1,1 +1,13 @@
-<p>change-calendar-id works!</p>
+<form (submit)="changeCalendarId()" class="p-4 bg-light rounded">
+  <div class="form-group">
+    <label for="calendarId">
+      Id kalendarza:
+    </label>
+    <select [(ngModel)]="calendarId" id="calendarId" name="calendarId">
+      <option *ngFor="let calendar of possibleCalendarIds" [ngValue]="calendar.id">{{ calendar.summary }}
+      </option>
+    </select>
+  </div>
+  <button class="btn btn-primary btn-block" type="submit">Zatwierdź</button>
+</form>
+

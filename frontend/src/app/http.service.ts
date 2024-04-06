@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,8 @@ export class HttpService {
     })
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   get(url: string) {
     return this.http.get(this.urlTemplate + url, this.httpOptions);
@@ -24,5 +25,17 @@ export class HttpService {
 
   post(url: string, data: any) {
     return this.http.post(this.urlTemplate + url, data, this.httpOptions);
+  }
+
+  patch(url: string, data: any) {
+    return this.http.patch(this.urlTemplate + url, data, this.httpOptions);
+  }
+
+  delete(url: string) {
+    return this.http.delete(this.urlTemplate + url, this.httpOptions);
+  }
+
+  put(url: string) {
+    return this.http.put(this.urlTemplate + url, null, this.httpOptions);
   }
 }

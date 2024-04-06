@@ -1,1 +1,8 @@
-<p>logout works!</p>
+<div *ngIf="authService.isAuthenticated()">
+  <div class="logout-form">
+    <form (submit)="logout()" class="p-4 bg-light rounded">
+      <button class="btn btn-primary btn-block" type="submit">Logout</button>
+    </form>
+  </div>
+</div>
+<hr>

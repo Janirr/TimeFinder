@@ -52,10 +52,6 @@ export class LoginComponent {
     );
   }
 
-  register() {
-    // Implement the registration logic
-  }
-
   logout() {
     this.authService.logout();
   }

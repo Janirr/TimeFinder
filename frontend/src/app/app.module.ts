@@ -18,6 +18,7 @@ import {TutorComponent} from './account/tutor/tutor.component';
 import {AccountComponent} from './account/account.component';
 import {StudentComponent} from './account/student/student.component';
 import {ChangeCalendarIdComponent} from './account/tutor/change-calendar-id/change-calendar-id.component';
+import {LogoutComponent} from "./account/logout/logout.component";
 
 registerLocaleData(localePl);
 
@@ -34,7 +35,8 @@ registerLocaleData(localePl);
     TutorComponent,
     AccountComponent,
     StudentComponent,
-    ChangeCalendarIdComponent
+    ChangeCalendarIdComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,

@@ -5,10 +5,7 @@ import com.google.api.services.calendar.model.Event;
 import com.poznan.put.rest.webservice.restapi.Tutor.Tutor;
 import com.poznan.put.rest.webservice.restapi.calendar.CalendarConfig;
 import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -28,15 +25,15 @@ public class TutorJpaResource {
     }
 
     @GetMapping
-    public List<Tutor> getAllTutors(){
+    public List<Tutor> getAllTutors() {
         return tutorsRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Optional<Tutor> getTutorById(@PathVariable Long id){
+    public Optional<Tutor> getTutorById(@PathVariable Long id) {
         Optional<Tutor> Tutor = tutorsRepository.findById(id);
-        if(Tutor.isEmpty()){
-            throw new ResourceNotFound("There is no tutor with id: "+id);
+        if (Tutor.isEmpty()) {
+            throw new ResourceNotFound("There is no tutor with id: " + id);
         }
         return Tutor;
     }
@@ -45,28 +42,28 @@ public class TutorJpaResource {
     public List<Event> getTutorPrimaryCalendarById(@PathVariable Long id) throws GeneralSecurityException, IOException {
         Optional<Tutor> Tutor = tutorsRepository.findById(id);
 
-        if(Tutor.isEmpty()){
-            throw new ResourceNotFound("There is no tutor with id: "+id);
+        if (Tutor.isEmpty()) {
+            throw new ResourceNotFound("There is no tutor with id: " + id);
         }
-        return calendarConfig.getEventsFromCalendarById(Tutor.get().getId(),"primary");
+        return calendarConfig.getEventsFromCalendarById(Tutor.get().getId(), "primary");
     }
 
     @GetMapping("/{id}/calendar/{calendarId}")
     public List<Event> getTutorCustomCalendarById(@PathVariable Long id, @PathVariable String calendarId) throws GeneralSecurityException, IOException {
         Optional<Tutor> tutor = tutorsRepository.findById(id);
 
-        if(tutor.isEmpty()){
-            throw new ResourceNotFound("There is no tutor with id: "+id);
+        if (tutor.isEmpty()) {
+            throw new ResourceNotFound("There is no tutor with id: " + id);
         }
-        return calendarConfig.getEventsFromCalendarById(tutor.get().getId(),calendarId);
+        return calendarConfig.getEventsFromCalendarById(tutor.get().getId(), calendarId);
     }
 
     @GetMapping("/{id}/calendars")
     public List<CalendarListEntry> getTutorCalendars(@PathVariable Long id) throws GeneralSecurityException, IOException {
         Optional<Tutor> tutor = tutorsRepository.findById(id);
 
-        if(tutor.isEmpty()){
-            throw new ResourceNotFound("There is no tutor with id: "+id);
+        if (tutor.isEmpty()) {
+            throw new ResourceNotFound("There is no tutor with id: " + id);
         }
         return calendarConfig.getAllCalendarsForTutor(tutor.get().getId());
     }
@@ -89,8 +86,22 @@ public class TutorJpaResource {
 
         return events;
     }
+
     @GetMapping("/subject/{subject}")
-    public Tutor getTutorBySubject(@PathVariable String subject){
+    public Tutor getTutorBySubject(@PathVariable String subject) {
         return tutorsRepository.findBySubject(subject);
+    }
+
+    @PutMapping("{tutorId}/calendar/{calendarId}")
+    public void updateTutorCalendar(@PathVariable Long tutorId, @PathVariable String calendarId) {
+        Optional<Tutor> tutorOptional = tutorsRepository.findById(tutorId);
+
+        if (tutorOptional.isEmpty()) {
+            throw new ResourceNotFound("There is no tutorOptional with id: " + tutorId);
+        }
+
+        Tutor tutor = tutorOptional.get();
+        tutor.setCalendarId(calendarId);
+        tutorsRepository.save(tutor);
     }
 }
