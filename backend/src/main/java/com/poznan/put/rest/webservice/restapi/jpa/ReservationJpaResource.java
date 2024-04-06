@@ -12,6 +12,8 @@ import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
 import com.poznan.put.rest.webservice.restapi.reservation.Reservation;
 import com.poznan.put.rest.webservice.restapi.student.Student;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -21,6 +23,7 @@ import java.net.URI;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,6 +34,8 @@ public class ReservationJpaResource {
     private final CalendarConfig calendarConfig;
     private final StudentRepository studentRepository;
     private final TutorsRepository tutorsRepository;
+
+    Logger logger = LoggerFactory.getLogger(ReservationJpaResource.class);
 
     public ReservationJpaResource(TutorsRepository tutorsRepository, ReservationRepository reservationRepository, CalendarConfig calendarConfig, StudentRepository studentRepository) {
         this.reservationRepository = reservationRepository;
@@ -121,8 +126,12 @@ public class ReservationJpaResource {
         if (tutor == null) {
             throw new ResourceNotFound("There is no tutor with id: " + tutorId);
         }
-        calendarConfig.addEventToCalendar(tutorId, event, calendarId);
-        Reservation reservation = new Reservation(shortEvent.getStart(), shortEvent.getEnd(), event.getSummary(), student, tutor);
+
+        Event googleEvent = calendarConfig.addEventToCalendar(tutorId, event, calendarId);
+        String htmlLink = googleEvent.getHtmlLink();
+        logger.info("Link: {}", htmlLink);
+
+        Reservation reservation = new Reservation(googleEvent.getId(), shortEvent.getStart(), shortEvent.getEnd(), event.getSummary(), student, tutor);
         reservationRepository.save(reservation);
     }
 
@@ -148,6 +157,38 @@ public class ReservationJpaResource {
             throws GeneralSecurityException, IOException {
         System.out.printf("Getting event %s\n", eventId);
         return calendarConfig.getEventById(tutorId, calendarId, eventId);
+    }
+
+    @GetMapping("/tutor/{tutorId}/calendar/{calendarId}/student/{studentMail}")
+    public void synchronizeGoogleCalendarWithReservations(@PathVariable String calendarId,
+                                                          @PathVariable int tutorId,
+                                                          @PathVariable String studentMail) throws GeneralSecurityException, IOException {
+        List<Event> eventsFromCalendarForStudent = calendarConfig.getEventsFromCalendarForStudent(tutorId, calendarId, studentMail);
+        List<Reservation> allByStudentEmail = reservationRepository.findAllByStudentEmail(studentMail);
+
+        if (eventsFromCalendarForStudent == null) {
+            logger.warn("Nothing to update");
+        }
+
+        for (Event calendarEvent : eventsFromCalendarForStudent) {
+            String eventId = calendarEvent.getId();
+            if (allByStudentEmail.stream().anyMatch(reservation -> reservation.getId().equals(eventId))) {
+                EventDateTime start = calendarEvent.getStart();
+                EventDateTime end = calendarEvent.getEnd();
+                Reservation reservation = reservationRepository.findById(eventId);
+                reservation.setStart(new Date(start.getDateTime().getValue()));
+                reservation.setEnd(new Date(end.getDateTime().getValue()));
+                reservationRepository.save(reservation);
+            } else {
+                EventDateTime start = calendarEvent.getStart();
+                EventDateTime end = calendarEvent.getEnd();
+                String summary = calendarEvent.getSummary();
+                Student student = studentRepository.findByEmail(studentMail);
+                Tutor tutor = tutorsRepository.findById(tutorId);
+                Reservation reservation = new Reservation(eventId, new Date(start.getDateTime().getValue()), new Date(end.getDateTime().getValue()), summary, student, tutor);
+                reservationRepository.save(reservation);
+            }
+        }
     }
 
 }

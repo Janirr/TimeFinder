@@ -1,7 +1,7 @@
-import { AuthService } from './../auth.service';
-import { Component, OnInit } from '@angular/core';
-import { HttpService } from '../http.service';
-import { UserService } from '../user.service';
+import {AuthService} from '../auth.service';
+import {Component, OnInit} from '@angular/core';
+import {HttpService} from '../http.service';
+import {UserService} from '../user.service';
 
 @Component({
   selector: 'app-reservations',
@@ -15,7 +15,7 @@ export class ReservationsComponent implements OnInit {
   calendarId: string = 'c0cc6a538c4604e5570b325de0095a2e9c1647adfc9c4e5f7bbc5efb71c5db57@group.calendar.google.com';
 
   constructor(private httpService: HttpService, public userService: UserService, public authService: AuthService) {
-    if(this.authService.isTutorLoggedIn()){
+    if (this.authService.isTutorLoggedIn()) {
       this.displayTutorCalendarEvents();
     } else {
       this.displayStudentReservations();
@@ -23,10 +23,11 @@ export class ReservationsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.onSubmitForm();
   }
 
   onSubmitForm() {
-    if(this.authService.isTutorLoggedIn()){
+    if (this.authService.isTutorLoggedIn()) {
       this.displayTutorCalendarEvents();
     } else {
       this.displayStudentReservations();
@@ -41,13 +42,22 @@ export class ReservationsComponent implements OnInit {
       });
   }
 
-  displayStudentReservations(){
+  displayStudentReservations() {
     const email = this.userService.student.email;
     this.httpService.get(`/reservations?email=${email}`)
-    .subscribe(response => {
-      this.studentReservations = response;
-      console.log(response);
-    });
+      .subscribe(response => {
+        this.studentReservations = response;
+        console.log(response);
+      });
+  }
+
+  synchronizeWithGoogleCalendar() {
+    this.httpService.get(`/reservations/tutor/${this.tutorId}/calendar/${this.calendarId}/student/${this.userService.student.email}`).subscribe(
+      response => {
+        console.log(response);
+        this.ngOnInit()
+      }
+    );
   }
 }
 

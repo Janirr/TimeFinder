@@ -1,22 +1,16 @@
 package com.poznan.put.rest.webservice.restapi.reservation;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.google.api.services.calendar.model.EventDateTime;
 import com.poznan.put.rest.webservice.restapi.Tutor.Tutor;
 import com.poznan.put.rest.webservice.restapi.student.Student;
 import jakarta.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Date;
-import java.util.Optional;
 
 @Entity
 public class Reservation {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private String id;
     private Date start;
     private Date end;
     private String summary;
@@ -35,7 +29,7 @@ public class Reservation {
 
     }
 
-    public Reservation(int id, Date start, Date end, String summary, Student student, Tutor tutor) {
+    public Reservation(String id, Date start, Date end, String summary, Student student, Tutor tutor) {
         this.id = id;
         this.start = start;
         this.end = end;
@@ -44,19 +38,11 @@ public class Reservation {
         this.tutor = tutor;
     }
 
-    public Reservation(Date start, Date end, String summary, Student student, Tutor tutor) {
-        this.start = start;
-        this.end = end;
-        this.summary = summary;
-        this.student = student;
-        this.tutor = tutor;
-    }
-
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -99,4 +85,5 @@ public class Reservation {
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
+
 }

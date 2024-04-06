@@ -2,6 +2,8 @@ package com.poznan.put.rest.webservice.restapi.calendar;
 
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -16,6 +18,7 @@ public class TimeManagerUtil {
     public static final int NUMBER_OF_DAYS = 14;
     public static final int MINUTES_TO_ADD = 15;
     private final CalendarConfig calendarConfig = new CalendarConfig();
+    private final Logger logger = LoggerFactory.getLogger(TimeManagerUtil.class);
     private HashMap<LocalDate, List<Timestamp>> markedFreeTimes = new HashMap<>();
     private HashMap<LocalDate, List<Timestamp>> takenTimes = new HashMap<>();
 
@@ -47,7 +50,7 @@ public class TimeManagerUtil {
             getCalendarEvents(tutorId, calendarId);
             generateAvailableTimes(minutesForLesson, availableTime, days);
         } catch (Exception e) {
-            System.out.println("Error in getting free time: " + e.getMessage());
+            logger.error("Error in getting free time: {} {}", e.getMessage(), e.getLocalizedMessage(), e);
         }
         return availableTime;
     }
@@ -95,15 +98,20 @@ public class TimeManagerUtil {
                 if (markedFreeTimes.containsKey(eventDay)) {
                     markedFreeTimes.get(eventDay).add(timestamp);
                 } else {
-                    markedFreeTimes.put(eventDay, List.of(timestamp));
+                    List<Timestamp> freeTimes = new ArrayList<>();
+                    freeTimes.add(timestamp);
+                    markedFreeTimes.put(eventDay, freeTimes);
                 }
             } else {
                 if (takenTimes.containsKey(eventDay)) {
                     takenTimes.get(eventDay).add(timestamp);
                 } else {
-                    takenTimes.put(eventDay, List.of(timestamp));
+                    List<Timestamp> takenTimesList = new ArrayList<>();
+                    takenTimesList.add(timestamp);
+                    takenTimes.put(eventDay, takenTimesList);
                 }
             }
+
         }
     }
 

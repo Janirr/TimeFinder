@@ -1,6 +1,5 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, Injectable, OnInit } from '@angular/core';
-import { HttpService } from 'src/app/http.service';
+import {Component, OnInit} from '@angular/core';
+import {HttpService} from 'src/app/http.service';
 
 @Component({
   selector: 'app-edit-reservation',
@@ -24,20 +23,19 @@ export class EditReservationComponent implements OnInit {
     const calendarId = 'c0cc6a538c4604e5570b325de0095a2e9c1647adfc9c4e5f7bbc5efb71c5db57@group.calendar.google.com';
 
     this.http.get(`'/reservations/calendar/${calendarId}/event/${this.eventId}`)
-    .subscribe(response => {
-      this.event = response; // Assign the response data to the variable
-      console.log(response);
-   });
+      .subscribe(response => {
+        this.event = response; // Assign the response data to the variable
+        console.log(response);
+      });
   }
+
   formatDateTime(dateTime: string | number): string {
     let timestamp: number;
 
     if (typeof dateTime === 'string') {
       timestamp = Number(dateTime);
-    } else if (typeof dateTime === 'number') {
-      timestamp = dateTime;
     } else {
-      return ''; // Return an empty string or handle the error as per your requirements
+      timestamp = dateTime;
     }
 
     if (isNaN(timestamp)) {
@@ -53,7 +51,6 @@ export class EditReservationComponent implements OnInit {
 
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
-
 
 
 }

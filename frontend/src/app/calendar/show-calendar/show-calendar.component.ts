@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpService} from '../../http.service';
 import {UserService} from '../../user.service';
-import {AvailableTime, CalendarResponse, LESSON_TIME, LESSON_TIMES, TUTOR_ID} from './calendar.model';
+import {AvailableTime, CalendarResponse, LESSON_TIME, LESSON_TIMES, TUTOR_ID} from '../calendar.model';
 import {Observable, tap} from 'rxjs';
 
 @Component({

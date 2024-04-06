@@ -16,17 +16,21 @@ import java.util.Objects;
 @ControllerAdvice
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<ErrorDetails> handleAllExceptions(Exception ex, WebRequest request){
+    public final ResponseEntity<ErrorDetails> handleAllExceptions(Exception ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 LocalDateTime.now(),
                 ex.getMessage(),
                 request.getDescription(false)
         );
+        StackTraceElement[] stackTrace = ex.getStackTrace();
+        for (StackTraceElement stackTraceElement : stackTrace) {
+            logger.error(stackTraceElement.toString());
+        }
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(ResourceNotFound.class)
-    public final ResponseEntity<ErrorDetails> handleUserNotFoundException(Exception ex, WebRequest request){
+    public final ResponseEntity<ErrorDetails> handleUserNotFoundException(Exception ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 LocalDateTime.now(),
                 ex.getMessage(),
@@ -39,8 +43,8 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 LocalDateTime.now(),
-                "Total errors: "+ex.getErrorCount() +
-                 ". First error: " + Objects.requireNonNull(ex.getFieldError()).getDefaultMessage(),
+                "Total errors: " + ex.getErrorCount() +
+                        ". First error: " + Objects.requireNonNull(ex.getFieldError()).getDefaultMessage(),
                 request.getDescription(false));
 
 

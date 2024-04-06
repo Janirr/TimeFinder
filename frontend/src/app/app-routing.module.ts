@@ -6,7 +6,7 @@ import {ReservationsComponent} from './reservations/reservations.component';
 import {EditReservationComponent} from './reservation/edit-reservation/edit-reservation.component';
 import {LoginComponent} from './login/login.component';
 import {ShowCalendarComponent} from './calendar/show-calendar/show-calendar.component';
-import {RegisterComponent} from "./register/register.component";
+import {AccountComponent} from "./account/account.component";
 
 const routes: Routes = [
   {path: 'pricing', component: PricingComponent},
@@ -16,7 +16,8 @@ const routes: Routes = [
   {path: 'reservations', component: ReservationsComponent},
   {path: 'reservation', component: EditReservationComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterComponent},
+  {path: 'account', component: AccountComponent},
+  {path: '**', component: ShowCalendarComponent}
 ];
 
 @NgModule({

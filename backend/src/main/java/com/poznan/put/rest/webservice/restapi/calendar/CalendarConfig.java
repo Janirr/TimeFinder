@@ -105,6 +105,19 @@ public class CalendarConfig {
 
     }
 
+    public List<Event> getEventsFromCalendarForStudent(int tutorId, String calendarId, String studentEmail)
+            throws GeneralSecurityException, IOException {
+        Calendar service = getAuthorization(tutorId);
+
+        List<Event> eventsFromCalendarById = getEventsFromCalendarById(tutorId, calendarId);
+
+        return eventsFromCalendarById.stream()
+                .filter(event -> event.getAttendees() != null)
+                .filter(event -> event.getAttendees().stream()
+                        .anyMatch(attendee -> studentEmail.equals(attendee.getEmail())))
+                .toList();
+    }
+
     public List<CalendarListEntry> getAllCalendarsForTutor(int tutorId)
             throws GeneralSecurityException, IOException {
         Calendar service = getAuthorization(tutorId);
@@ -125,11 +138,11 @@ public class CalendarConfig {
         return service.events().get(calendarId, eventId).execute();
     }
 
-    public void addEventToCalendar(int tutorId, Event event, String calendarId)
+    public Event addEventToCalendar(int tutorId, Event event, String calendarId)
             throws GeneralSecurityException, IOException {
         Calendar service = getAuthorization(tutorId);
 
-        service.events().insert(calendarId, event).execute();
+        return service.events().insert(calendarId, event).execute();
     }
 
     public void editEventById(int tutorId, String calendarId, String eventId, EventDateTime start, EventDateTime end)
@@ -139,7 +152,6 @@ public class CalendarConfig {
         event.setEnd(end);
         event.setStart(start);
         Event updatedEvent = service.events().update(calendarId, eventId, event).execute();
-        System.out.println(updatedEvent.getUpdated());
     }
 
     public void deleteEventById(int tutorId, String calendarId, String eventId)

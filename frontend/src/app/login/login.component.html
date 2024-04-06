@@ -5,19 +5,19 @@
         <h2 class="text-center mb-4">Zaloguj się</h2>
         <form (submit)="login()" class="p-4 bg-light rounded">
           <div class="form-group">
-            <label for="studentEmail">
+            <label for="email">
               <!--              <img alt="Ikona loginu" src="assets/login.png" width="32px">-->
               E-mail:
             </label>
-            <input [(ngModel)]="email" class="form-control" id="studentEmail" name="studentEmail" required
+            <input [(ngModel)]="email" class="form-control" id="email" name="email" required
                    type="text">
           </div>
           <div class="form-group">
-            <label for="studentPassword">
+            <label for="password">
               <!--              <img alt="Ikona hasła" src="assets/password.png" width="32px">-->
               Hasło:
             </label>
-            <input [(ngModel)]="password" class="form-control" id="studentPassword" name="studentPassword"
+            <input [(ngModel)]="password" class="form-control" id="password" name="password"
                    required
                    type="password">
           </div>
@@ -29,11 +29,17 @@
           <button class="btn btn-primary btn-block" type="submit">Login</button>
         </form>
       </div>
-      <div *ngIf="authService.isAuthenticated()" class="logout-form">
-        <form (submit)="logout()" class="p-4 bg-light rounded">
-          <button class="btn btn-primary btn-block" type="submit">Logout</button>
-        </form>
-      </div>
+      <!--      <div *ngIf="authService.isAuthenticated()">-->
+      <!--        <div class="logout-form">-->
+      <!--          <form (submit)="logout()" class="p-4 bg-light rounded">-->
+      <!--            <button class="btn btn-primary btn-block" type="submit">Logout</button>-->
+      <!--          </form>-->
+      <!--        </div>-->
+      <!--        <div *ngIf="authService.isTutorLoggedIn()">-->
+      <!--          <h2 class="text-center mb-4">Change default calendar:</h2>-->
+      <!--          <input type="text">-->
+      <!--        </div>-->
+      <!--      </div>-->
     </div>
   </div>
 </div>

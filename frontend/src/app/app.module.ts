@@ -12,9 +12,12 @@ import {PricingComponent} from './pricing/pricing.component';
 import {ContactComponent} from './contact/contact.component';
 import {ReservationsComponent} from './reservations/reservations.component';
 import {LoginComponent} from './login/login.component';
-import {RegisterComponent} from './register/register.component';
 import {registerLocaleData} from "@angular/common";
 import localePl from '@angular/common/locales/pl';
+import {TutorComponent} from './account/tutor/tutor.component';
+import {AccountComponent} from './account/account.component';
+import {StudentComponent} from './account/student/student.component';
+import {ChangeCalendarIdComponent} from './account/tutor/change-calendar-id/change-calendar-id.component';
 
 registerLocaleData(localePl);
 
@@ -28,7 +31,10 @@ registerLocaleData(localePl);
     ContactComponent,
     ReservationsComponent,
     LoginComponent,
-    RegisterComponent
+    TutorComponent,
+    AccountComponent,
+    StudentComponent,
+    ChangeCalendarIdComponent
   ],
   imports: [
     BrowserModule,
