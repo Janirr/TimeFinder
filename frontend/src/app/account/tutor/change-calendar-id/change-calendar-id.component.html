@@ -3,7 +3,7 @@
     <label for="calendarId">
       Id kalendarza:
     </label>
-    <select [(ngModel)]="calendarId" id="calendarId" name="calendarId">
+    <select [(ngModel)]="calendarId" class="form-control" id="calendarId" name="calendarId">
       <option *ngFor="let calendar of possibleCalendarIds" [ngValue]="calendar.id">{{ calendar.summary }}
       </option>
     </select>
