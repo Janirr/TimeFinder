@@ -51,7 +51,7 @@ public class TutorJpaResource {
         if (Tutor.isEmpty()) {
             throw new ResourceNotFound("There is no tutor with id: " + id);
         }
-        return calendarConfig.getEventsFromCalendarById(Tutor.get().getId(), "primary");
+        return calendarConfig.getEventsFromCalendar(Tutor.get().getId(), "primary");
     }
 
     @GetMapping("/{id}/calendar/{calendarId}")
@@ -61,7 +61,7 @@ public class TutorJpaResource {
         if (tutor.isEmpty()) {
             throw new ResourceNotFound("There is no tutor with id: " + id);
         }
-        return calendarConfig.getEventsFromCalendarById(tutor.get().getId(), calendarId);
+        return calendarConfig.getEventsFromCalendar(tutor.get().getId(), calendarId);
     }
 
     @GetMapping("/{id}/calendars")
@@ -87,7 +87,7 @@ public class TutorJpaResource {
 
         for (CalendarListEntry calendar : calendars) {
             String calendarId = calendar.getId();
-            events.add(calendarConfig.getEventsFromCalendarById(tutor.get().getId(), calendarId));
+            events.add(calendarConfig.getEventsFromCalendar(tutor.get().getId(), calendarId));
         }
 
         return events;

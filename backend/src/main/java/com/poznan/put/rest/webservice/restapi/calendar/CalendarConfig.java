@@ -75,7 +75,7 @@ public class CalendarConfig {
         getAuthorization(1);
     }
 
-    public List<Event> getEventsFromCalendarById(int tutorId, String calendarId) throws GeneralSecurityException, IOException {
+    public List<Event> getEventsFromCalendar(int tutorId, String calendarId) throws GeneralSecurityException, IOException {
         try {
             // Build a new authorized API client service.
             Calendar service = getAuthorization(tutorId);
@@ -109,7 +109,7 @@ public class CalendarConfig {
             throws GeneralSecurityException, IOException {
         Calendar service = getAuthorization(tutorId);
 
-        List<Event> eventsFromCalendarById = getEventsFromCalendarById(tutorId, calendarId);
+        List<Event> eventsFromCalendarById = getEventsFromCalendar(tutorId, calendarId);
 
         return eventsFromCalendarById.stream()
                 .filter(event -> event.getAttendees() != null)
@@ -117,6 +117,7 @@ public class CalendarConfig {
                         .anyMatch(attendee -> studentEmail.equals(attendee.getEmail())))
                 .toList();
     }
+
 
     public List<CalendarListEntry> getAllCalendarsForTutor(int tutorId)
             throws GeneralSecurityException, IOException {

@@ -52,12 +52,21 @@ export class ReservationsComponent implements OnInit {
   }
 
   synchronizeWithGoogleCalendar() {
-    this.httpService.get(`/reservations/tutor/${this.tutorId}/calendar/${this.calendarId}/student/${this.userService.student.email}`).subscribe(
-      response => {
-        console.log(response);
-        this.ngOnInit()
-      }
-    );
+    if (this.authService.isStudentLoggedIn()) {
+      this.httpService.get(`/reservations/tutor/${this.tutorId}/calendar/${this.calendarId}/student/${this.userService.student.email}`).subscribe(
+        response => {
+          console.log(response);
+          this.ngOnInit()
+        }
+      );
+    } else {
+      this.httpService.get(`/reservations/tutor/${this.tutorId}/calendar/${this.calendarId}`).subscribe(
+        response => {
+          console.log(response);
+          this.ngOnInit()
+        }
+      );
+    }
   }
 }
 

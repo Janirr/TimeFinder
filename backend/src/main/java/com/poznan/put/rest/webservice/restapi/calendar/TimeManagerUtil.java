@@ -89,7 +89,7 @@ public class TimeManagerUtil {
     }
 
     public void getCalendarEvents(int tutorId, String calendarId) throws GeneralSecurityException, IOException {
-        for (Event event : calendarConfig.getEventsFromCalendarById(tutorId, calendarId)) {
+        for (Event event : calendarConfig.getEventsFromCalendar(tutorId, calendarId)) {
             LocalDate eventDay = getLocalDateFromDate(new Date(event.getStart().getDateTime().getValue()));
             LocalTime startHour = getLocalTime(event.getStart());
             LocalTime endHour = getLocalTime(event.getEnd());

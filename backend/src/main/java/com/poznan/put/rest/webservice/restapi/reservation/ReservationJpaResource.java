@@ -24,10 +24,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/reservations")
@@ -61,7 +58,7 @@ public class ReservationJpaResource {
     @GetMapping("/google/tutor/{tutorId}/calendar/{calendarId}")
     public List<Event> getCalendarEventsFromCalendarByIds(@PathVariable int tutorId, @PathVariable String calendarId)
             throws GeneralSecurityException, IOException {
-        return calendarConfig.getEventsFromCalendarById(tutorId, calendarId);
+        return calendarConfig.getEventsFromCalendar(tutorId, calendarId);
     }
 
     // Display free time
@@ -187,6 +184,53 @@ public class ReservationJpaResource {
                 EventDateTime end = calendarEvent.getEnd();
                 String summary = calendarEvent.getSummary();
                 Student student = studentRepository.findByEmail(studentMail);
+                Tutor tutor = tutorsRepository.findById(tutorId);
+                Reservation reservation = new Reservation(eventId, new Date(start.getDateTime().getValue()), new Date(end.getDateTime().getValue()), summary, student, tutor);
+                reservationRepository.save(reservation);
+            }
+        }
+    }
+
+    @GetMapping("/tutor/{tutorId}/calendar/{calendarId}")
+    public void synchronizeGoogleCalendarWithReservations(@PathVariable String calendarId,
+                                                          @PathVariable int tutorId) throws GeneralSecurityException, IOException {
+        List<Event> googleReservations = calendarConfig.getEventsFromCalendar(tutorId, calendarId);
+        List<Reservation> dbReservations = reservationRepository.findAllByTutorId(tutorId);
+
+        if (googleReservations == null) {
+            logger.warn("Nothing to update");
+            return;
+        }
+
+        for (Event calendarEvent : googleReservations) {
+            String eventId = calendarEvent.getId();
+            if (dbReservations.stream().anyMatch(reservation -> reservation.getId().equals(eventId))) {
+                EventDateTime start = calendarEvent.getStart();
+                EventDateTime end = calendarEvent.getEnd();
+                Reservation reservation = reservationRepository.findById(eventId);
+                reservation.setStart(new Date(start.getDateTime().getValue()));
+                reservation.setEnd(new Date(end.getDateTime().getValue()));
+                reservationRepository.save(reservation);
+            } else {
+                EventDateTime start = calendarEvent.getStart();
+                EventDateTime end = calendarEvent.getEnd();
+                String summary = calendarEvent.getSummary();
+                List<EventAttendee> attendees = calendarEvent.getAttendees();
+                Optional<String> studentMail = Optional.empty();
+                if (attendees == null) {
+                    continue;
+                }
+                List<Student> allStudents = studentRepository.findAll();
+                List<String> emailStudents = allStudents.stream().map(Student::getEmail).toList();
+                studentMail = attendees
+                        .stream()
+                        .filter(attendee -> emailStudents.contains(attendee.getEmail())).findFirst().map(EventAttendee::getEmail);
+                Student student;
+                if (studentMail.isPresent()) {
+                    student = studentRepository.findByEmail(studentMail.get());
+                } else {
+                    continue;
+                }
                 Tutor tutor = tutorsRepository.findById(tutorId);
                 Reservation reservation = new Reservation(eventId, new Date(start.getDateTime().getValue()), new Date(end.getDateTime().getValue()), summary, student, tutor);
                 reservationRepository.save(reservation);

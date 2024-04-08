@@ -10,5 +10,7 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
     List<Reservation> findAllByStudentEmail(String email);
 
+    List<Reservation> findAllByTutorId(int tutorId);
+
     Reservation findById(String id);
 }
