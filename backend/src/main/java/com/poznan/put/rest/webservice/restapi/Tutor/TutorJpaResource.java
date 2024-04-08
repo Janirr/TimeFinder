@@ -8,6 +8,7 @@ import com.poznan.put.rest.webservice.restapi.jpa.PricingRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.TutorsRepository;
 import com.poznan.put.rest.webservice.restapi.pricing.Pricing;
 import com.poznan.put.rest.webservice.restapi.pricing.PricingRequest;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -117,6 +118,7 @@ public class TutorJpaResource {
     }
 
     @PostMapping("/{id}/pricings")
+    @Transactional
     public void updatePricingsForTutor(@PathVariable Long id, @RequestBody List<PricingRequest> pricings) {
         Optional<Tutor> tutor = tutorsRepository.findById(id);
         List<Pricing> pricingArrayList = new ArrayList<>();
@@ -132,6 +134,7 @@ public class TutorJpaResource {
             pricing.setTutor(tutor.get());
             pricingArrayList.add(pricing);
         }
+        pricingRepository.deleteAllByTutor(tutor.get());
         pricingRepository.saveAll(pricingArrayList);
     }
 }
