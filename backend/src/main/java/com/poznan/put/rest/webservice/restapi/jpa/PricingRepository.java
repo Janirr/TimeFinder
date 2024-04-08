@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface PricingRepository extends JpaRepository<Pricing, Integer> {
     List<Pricing> findAllByTutor(Tutor tutor);
+
+    void deleteAllByTutor(Tutor tutor);
 }

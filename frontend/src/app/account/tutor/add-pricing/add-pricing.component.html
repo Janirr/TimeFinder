@@ -4,7 +4,6 @@
   <table class="table table-striped table-bordered">
     <thead>
     <tr>
-      <th>Id</th>
       <th>Poziom</th>
       <th>Cena</th>
       <th></th>
@@ -12,7 +11,6 @@
     </thead>
     <tbody>
     <tr *ngFor="let pricing of pricings; let i = index">
-      <td><input [(ngModel)]="pricing.id" class="form-control" name="id{{i}}" type="text"></td>
       <td><input [(ngModel)]="pricing.level" class="form-control" name="level{{i}}" type="text"></td>
       <td><input [(ngModel)]="pricing.price" class="form-control" name="price{{i}}" type="text"></td>
       <td>
