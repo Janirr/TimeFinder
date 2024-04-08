@@ -170,6 +170,7 @@ public class ReservationJpaResource {
 
         if (eventsFromCalendarForStudent == null) {
             logger.warn("Nothing to update");
+            return;
         }
 
         for (Event calendarEvent : eventsFromCalendarForStudent) {
