@@ -1,6 +1,5 @@
 package com.poznan.put.rest.webservice.restapi.pricing;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.poznan.put.rest.webservice.restapi.Tutor.Tutor;
 import jakarta.persistence.*;
 
@@ -8,16 +7,16 @@ import jakarta.persistence.*;
 @Entity
 public class Pricing {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String level;
     private String price;
 
     @ManyToOne(targetEntity = Tutor.class)
     @JoinColumn(name = "tutor_id", foreignKey = @ForeignKey(name = "fk_pricing_tutor"))
-    @JsonBackReference
     private Tutor tutor;
 
-    public Pricing(String id, String level, String price, Tutor tutor) {
+    public Pricing(Long id, String level, String price, Tutor tutor) {
         this.id = id;
         this.level = level;
         this.price = price;
@@ -28,11 +27,11 @@ public class Pricing {
 
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

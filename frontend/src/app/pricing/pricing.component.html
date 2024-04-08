@@ -11,21 +11,6 @@
     <button class="btn btn-primary" type="submit">Zobacz ceny</button>
   </form>
   <hr>
-  <table *ngIf="formSubmitted" class="table table-striped table-bordered">
-    <thead>
-    <tr>
-      <th>Poziom</th>
-      <th>Cena</th>
-    </tr>
-    </thead>
-    <tbody>
-    <ng-container *ngFor="let pricing of pricings">
-      <tr>
-        <td>{{ pricing.level }}</td>
-        <td>{{ pricing.price }}</td>
-      </tr>
-    </ng-container>
-    </tbody>
-  </table>
+  <app-show-pricing *ngIf="formSubmitted" [pricings]="pricings"/>
 </div>
 

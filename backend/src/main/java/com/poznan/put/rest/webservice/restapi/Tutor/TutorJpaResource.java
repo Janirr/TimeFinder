@@ -7,6 +7,7 @@ import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
 import com.poznan.put.rest.webservice.restapi.jpa.PricingRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.TutorsRepository;
 import com.poznan.put.rest.webservice.restapi.pricing.Pricing;
+import com.poznan.put.rest.webservice.restapi.pricing.PricingRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -113,5 +114,24 @@ public class TutorJpaResource {
     public List<Pricing> getPricingsForTutor(@PathVariable Long id) {
         Optional<Tutor> tutor = tutorsRepository.findById(id);
         return tutor.map(pricingRepository::findAllByTutor).orElse(null);
+    }
+
+    @PostMapping("/{id}/pricings")
+    public void updatePricingsForTutor(@PathVariable Long id, @RequestBody List<PricingRequest> pricings) {
+        Optional<Tutor> tutor = tutorsRepository.findById(id);
+        List<Pricing> pricingArrayList = new ArrayList<>();
+
+        if (tutor.isEmpty()) {
+            return;
+        }
+
+        for (PricingRequest pricingRequest : pricings) {
+            Pricing pricing = new Pricing();
+            pricing.setLevel(pricingRequest.getLevel());
+            pricing.setPrice(pricingRequest.getPrice());
+            pricing.setTutor(tutor.get());
+            pricingArrayList.add(pricing);
+        }
+        pricingRepository.saveAll(pricingArrayList);
     }
 }
