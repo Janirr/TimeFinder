@@ -1,5 +1,4 @@
 <div class="container">
-  <app-logout></app-logout>
   <app-tutor *ngIf="authService.isTutorLoggedIn()"></app-tutor>
   <app-student *ngIf="authService.isStudentLoggedIn()"></app-student>
 </div>

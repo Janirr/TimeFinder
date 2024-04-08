@@ -1,30 +1,21 @@
 <div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <div *ngIf="!authService.isAuthenticated()" class="col-md-4 col-md-offset-4 login-form">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div *ngIf="!authService.isAuthenticated()" class="login-form bg-light p-4 rounded shadow">
         <h2 class="text-center mb-4">Zaloguj się</h2>
-        <form (submit)="login()" class="p-4 bg-light rounded">
-          <div class="form-group">
-            <label for="email">
-              <!--              <img alt="Ikona loginu" src="assets/login.png" width="32px">-->
-              E-mail:
-            </label>
-            <input [(ngModel)]="email" class="form-control" id="email" name="email" required
-                   type="text">
+        <form (submit)="login()">
+          <div class="mb-3">
+            <label class="form-label" for="email">E-mail:</label>
+            <input [(ngModel)]="email" class="form-control" id="email" name="email" required type="email">
           </div>
-          <div class="form-group">
-            <label for="password">
-              <!--              <img alt="Ikona hasła" src="assets/password.png" width="32px">-->
-              Hasło:
-            </label>
-            <input [(ngModel)]="password" class="form-control" id="password" name="password"
-                   required
-                   type="password">
+          <div class="mb-3">
+            <label class="form-label" for="password">Hasło:</label>
+            <input [(ngModel)]="password" class="form-control" id="password" name="password" required type="password">
           </div>
-          <div class="checkbox">
-            <label>
-              <input [(ngModel)]="isTutor" [ngModelOptions]="{standalone: true}" type="checkbox">Jestem nauczycielem
-            </label>
+          <div class="mb-3 form-check">
+            <input [(ngModel)]="isTutor" [ngModelOptions]="{standalone: true}" class="form-check-input" id="isTutor"
+                   type="checkbox">
+            <label class="form-check-label" for="isTutor">Jestem nauczycielem</label>
           </div>
           <button class="btn btn-primary btn-block" type="submit">Login</button>
         </form>

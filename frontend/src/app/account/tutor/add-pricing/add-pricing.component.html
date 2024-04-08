@@ -1,24 +1,24 @@
 <hr>
 <h2>Edytuj cennik</h2>
 <form>
-  <table class="table table-striped table-bordered">
-    <thead>
-    <tr>
-      <th>Poziom</th>
-      <th>Cena</th>
-      <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let pricing of pricings; let i = index">
-      <td><input [(ngModel)]="pricing.level" class="form-control" name="level{{i}}" type="text"></td>
-      <td><input [(ngModel)]="pricing.price" class="form-control" name="price{{i}}" type="text"></td>
-      <td>
-        <button (click)="deletePricing(i)" class="btn btn-danger col-md-12">Usuń pozycję</button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-  <button (click)="acceptNewPricings()" class="btn btn-primary">Zatwierdź nowy cennik</button>
-  <button (click)="addNewPricing()" class="btn btn-info">Dodaj nową pozycję</button>
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Poziom</th>
+            <th>Cena</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let pricing of pricings; let i = index">
+            <td><input [(ngModel)]="pricing.level" class="form-control" name="level{{i}}" type="text"></td>
+            <td><input [(ngModel)]="pricing.price" class="form-control" name="price{{i}}" type="text"></td>
+            <td>
+                <button (click)="deletePricing(i)" class="btn btn-danger col-md-12">Usuń pozycję</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <button (click)="acceptNewPricings()" class="btn btn-primary btn-block">Zatwierdź nowy cennik</button>
+    <button (click)="addNewPricing()" class="btn btn-info">Dodaj nową pozycję</button>
 </form>

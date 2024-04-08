@@ -1,14 +1,14 @@
 <div class="container">
-  <h1>Skontaktuj się z nauczycielem</h1>
-  <form #userForm="ngForm" (ngSubmit)="onSubmitForm()">
-    <div class="form-group">
-      <label>Nauczyciel:</label>
-      <select [(ngModel)]="tutorId" [ngModelOptions]="{standalone: true}" class="form-control">
+  <h1 class="mb-4">Skontaktuj się z nauczycielem</h1>
+  <form #userForm="ngForm" (ngSubmit)="onSubmitForm()" class="mb-4">
+    <div class="mb-3">
+      <label class="form-label" for="tutorSelect">Nauczyciel:</label>
+      <select [(ngModel)]="tutorId" [ngModelOptions]="{standalone: true}" class="form-control" id="tutorSelect">
         <option *ngFor="let tutor of tutors" [id]="tutor.id" [ngValue]="tutor.id"> {{ tutor.name }} {{ tutor.surname }}
         </option>
       </select>
     </div>
-    <button class="btn btn-primary" type="submit">Wyświetl dane kontaktowe</button>
+    <button class="btn btn-primary btn-block" type="submit">Wyświetl dane kontaktowe</button>
   </form>
   <hr>
   <div *ngIf="formSubmitted">

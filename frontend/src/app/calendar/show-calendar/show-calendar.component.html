@@ -1,48 +1,49 @@
 <div class="container">
-  <h1>Zarezerwuj termin</h1>
-  <form #userForm="ngForm" (ngSubmit)="onSubmitForm()">
-    <div class="form-group">
-      <label>Czas trwania zajęć:</label>
-      <select [(ngModel)]="lessonTime" [ngModelOptions]="{standalone: true}" class="form-control">
-        <option *ngFor="let lessonTime of lessonTimes" [id]="lessonTime" [ngValue]="lessonTime">{{ lessonTime }} minut
-        </option>
+  <h1 class="mb-4">Zarezerwuj termin</h1>
+
+  <form #userForm="ngForm" (ngSubmit)="onSubmitForm()" class="mb-4">
+    <div class="mb-3">
+      <label class="form-label" for="lessonTime">Czas trwania zajęć:</label>
+      <select [(ngModel)]="lessonTime" [ngModelOptions]="{standalone: true}" class="form-select" id="lessonTime">
+        <option *ngFor="let time of lessonTimes" [value]="time">{{ time }} minut</option>
       </select>
     </div>
-    <div class="form-group">
-      <label>Nauczyciel:</label>
-      <select [(ngModel)]="tutorId" [ngModelOptions]="{standalone: true}" class="form-control">
-        <option *ngFor="let tutor of tutors" [id]="tutor.id" [ngValue]="tutor.id">{{ tutor.name }} {{ tutor.surname }}
-        </option>
+
+    <div class="mb-3">
+      <label class="form-label" for="tutor">Nauczyciel:</label>
+      <select [(ngModel)]="tutorId" [ngModelOptions]="{standalone: true}" class="form-select" id="tutor">
+        <option *ngFor="let tutor of tutors" [value]="tutor.id">{{ tutor.name }} {{ tutor.surname }}</option>
       </select>
     </div>
-    <button class="btn btn-primary" type="submit">Wyszukaj terminy</button>
+
+    <button class="btn btn-primary btn-block" type="submit">Wyszukaj terminy</button>
   </form>
 </div>
+
 <hr>
-<!-- Godziny + zatwierdź -->
+
 <div *ngIf="formSubmitted">
-  <div
-    style="display: flex; width: 100%; padding-left: 15px; padding-right: 15px; flex-wrap: wrap; justify-content: space-between">
-    <div *ngFor="let day of calendarDates | keyvalue" class="col-md-3" style="text-align: center">
-      <h4>{{ day.key | date:'fullDate' }}</h4>
-      <hr>
-      <form #userForm="ngForm"
-            (submit)="confirmReservation(userForm, day.key)"
-            [id]="day.key"
-            class="form">
-        <div>
-          <div *ngFor="let dayValues of day.value">
-            <input [ngModel]="startDateTime" name="startDateTime" type="hidden">
-            <input [ngModel]="endDateTime" name="endDateTime" type="hidden">
-            <button
-              (click)="userForm.value.startDateTime = dayValues.fromHour; userForm.value.endDateTime = dayValues.untilHour"
-              class="btn btn-primary col-md-8 col-md-offset-2" style="margin-top: 4px"
-              type="submit">{{ dayValues.fromHour }}
-            </button>
+  <div class="container">
+    <div class="row row-cols-1 row-cols-md-6 g-6">
+      <div *ngFor="let day of calendarDates | keyvalue" class="col">
+        <div class="card text-center">
+          <div class="card-header">{{ day.key | date:'fullDate' }}</div>
+          <div class="card-body">
+            <form #userForm="ngForm" (submit)="confirmReservation(userForm, day.key)" [id]="day.key" class="form">
+              <div *ngFor="let dayValues of day.value">
+                <input [(ngModel)]="startDateTime" name="startDateTime" type="hidden">
+                <input [(ngModel)]="endDateTime" name="endDateTime" type="hidden">
+                <button
+                  (click)="userForm.value.startDateTime = dayValues.fromHour; userForm.value.endDateTime = dayValues.untilHour"
+                  class="btn btn-primary btn-block col-md-12"
+                  style="margin-top: 4px" type="submit">{{ dayValues.fromHour }}
+                </button>
+              </div>
+            </form>
           </div>
-          <br/>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
+```

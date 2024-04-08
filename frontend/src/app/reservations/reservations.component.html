@@ -17,8 +17,8 @@
         <td>{{ reservation.end.dateTime.value | date: 'HH:mm' }}</td>
         <td>{{ reservation.summary }}</td>
         <td>
-          <button [routerLink]="'/reservation'" class="btn btn-primary btn-warning" disabled>Edytuj</button>
-          <button class="btn btn-primary btn-danger" disabled>Usuń</button>
+          <button [routerLink]="'/reservation'" class="btn btn-primary btn-block btn-warning" disabled>Edytuj</button>
+          <button class="btn btn-primary btn-block btn-danger" disabled>Usuń</button>
         </td>
       </tr>
     </ng-container>
@@ -31,12 +31,14 @@
         <td>{{ reservation.end | date: 'HH:mm' }}</td>
         <td>{{ reservation.summary }}</td>
         <td>
-          <button [routerLink]="'/reservation'" class="btn btn-primary btn-warning" disabled>Edytuj</button>
-          <button class="btn btn-primary btn-danger" disabled>Usuń</button>
+          <button [routerLink]="'/reservation'" class="btn btn-primary btn-block btn-warning" disabled>Edytuj</button>
+          <button class="btn btn-primary btn-block btn-danger" disabled>Usuń</button>
         </td>
       </tr>
     </ng-container>
     </tbody>
   </table>
-  <button (click)="synchronizeWithGoogleCalendar()" class="btn btn-primary">Zsynchronizuj z kalendarzem Google</button>
+  <button (click)="synchronizeWithGoogleCalendar()" class="btn btn-primary btn-block">Zsynchronizuj z kalendarzem
+    Google
+  </button>
 </div>

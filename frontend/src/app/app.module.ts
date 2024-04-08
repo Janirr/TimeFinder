@@ -18,7 +18,6 @@ import {TutorComponent} from './account/tutor/tutor.component';
 import {AccountComponent} from './account/account.component';
 import {StudentComponent} from './account/student/student.component';
 import {ChangeCalendarIdComponent} from './account/tutor/change-calendar-id/change-calendar-id.component';
-import {LogoutComponent} from "./account/logout/logout.component";
 import {AddPricingComponent} from './account/tutor/add-pricing/add-pricing.component';
 import {ShowPricingComponent} from './pricing/show-pricing/show-pricing.component';
 
@@ -38,7 +37,6 @@ registerLocaleData(localePl);
     AccountComponent,
     StudentComponent,
     ChangeCalendarIdComponent,
-    LogoutComponent,
     AddPricingComponent,
     ShowPricingComponent
   ],
