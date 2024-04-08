@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
-import { UserService } from './user.service';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {Observable, throwError} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
+import {UserService} from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,8 @@ export class AuthService {
   private studentLoggedIn: boolean = false;
   private tutorLoggedIn: boolean = false;
 
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) {
+  }
 
   login(email: string, password: string): Observable<any> {
     const credentials = {
@@ -49,6 +50,7 @@ export class AuthService {
         })
       );
   }
+
   tutorLogin(email: string, password: string): Observable<any> {
     const credentials = {
       email,
@@ -88,7 +90,7 @@ export class AuthService {
     return this.studentLoggedIn;
   }
 
-  logout(){
+  logout() {
     this.studentLoggedIn = false;
     this.tutorLoggedIn = false;
   }
