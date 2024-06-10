@@ -1,6 +1,7 @@
 package com.poznan.put.rest.webservice.restapi.reservation;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.poznan.put.rest.webservice.restapi.Tutor.Tutor;
 import com.poznan.put.rest.webservice.restapi.student.Student;
 import jakarta.persistence.*;
@@ -17,7 +18,7 @@ public class Reservation {
 
     @ManyToOne(targetEntity = Student.class)
     @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "fk_reservation_student"))
-    @JsonBackReference
+    @JsonManagedReference
     private Student student;
 
     @ManyToOne(targetEntity = Tutor.class)

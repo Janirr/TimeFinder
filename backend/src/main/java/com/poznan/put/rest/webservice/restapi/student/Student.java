@@ -1,7 +1,7 @@
 package com.poznan.put.rest.webservice.restapi.student;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.api.services.calendar.model.Event;
 import com.poznan.put.rest.webservice.restapi.reservation.Reservation;
 import jakarta.persistence.*;
@@ -27,7 +27,7 @@ public class Student {
     @Size(min = 9, max = 15, message = "Your phone number has to contain between 9 to 15 characters")
     private String phoneNumber;
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonBackReference
     private List<Reservation> reservationList;
 
     public Student(int id, String password, String name, String surname, String email, String phoneNumber, List<Reservation> reservationList) {
