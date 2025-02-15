@@ -3,6 +3,7 @@ import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {UserService} from './user.service';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable({
   providedIn: 'root'
@@ -25,9 +26,10 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<any> {
+    const hashedPassword = this.hashPassword(password);  // Hash the password
     const credentials = {
       email,
-      password
+      password: hashedPassword
     };
     return this.http.post(this.Url + '/student', credentials, {
       ...this.httpOptions,
@@ -37,7 +39,7 @@ export class AuthService {
         tap((response: any) => {
           if (response !== null && response !== 'UNAUTHORIZED') {
             const student = JSON.parse(response);
-            console.log(student)
+            console.log(student);
             this.studentLoggedIn = true;
             this.userService.student = student; // Assign the response string directly to email
           } else {
@@ -52,9 +54,10 @@ export class AuthService {
   }
 
   tutorLogin(email: string, password: string): Observable<any> {
+    const hashedPassword = this.hashPassword(password);  // Hash the password
     const credentials = {
       email,
-      password
+      password: hashedPassword
     };
     return this.http.post(this.Url + '/tutor', credentials, {
       ...this.httpOptions,
@@ -64,7 +67,7 @@ export class AuthService {
         tap((response: any) => {
           if (response !== null && response !== 'UNAUTHORIZED') {
             const tutor = JSON.parse(response);
-            console.log(tutor)
+            console.log(tutor);
             this.tutorLoggedIn = true;
             this.userService.tutor = tutor; // Assign the response string directly to email
           } else {
@@ -73,7 +76,32 @@ export class AuthService {
         }),
         catchError((error: HttpErrorResponse) => {
           console.error('Login failed', error);
-          return throwError('Login failed'); // Use throwError to create an error observable
+          return throwError(() => 'Login failed'); // Use throwError to create an error observable
+        })
+      );
+  }
+
+  register(email: string, password: string, name: string, surname: string, phoneNumber: number, isTutor: boolean): Observable<any> {
+    const hashedPassword = this.hashPassword(password);  // Hash the password
+    const credentials = {
+      email,
+      password: hashedPassword,
+      name,
+      surname,
+      phoneNumber,
+      isTutor
+    };
+    return this.http.post(this.Url + '/register/student', credentials, {
+      ...this.httpOptions,
+      responseType: 'text' // Set the response type to 'text'
+    })
+      .pipe(
+        tap((response: any) => {
+          console.log(response);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          console.error('Register failed', error);
+          return throwError(() => 'Register failed'); // Use throwError to create an error observable
         })
       );
   }
@@ -93,5 +121,9 @@ export class AuthService {
   logout() {
     this.studentLoggedIn = false;
     this.tutorLoggedIn = false;
+  }
+
+  private hashPassword(password: string): string {
+    return CryptoJS.SHA256(password).toString(CryptoJS.enc.Base64);  // Hash password with SHA-256
   }
 }

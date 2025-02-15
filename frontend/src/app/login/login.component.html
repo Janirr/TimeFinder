@@ -1,24 +1,33 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <div *ngIf="!authService.isAuthenticated()" class="login-form bg-light p-4 rounded shadow">
+      <div class="login-form bg-light p-4 rounded shadow">
         <h2 class="text-center mb-4">Zaloguj się</h2>
-        <form (submit)="login()">
+        <form (ngSubmit)="login()" [formGroup]="loginForm">
           <div class="mb-3">
             <label class="form-label" for="email">E-mail:</label>
-            <input [(ngModel)]="email" class="form-control" id="email" name="email" required type="email">
+            <input class="form-control" formControlName="email" id="email" required type="email">
+            <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-danger">
+              Wprowadź poprawny adres e-mail.
+            </div>
           </div>
           <div class="mb-3">
             <label class="form-label" for="password">Hasło:</label>
-            <input [(ngModel)]="password" class="form-control" id="password" name="password" required type="password">
+            <input class="form-control" formControlName="password" id="password" required type="password">
+            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger">
+              Hasło jest wymagane.
+            </div>
           </div>
           <div class="mb-3 form-check">
-            <input [(ngModel)]="isTutor" [ngModelOptions]="{standalone: true}" class="form-check-input" id="isTutor"
-                   type="checkbox">
+            <input class="form-check-input" formControlName="isTutor" id="isTutor" type="checkbox">
             <label class="form-check-label" for="isTutor">Jestem nauczycielem</label>
           </div>
-          <button class="btn btn-primary btn-block" type="submit">Login</button>
+          <button [disabled]="loginForm.invalid" class="btn btn-primary btn-block" type="submit">Login</button>
         </form>
+
+        <div class="text-center mt-3">
+          <p>Nie masz konta? <a class="btn btn-link" routerLink="register">Zarejestruj się</a></p>
+        </div>
       </div>
     </div>
   </div>

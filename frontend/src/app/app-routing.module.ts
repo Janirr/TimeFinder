@@ -7,15 +7,17 @@ import {EditReservationComponent} from './reservation/edit-reservation/edit-rese
 import {LoginComponent} from './login/login.component';
 import {ShowCalendarComponent} from './calendar/show-calendar/show-calendar.component';
 import {AccountComponent} from "./account/account.component";
+import {RegisterComponent} from "./register/register.component";
 
 const routes: Routes = [
+  {path: '', component: LoginComponent},  // This will show the login on the root URL
   {path: 'pricing', component: PricingComponent},
-  {path: '', component: ShowCalendarComponent},
   {path: 'calendar', component: ShowCalendarComponent},
   {path: 'contact', component: ContactComponent},
   {path: 'reservations', component: ReservationsComponent},
   {path: 'reservation', component: EditReservationComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},
   {path: 'account', component: AccountComponent},
   {path: '**', component: ShowCalendarComponent}
 ];
