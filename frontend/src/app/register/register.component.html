@@ -5,31 +5,6 @@
         <h2 class="text-center mb-4">Zarejestruj się</h2>
         <form (ngSubmit)="register()" [formGroup]="registerForm">
           <div class="mb-3">
-            <label class="form-label" for="registerEmail">E-mail:</label>
-            <input class="form-control" formControlName="registerEmail" id="registerEmail" required type="email">
-            <div *ngIf="registerForm.get('registerEmail')?.invalid && registerForm.get('registerEmail')?.touched"
-                 class="text-danger">
-              Wprowadź poprawny adres e-mail.
-            </div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label" for="registerPassword">Hasło:</label>
-            <input class="form-control" formControlName="registerPassword" id="registerPassword" required
-                   type="password">
-            <div *ngIf="registerForm.get('registerPassword')?.invalid && registerForm.get('registerPassword')?.touched"
-                 class="text-danger">
-              Hasło musi mieć co najmniej 6 znaków.
-            </div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label" for="registerPassword2">Potwierdź hasło:</label>
-            <input class="form-control" formControlName="registerPassword2" id="registerPassword2" required
-                   type="password">
-            <div *ngIf="registerForm.hasError('passwordsMismatch') && registerForm.touched" class="text-danger">
-              Hasła muszą być takie same.
-            </div>
-          </div>
-          <div class="mb-3">
             <label class="form-label" for="name">Imię:</label>
             <input class="form-control" formControlName="name" id="name" required>
           </div>
@@ -41,6 +16,32 @@
             <label class="form-label" for="phoneNumber">Numer telefonu:</label>
             <input class="form-control" formControlName="phoneNumber" id="phoneNumber" required>
           </div>
+          <div class="mb-3">
+            <label class="form-label" for="email">E-mail:</label>
+            <input class="form-control" formControlName="email" id="email" required type="email">
+            <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+                 class="text-danger">
+              Wprowadź poprawny adres e-mail.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="password">Hasło:</label>
+            <input class="form-control" formControlName="password" id="password" required
+                   type="password">
+            <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+                 class="text-danger">
+              Hasło musi mieć co najmniej 6 znaków.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="confirmPassword">Potwierdź hasło:</label>
+            <input class="form-control" formControlName="confirmPassword" id="confirmPassword" required
+                   type="password">
+            <div *ngIf="registerForm.hasError('passwordsMismatch') && registerForm.touched" class="text-danger">
+              Hasła muszą być takie same.
+            </div>
+          </div>
+
           <button [disabled]="registerForm.invalid" class="btn btn-primary btn-block" type="submit">Zarejestruj się
           </button>
         </form>

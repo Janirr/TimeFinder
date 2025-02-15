@@ -15,9 +15,9 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
-      registerEmail: ['', [Validators.required, Validators.email]],
-      registerPassword: ['', [Validators.required, Validators.minLength(6)]],
-      registerPassword2: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required]],
       name: ['', Validators.required],
       surname: ['', Validators.required],
       phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]{9,}$')]],
@@ -26,8 +26,8 @@ export class RegisterComponent implements OnInit {
   }
 
   passwordsMatchValidator(form: AbstractControl) {
-    const password = form.get('registerPassword')?.value;
-    const confirmPassword = form.get('registerPassword2')?.value;
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
     return password === confirmPassword ? null : {passwordsMismatch: true};
   }
 

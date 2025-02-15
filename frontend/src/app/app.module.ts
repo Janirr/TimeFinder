@@ -21,6 +21,7 @@ import {ChangeCalendarIdComponent} from './account/tutor/change-calendar-id/chan
 import {AddPricingComponent} from './account/tutor/add-pricing/add-pricing.component';
 import {ShowPricingComponent} from './pricing/show-pricing/show-pricing.component';
 import {RegisterComponent} from './register/register.component';
+import {NotFoundComponent} from './not-found/not-found.component';
 
 registerLocaleData(localePl);
 
@@ -40,7 +41,8 @@ registerLocaleData(localePl);
     ChangeCalendarIdComponent,
     AddPricingComponent,
     ShowPricingComponent,
-    RegisterComponent
+    RegisterComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
