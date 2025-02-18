@@ -1,4 +1,4 @@
-package com.poznan.put.rest.webservice.restapi.Tutor;
+package com.poznan.put.rest.webservice.restapi.tutor;
 
 import com.google.api.services.calendar.model.CalendarListEntry;
 import com.google.api.services.calendar.model.Event;
@@ -19,12 +19,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/tutors")
-public class TutorJpaResource {
+public class TutorController {
     private final TutorsRepository tutorsRepository;
     private final CalendarConfig calendarConfig;
     private final PricingRepository pricingRepository;
 
-    public TutorJpaResource(TutorsRepository tutorsRepository, CalendarConfig calendarConfig, PricingRepository pricingRepository) {
+    public TutorController(TutorsRepository tutorsRepository, CalendarConfig calendarConfig, PricingRepository pricingRepository) {
         this.tutorsRepository = tutorsRepository;
         this.calendarConfig = calendarConfig;
         this.pricingRepository = pricingRepository;
@@ -95,7 +95,7 @@ public class TutorJpaResource {
 
     @GetMapping("/subject/{subject}")
     public Tutor getTutorBySubject(@PathVariable String subject) {
-        return tutorsRepository.findBySubject(subject);
+        return tutorsRepository.findBySubject(subject).orElseThrow();
     }
 
     @PutMapping("{tutorId}/calendar/{calendarId}")

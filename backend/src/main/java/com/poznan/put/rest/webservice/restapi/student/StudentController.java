@@ -16,11 +16,11 @@ import java.util.Optional;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/students")
-public class StudentJpaResource {
+public class StudentController {
     private final StudentRepository studentRepository;
     private final ReservationRepository reservationRepository;
 
-    public StudentJpaResource(StudentRepository studentRepository, ReservationRepository reservationRepository) {
+    public StudentController(StudentRepository studentRepository, ReservationRepository reservationRepository) {
         this.studentRepository = studentRepository;
         this.reservationRepository = reservationRepository;
     }

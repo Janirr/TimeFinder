@@ -4,15 +4,15 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
-import com.poznan.put.rest.webservice.restapi.Tutor.Tutor;
 import com.poznan.put.rest.webservice.restapi.calendar.AvailableTime;
 import com.poznan.put.rest.webservice.restapi.calendar.CalendarConfig;
 import com.poznan.put.rest.webservice.restapi.calendar.TimeManagerUtil;
 import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
 import com.poznan.put.rest.webservice.restapi.jpa.ReservationRepository;
-import com.poznan.put.rest.webservice.restapi.jpa.StudentRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.TutorsRepository;
+import com.poznan.put.rest.webservice.restapi.services.StudentService;
 import com.poznan.put.rest.webservice.restapi.student.Student;
+import com.poznan.put.rest.webservice.restapi.tutor.Tutor;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,22 +28,22 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/reservations")
-public class ReservationJpaResource {
+public class ReservationController {
     private final ReservationRepository reservationRepository;
     private final CalendarConfig calendarConfig;
-    private final StudentRepository studentRepository;
+    private final StudentService studentService;
     private final TutorsRepository tutorsRepository;
 
-    Logger logger = LoggerFactory.getLogger(ReservationJpaResource.class);
+    Logger logger = LoggerFactory.getLogger(ReservationController.class);
 
-    public ReservationJpaResource(TutorsRepository tutorsRepository, ReservationRepository reservationRepository, CalendarConfig calendarConfig, StudentRepository studentRepository) {
+    public ReservationController(ReservationRepository reservationRepository, CalendarConfig calendarConfig, StudentService studentService, TutorsRepository tutorsRepository) {
         this.reservationRepository = reservationRepository;
         this.calendarConfig = calendarConfig;
-        this.studentRepository = studentRepository;
+        this.studentService = studentService;
         this.tutorsRepository = tutorsRepository;
     }
 
-//    @GetMapping(...)
+    //    @GetMapping(...)
 //    public List<Reservation> retrieveAllReservations(){
 //        return reservationRepository.findAll();
 //    }
@@ -117,14 +117,9 @@ public class ReservationJpaResource {
         attendees.add(new EventAttendee().setEmail(shortEvent.getAttendee()));
         event.setAttendees(attendees);
 
-        Student student = studentRepository.findByEmail(shortEvent.getAttendee());
-        if (student == null) {
-            throw new ResourceNotFound("There is no student with email: " + shortEvent.getAttendee());
-        }
-        Tutor tutor = tutorsRepository.findById(tutorId);
-        if (tutor == null) {
-            throw new ResourceNotFound("There is no tutor with id: " + tutorId);
-        }
+        Student student = studentService.findStudentByEmailOrThrowException(shortEvent.getAttendee());
+        Tutor tutor = tutorsRepository.findById(tutorId)
+                .orElseThrow(() -> new ResourceNotFound("There is no tutor with id: " + tutorId));
 
         Event googleEvent = calendarConfig.addEventToCalendar(tutorId, event, calendarId);
         String htmlLink = googleEvent.getHtmlLink();
@@ -183,8 +178,8 @@ public class ReservationJpaResource {
                 EventDateTime start = calendarEvent.getStart();
                 EventDateTime end = calendarEvent.getEnd();
                 String summary = calendarEvent.getSummary();
-                Student student = studentRepository.findByEmail(studentMail);
-                Tutor tutor = tutorsRepository.findById(tutorId);
+                Student student = studentService.findStudentByEmailOrThrowException(studentMail);
+                Tutor tutor = tutorsRepository.findById(tutorId).orElseThrow();
                 Reservation reservation = new Reservation(eventId, new Date(start.getDateTime().getValue()), new Date(end.getDateTime().getValue()), summary, student, tutor);
                 reservationRepository.save(reservation);
             }
@@ -220,18 +215,18 @@ public class ReservationJpaResource {
                 if (attendees == null) {
                     continue;
                 }
-                List<Student> allStudents = studentRepository.findAll();
+                List<Student> allStudents = studentService.findAllStudents();
                 List<String> emailStudents = allStudents.stream().map(Student::getEmail).toList();
                 studentMail = attendees
                         .stream()
                         .filter(attendee -> emailStudents.contains(attendee.getEmail())).findFirst().map(EventAttendee::getEmail);
                 Student student;
                 if (studentMail.isPresent()) {
-                    student = studentRepository.findByEmail(studentMail.get());
+                    student = studentService.findStudentByEmailOrThrowException(studentMail.get());
                 } else {
                     continue;
                 }
-                Tutor tutor = tutorsRepository.findById(tutorId);
+                Tutor tutor = tutorsRepository.findById(tutorId).orElseThrow();
                 Reservation reservation = new Reservation(eventId, new Date(start.getDateTime().getValue()), new Date(end.getDateTime().getValue()), summary, student, tutor);
                 reservationRepository.save(reservation);
             }

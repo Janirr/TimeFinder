@@ -1,4 +1,4 @@
-package com.poznan.put.rest.webservice.restapi.Tutor;
+package com.poznan.put.rest.webservice.restapi.tutor;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -24,14 +24,6 @@ public class Tutor {
     @JsonManagedReference
     private List<Reservation> reservationList;
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Tutor(int id, String name, String surname, String phoneNumber, String email, String password, String calendarId, String subject, List<Reservation> reservationList) {
         this.id = id;
         this.name = name;
@@ -46,6 +38,14 @@ public class Tutor {
 
     public Tutor() {
 
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getId() {
