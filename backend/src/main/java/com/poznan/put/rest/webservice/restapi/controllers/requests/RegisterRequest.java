@@ -1,4 +1,4 @@
-package com.poznan.put.rest.webservice.restapi.model.records;
+package com.poznan.put.rest.webservice.restapi.controllers.requests;
 
 public record RegisterRequest(
         String name,

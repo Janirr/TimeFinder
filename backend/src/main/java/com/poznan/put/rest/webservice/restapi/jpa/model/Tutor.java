@@ -1,4 +1,4 @@
-package com.poznan.put.rest.webservice.restapi.model;
+package com.poznan.put.rest.webservice.restapi.jpa.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

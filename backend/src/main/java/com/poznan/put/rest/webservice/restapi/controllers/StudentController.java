@@ -1,7 +1,7 @@
 package com.poznan.put.rest.webservice.restapi.controllers;
 
-import com.poznan.put.rest.webservice.restapi.model.Reservation;
-import com.poznan.put.rest.webservice.restapi.model.Student;
+import com.poznan.put.rest.webservice.restapi.jpa.model.Reservation;
+import com.poznan.put.rest.webservice.restapi.jpa.model.Student;
 import com.poznan.put.rest.webservice.restapi.services.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

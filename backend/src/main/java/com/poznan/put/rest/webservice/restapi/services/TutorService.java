@@ -3,12 +3,12 @@ package com.poznan.put.rest.webservice.restapi.services;
 import com.google.api.services.calendar.model.CalendarListEntry;
 import com.google.api.services.calendar.model.Event;
 import com.poznan.put.rest.webservice.restapi.configuration.CalendarConfig;
+import com.poznan.put.rest.webservice.restapi.controllers.requests.PricingRequest;
 import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
 import com.poznan.put.rest.webservice.restapi.jpa.PricingRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.TutorsRepository;
-import com.poznan.put.rest.webservice.restapi.model.Pricing;
-import com.poznan.put.rest.webservice.restapi.model.Tutor;
-import com.poznan.put.rest.webservice.restapi.model.records.PricingRequest;
+import com.poznan.put.rest.webservice.restapi.jpa.model.Pricing;
+import com.poznan.put.rest.webservice.restapi.jpa.model.Tutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

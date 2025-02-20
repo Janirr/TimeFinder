@@ -3,8 +3,8 @@ package com.poznan.put.rest.webservice.restapi.services;
 import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
 import com.poznan.put.rest.webservice.restapi.jpa.ReservationRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.StudentRepository;
-import com.poznan.put.rest.webservice.restapi.model.Reservation;
-import com.poznan.put.rest.webservice.restapi.model.Student;
+import com.poznan.put.rest.webservice.restapi.jpa.model.Reservation;
+import com.poznan.put.rest.webservice.restapi.jpa.model.Student;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

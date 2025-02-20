@@ -1,11 +1,11 @@
 package com.poznan.put.rest.webservice.restapi.services;
 
+import com.poznan.put.rest.webservice.restapi.controllers.requests.LoginRequest;
+import com.poznan.put.rest.webservice.restapi.controllers.requests.RegisterRequest;
 import com.poznan.put.rest.webservice.restapi.jpa.StudentRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.TutorsRepository;
-import com.poznan.put.rest.webservice.restapi.model.Student;
-import com.poznan.put.rest.webservice.restapi.model.Tutor;
-import com.poznan.put.rest.webservice.restapi.model.records.LoginRequest;
-import com.poznan.put.rest.webservice.restapi.model.records.RegisterRequest;
+import com.poznan.put.rest.webservice.restapi.jpa.model.Student;
+import com.poznan.put.rest.webservice.restapi.jpa.model.Tutor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 

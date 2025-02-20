@@ -3,8 +3,8 @@ package com.poznan.put.rest.webservice.restapi.services;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.poznan.put.rest.webservice.restapi.configuration.CalendarConfig;
-import com.poznan.put.rest.webservice.restapi.model.records.AvailableTime;
-import com.poznan.put.rest.webservice.restapi.model.records.Timestamp;
+import com.poznan.put.rest.webservice.restapi.controllers.responses.AvailableTimeResponse;
+import com.poznan.put.rest.webservice.restapi.services.helpers.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -52,8 +52,8 @@ public class TimeManagerService {
         return days;
     }
 
-    public HashMap<LocalDate, List<AvailableTime>> getFreeTime(int tutorId, String calendarId, int minutesForLesson) {
-        HashMap<LocalDate, List<AvailableTime>> availableTime = new HashMap<>();
+    public HashMap<LocalDate, List<AvailableTimeResponse>> getFreeTime(int tutorId, String calendarId, int minutesForLesson) {
+        HashMap<LocalDate, List<AvailableTimeResponse>> availableTime = new HashMap<>();
         try {
             Date[] days = getNextDays(NUMBER_OF_DAYS);
             getCalendarEvents(tutorId, calendarId);
@@ -64,9 +64,9 @@ public class TimeManagerService {
         return availableTime;
     }
 
-    public void generateAvailableTimes(int minutesForLesson, HashMap<LocalDate, List<AvailableTime>> availableTime, Date[] days) {
+    public void generateAvailableTimes(int minutesForLesson, HashMap<LocalDate, List<AvailableTimeResponse>> availableTime, Date[] days) {
         for (Date date : days) {
-            List<AvailableTime> markedFreeTimesInDay = new ArrayList<>();
+            List<AvailableTimeResponse> markedFreeTimesInDay = new ArrayList<>();
             LocalDate day = getLocalDateFromDate(date);
 
             if (!markedFreeTimes.containsKey(day)) {
@@ -124,11 +124,11 @@ public class TimeManagerService {
         }
     }
 
-    public void generateFreeTimestamps(int minutesForLesson, List<AvailableTime> freeTimes, LocalTime minStartHour, LocalTime maxEndHour) {
+    public void generateFreeTimestamps(int minutesForLesson, List<AvailableTimeResponse> freeTimes, LocalTime minStartHour, LocalTime maxEndHour) {
         long availableMinutesForLesson = ChronoUnit.MINUTES.between(minStartHour, maxEndHour);
         while (availableMinutesForLesson >= minutesForLesson) {
             LocalTime lessonEndLocalTime = minStartHour.plusMinutes(minutesForLesson);
-            freeTimes.add(new AvailableTime(minStartHour, lessonEndLocalTime));
+            freeTimes.add(new AvailableTimeResponse(minStartHour, lessonEndLocalTime));
             minStartHour = minStartHour.plusMinutes(MINUTES_TO_ADD);
             availableMinutesForLesson = ChronoUnit.MINUTES.between(minStartHour, maxEndHour);
         }

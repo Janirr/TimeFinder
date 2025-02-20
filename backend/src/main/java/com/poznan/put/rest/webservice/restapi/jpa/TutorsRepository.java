@@ -1,6 +1,6 @@
 package com.poznan.put.rest.webservice.restapi.jpa;
 
-import com.poznan.put.rest.webservice.restapi.model.Tutor;
+import com.poznan.put.rest.webservice.restapi.jpa.model.Tutor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

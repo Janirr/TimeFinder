@@ -1,8 +1,8 @@
 package com.poznan.put.rest.webservice.restapi.calendar;
 
-import com.poznan.put.rest.webservice.restapi.model.records.AvailableTime;
-import com.poznan.put.rest.webservice.restapi.model.records.Timestamp;
+import com.poznan.put.rest.webservice.restapi.controllers.responses.AvailableTimeResponse;
 import com.poznan.put.rest.webservice.restapi.services.TimeManagerService;
+import com.poznan.put.rest.webservice.restapi.services.helpers.Timestamp;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -24,46 +24,46 @@ class TimeManagerServiceTest {
 
     @Test
     void shouldNotGenerateAnyFreeTimestamps() {
-        ArrayList<AvailableTime> actualFreeTimes = new ArrayList<>();
+        ArrayList<AvailableTimeResponse> actualFreeTimes = new ArrayList<>();
         timeManagerService.generateFreeTimestamps(MINUTES_FOR_LESSON, actualFreeTimes, LocalTime.of(16, 0), LocalTime.of(16, 59));
         assertEquals(Collections.emptyList(), actualFreeTimes);
     }
 
     @Test
     void shouldGenerateOneFreeTimestamps() {
-        ArrayList<AvailableTime> expectedFreeTimes = new ArrayList<>();
+        ArrayList<AvailableTimeResponse> expectedFreeTimes = new ArrayList<>();
         LocalTime startHour = LocalTime.of(16, 0);
         LocalTime endHour = startHour.plusMinutes(MINUTES_FOR_LESSON);
         for (int i = 0; i < 1; i++) {
-            expectedFreeTimes.add(new AvailableTime(startHour, endHour));
+            expectedFreeTimes.add(new AvailableTimeResponse(startHour, endHour));
             startHour = startHour.plusMinutes(MINUTES_TO_ADD);
             endHour = endHour.plusMinutes(MINUTES_TO_ADD);
         }
 
-        ArrayList<AvailableTime> actualFreeTimes = new ArrayList<>();
+        ArrayList<AvailableTimeResponse> actualFreeTimes = new ArrayList<>();
         timeManagerService.generateFreeTimestamps(MINUTES_FOR_LESSON, actualFreeTimes, LocalTime.of(16, 0), LocalTime.of(17, 0));
         assertEquals(expectedFreeTimes, actualFreeTimes);
     }
 
     @Test
     void shouldGenerateFiveFreeTimestamps() {
-        ArrayList<AvailableTime> expectedFreeTimes = new ArrayList<>();
+        ArrayList<AvailableTimeResponse> expectedFreeTimes = new ArrayList<>();
         LocalTime startHour = LocalTime.of(16, 0);
         LocalTime endHour = startHour.plusMinutes(MINUTES_FOR_LESSON);
         for (int i = 0; i < 5; i++) {
-            expectedFreeTimes.add(new AvailableTime(startHour, endHour));
+            expectedFreeTimes.add(new AvailableTimeResponse(startHour, endHour));
             startHour = startHour.plusMinutes(MINUTES_TO_ADD);
             endHour = endHour.plusMinutes(MINUTES_TO_ADD);
         }
 
-        ArrayList<AvailableTime> actualFreeTimes = new ArrayList<>();
+        ArrayList<AvailableTimeResponse> actualFreeTimes = new ArrayList<>();
         timeManagerService.generateFreeTimestamps(MINUTES_FOR_LESSON, actualFreeTimes, LocalTime.of(16, 0), LocalTime.of(18, 0));
         assertEquals(expectedFreeTimes, actualFreeTimes);
     }
 
     @Test
     void shouldGenerateAvailableTimes() {
-        HashMap<LocalDate, List<AvailableTime>> result = new HashMap<>();
+        HashMap<LocalDate, List<AvailableTimeResponse>> result = new HashMap<>();
         Date[] dates = new Date[1];
         Date today = Date.from(Instant.now());
         dates[0] = today;

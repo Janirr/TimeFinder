@@ -1,4 +1,4 @@
-package com.poznan.put.rest.webservice.restapi.model;
+package com.poznan.put.rest.webservice.restapi.jpa.model;
 
 import jakarta.persistence.*;
 

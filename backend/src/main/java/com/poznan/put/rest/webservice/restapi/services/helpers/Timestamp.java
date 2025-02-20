@@ -1,4 +1,4 @@
-package com.poznan.put.rest.webservice.restapi.model.records;
+package com.poznan.put.rest.webservice.restapi.services.helpers;
 
 import java.time.LocalTime;
 

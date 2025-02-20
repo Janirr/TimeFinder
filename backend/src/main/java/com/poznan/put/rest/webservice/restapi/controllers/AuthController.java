@@ -1,7 +1,7 @@
 package com.poznan.put.rest.webservice.restapi.controllers;
 
-import com.poznan.put.rest.webservice.restapi.model.records.LoginRequest;
-import com.poznan.put.rest.webservice.restapi.model.records.RegisterRequest;
+import com.poznan.put.rest.webservice.restapi.controllers.requests.LoginRequest;
+import com.poznan.put.rest.webservice.restapi.controllers.requests.RegisterRequest;
 import com.poznan.put.rest.webservice.restapi.services.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

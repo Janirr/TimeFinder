@@ -2,9 +2,9 @@ package com.poznan.put.rest.webservice.restapi.controllers;
 
 import com.google.api.services.calendar.model.CalendarListEntry;
 import com.google.api.services.calendar.model.Event;
-import com.poznan.put.rest.webservice.restapi.model.Pricing;
-import com.poznan.put.rest.webservice.restapi.model.Tutor;
-import com.poznan.put.rest.webservice.restapi.model.records.PricingRequest;
+import com.poznan.put.rest.webservice.restapi.controllers.requests.PricingRequest;
+import com.poznan.put.rest.webservice.restapi.jpa.model.Pricing;
+import com.poznan.put.rest.webservice.restapi.jpa.model.Tutor;
 import com.poznan.put.rest.webservice.restapi.services.TutorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
