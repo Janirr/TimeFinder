@@ -1,9 +1,13 @@
-package com.poznan.put.rest.webservice.restapi.calendar;
+package com.poznan.put.rest.webservice.restapi.services;
 
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
+import com.poznan.put.rest.webservice.restapi.configuration.CalendarConfig;
+import com.poznan.put.rest.webservice.restapi.model.records.AvailableTime;
+import com.poznan.put.rest.webservice.restapi.model.records.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -14,13 +18,18 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-public class TimeManagerUtil {
+@Service
+public class TimeManagerService {
     public static final int NUMBER_OF_DAYS = 14;
     public static final int MINUTES_TO_ADD = 15;
-    private final CalendarConfig calendarConfig = new CalendarConfig();
-    private final Logger logger = LoggerFactory.getLogger(TimeManagerUtil.class);
+    private final Logger logger = LoggerFactory.getLogger(TimeManagerService.class);
+    private final CalendarConfig calendarConfig;
     private HashMap<LocalDate, List<Timestamp>> markedFreeTimes = new HashMap<>();
     private HashMap<LocalDate, List<Timestamp>> takenTimes = new HashMap<>();
+
+    public TimeManagerService(CalendarConfig calendarConfig) {
+        this.calendarConfig = calendarConfig;
+    }
 
     public static LocalDate getLocalDateFromDate(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

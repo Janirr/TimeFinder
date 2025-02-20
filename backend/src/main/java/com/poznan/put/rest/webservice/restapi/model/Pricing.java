@@ -1,6 +1,5 @@
-package com.poznan.put.rest.webservice.restapi.pricing;
+package com.poznan.put.rest.webservice.restapi.model;
 
-import com.poznan.put.rest.webservice.restapi.tutor.Tutor;
 import jakarta.persistence.*;
 
 

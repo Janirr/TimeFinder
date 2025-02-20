@@ -1,5 +1,7 @@
-package com.poznan.put.rest.webservice.restapi.security;
+package com.poznan.put.rest.webservice.restapi.controllers;
 
+import com.poznan.put.rest.webservice.restapi.model.records.LoginRequest;
+import com.poznan.put.rest.webservice.restapi.model.records.RegisterRequest;
 import com.poznan.put.rest.webservice.restapi.services.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AuthController {
-
     private final AuthService authService;
 
     public AuthController(AuthService authService) {
@@ -28,6 +29,5 @@ public class AuthController {
     @PostMapping("/login/tutor")
     public ResponseEntity<?> tutorLogin(@RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.tutorLogin(loginRequest));
-
     }
 }

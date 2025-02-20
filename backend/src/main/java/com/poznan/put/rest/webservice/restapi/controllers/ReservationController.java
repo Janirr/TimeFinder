@@ -1,18 +1,20 @@
-package com.poznan.put.rest.webservice.restapi.reservation;
+package com.poznan.put.rest.webservice.restapi.controllers;
 
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
-import com.poznan.put.rest.webservice.restapi.calendar.AvailableTime;
-import com.poznan.put.rest.webservice.restapi.calendar.CalendarConfig;
-import com.poznan.put.rest.webservice.restapi.calendar.TimeManagerUtil;
+import com.poznan.put.rest.webservice.restapi.configuration.CalendarConfig;
 import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
 import com.poznan.put.rest.webservice.restapi.jpa.ReservationRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.TutorsRepository;
+import com.poznan.put.rest.webservice.restapi.model.Reservation;
+import com.poznan.put.rest.webservice.restapi.model.ShortEvent;
+import com.poznan.put.rest.webservice.restapi.model.Student;
+import com.poznan.put.rest.webservice.restapi.model.Tutor;
+import com.poznan.put.rest.webservice.restapi.model.records.AvailableTime;
 import com.poznan.put.rest.webservice.restapi.services.StudentService;
-import com.poznan.put.rest.webservice.restapi.student.Student;
-import com.poznan.put.rest.webservice.restapi.tutor.Tutor;
+import com.poznan.put.rest.webservice.restapi.services.TimeManagerService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,20 +35,17 @@ public class ReservationController {
     private final CalendarConfig calendarConfig;
     private final StudentService studentService;
     private final TutorsRepository tutorsRepository;
+    private final TimeManagerService timeManagerService;
 
     Logger logger = LoggerFactory.getLogger(ReservationController.class);
 
-    public ReservationController(ReservationRepository reservationRepository, CalendarConfig calendarConfig, StudentService studentService, TutorsRepository tutorsRepository) {
+    public ReservationController(ReservationRepository reservationRepository, CalendarConfig calendarConfig, StudentService studentService, TutorsRepository tutorsRepository, TimeManagerService timeManagerService) {
         this.reservationRepository = reservationRepository;
         this.calendarConfig = calendarConfig;
         this.studentService = studentService;
         this.tutorsRepository = tutorsRepository;
+        this.timeManagerService = timeManagerService;
     }
-
-    //    @GetMapping(...)
-//    public List<Reservation> retrieveAllReservations(){
-//        return reservationRepository.findAll();
-//    }
 
     @GetMapping("/reservation/{reservationId}")
     public Reservation retrieveReservationById(@PathVariable int reservationId) {
@@ -64,8 +63,7 @@ public class ReservationController {
     // Display free time
     @GetMapping("/tutor/{tutorId}/calendar/{calendarId}/{minutesForLesson}")
     public HashMap<LocalDate, List<AvailableTime>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId, @PathVariable int minutesForLesson) {
-        TimeManagerUtil timeManagerUtil = new TimeManagerUtil();
-        return timeManagerUtil.getFreeTime(tutorId, calendarId, minutesForLesson);
+        return timeManagerService.getFreeTime(tutorId, calendarId, minutesForLesson);
     }
 
     @GetMapping
@@ -211,11 +209,11 @@ public class ReservationController {
                 EventDateTime end = calendarEvent.getEnd();
                 String summary = calendarEvent.getSummary();
                 List<EventAttendee> attendees = calendarEvent.getAttendees();
-                Optional<String> studentMail = Optional.empty();
+                Optional<String> studentMail;
                 if (attendees == null) {
                     continue;
                 }
-                List<Student> allStudents = studentService.findAllStudents();
+                List<Student> allStudents = studentService.getAllStudents();
                 List<String> emailStudents = allStudents.stream().map(Student::getEmail).toList();
                 studentMail = attendees
                         .stream()

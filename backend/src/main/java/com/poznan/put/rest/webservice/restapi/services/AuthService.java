@@ -2,10 +2,10 @@ package com.poznan.put.rest.webservice.restapi.services;
 
 import com.poznan.put.rest.webservice.restapi.jpa.StudentRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.TutorsRepository;
-import com.poznan.put.rest.webservice.restapi.security.LoginRequest;
-import com.poznan.put.rest.webservice.restapi.security.RegisterRequest;
-import com.poznan.put.rest.webservice.restapi.student.Student;
-import com.poznan.put.rest.webservice.restapi.tutor.Tutor;
+import com.poznan.put.rest.webservice.restapi.model.Student;
+import com.poznan.put.rest.webservice.restapi.model.Tutor;
+import com.poznan.put.rest.webservice.restapi.model.records.LoginRequest;
+import com.poznan.put.rest.webservice.restapi.model.records.RegisterRequest;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +28,12 @@ public class AuthService {
     }
 
     public Student studentLogin(LoginRequest loginRequest) {
-        return studentRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword())
+        return studentRepository.findByEmailAndPassword(loginRequest.email(), loginRequest.password())
                 .orElseThrow(() -> new BadCredentialsException("Invalid student credentials"));
     }
 
     public Tutor tutorLogin(LoginRequest loginRequest) {
-        return tutorsRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword())
+        return tutorsRepository.findByEmailAndPassword(loginRequest.email(), loginRequest.password())
                 .orElseThrow(() -> new BadCredentialsException("Invalid tutor credentials"));
     }
 }

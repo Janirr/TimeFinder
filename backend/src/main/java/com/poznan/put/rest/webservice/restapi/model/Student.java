@@ -1,9 +1,8 @@
-package com.poznan.put.rest.webservice.restapi.student;
+package com.poznan.put.rest.webservice.restapi.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.api.services.calendar.model.Event;
-import com.poznan.put.rest.webservice.restapi.reservation.Reservation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
