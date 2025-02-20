@@ -1,7 +1,7 @@
 package com.poznan.put.rest.webservice.restapi.jpa;
 
-import com.poznan.put.rest.webservice.restapi.Tutor.Tutor;
-import com.poznan.put.rest.webservice.restapi.pricing.Pricing;
+import com.poznan.put.rest.webservice.restapi.jpa.model.Pricing;
+import com.poznan.put.rest.webservice.restapi.jpa.model.Tutor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

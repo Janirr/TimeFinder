@@ -1,4 +1,4 @@
-package com.poznan.put.rest.webservice.restapi.reservation;
+package com.poznan.put.rest.webservice.restapi.jpa.model;
 
 import java.util.Date;
 

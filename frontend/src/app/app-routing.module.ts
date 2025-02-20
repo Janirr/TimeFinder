@@ -7,17 +7,21 @@ import {EditReservationComponent} from './reservation/edit-reservation/edit-rese
 import {LoginComponent} from './login/login.component';
 import {ShowCalendarComponent} from './calendar/show-calendar/show-calendar.component';
 import {AccountComponent} from "./account/account.component";
+import {NotFoundComponent} from './not-found/not-found.component'; // Assuming you have a 404 component
+import {AuthGuard} from './auth.guard';
+import {RegisterComponent} from "./register/register.component"; // Import the guard
 
 const routes: Routes = [
-  {path: 'pricing', component: PricingComponent},
-  {path: '', component: ShowCalendarComponent},
-  {path: 'calendar', component: ShowCalendarComponent},
-  {path: 'contact', component: ContactComponent},
-  {path: 'reservations', component: ReservationsComponent},
-  {path: 'reservation', component: EditReservationComponent},
+  {path: 'pricing', component: PricingComponent, canActivate: [AuthGuard]},
+  {path: '', component: ShowCalendarComponent, canActivate: [AuthGuard]},
+  {path: 'calendar', component: ShowCalendarComponent, canActivate: [AuthGuard]},
+  {path: 'contact', component: ContactComponent, canActivate: [AuthGuard]}, // Protect this route
+  {path: 'reservations', component: ReservationsComponent, canActivate: [AuthGuard]},  // Protect this route
+  {path: 'reservation', component: EditReservationComponent, canActivate: [AuthGuard]}, // Protect this route
   {path: 'login', component: LoginComponent},
-  {path: 'account', component: AccountComponent},
-  {path: '**', component: ShowCalendarComponent}
+  {path: 'register', component: RegisterComponent},
+  {path: 'account', component: AccountComponent, canActivate: [AuthGuard]}, // Protect this route
+  {path: '**', component: NotFoundComponent},  // Catch-all route for undefined paths
 ];
 
 @NgModule({

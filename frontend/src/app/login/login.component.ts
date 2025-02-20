@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../auth.service';
 
 @Component({
@@ -6,53 +7,37 @@ import {AuthService} from '../auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
-  email = '';
-  password = '';
-  isTutor = false;
+export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
 
-  constructor(public authService: AuthService) {
+  constructor(private fb: FormBuilder, public authService: AuthService) {
+  }
+
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      isTutor: [false]
+    });
   }
 
   login() {
-    if (this.isTutor) {
-      this.tutorLogin(this.email, this.password);
-    } else {
-      this.studentLogin(this.email, this.password);
-    }
+    if (this.loginForm.invalid) return;
+    const {email, password, isTutor} = this.loginForm.value;
+    isTutor ? this.tutorLogin(email, password) : this.studentLogin(email, password);
   }
 
   tutorLogin(email: string, password: string) {
-    this.authService.tutorLogin(email, password).subscribe(
-      response => {
-        // Handle successful tutor login response
-        localStorage.setItem('token', response.token); // Change 'token' to your token key
-        // Redirect the user or perform any additional actions
-      },
-      error => {
-        // Handle tutor login error
-        console.error('Tutor login failed:', error);
-        // Display error message or perform any additional actions
-      }
-    );
+    this.authService.tutorLogin(email, password).subscribe({
+      next: response => localStorage.setItem('token', response.token),
+      error: error => console.error('Tutor login failed:', error)
+    });
   }
 
   studentLogin(email: string, password: string) {
-    this.authService.login(email, password).subscribe(
-      response => {
-        // Handle successful login response
-        localStorage.setItem('token', response.token); // Change 'token' to your token key
-        // Redirect the user or perform any additional actions
-      },
-      error => {
-        // Handle login error
-        console.error('Student login failed:', error);
-        // Display error message or perform any additional actions
-      }
-    );
-  }
-
-  logout() {
-    this.authService.logout();
+    this.authService.login(email, password).subscribe({
+      next: response => localStorage.setItem('token', response.token),
+      error: error => console.error('Student login failed:', error)
+    });
   }
 }

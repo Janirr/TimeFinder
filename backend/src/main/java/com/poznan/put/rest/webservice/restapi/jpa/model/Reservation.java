@@ -1,9 +1,7 @@
-package com.poznan.put.rest.webservice.restapi.reservation;
+package com.poznan.put.rest.webservice.restapi.jpa.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.poznan.put.rest.webservice.restapi.Tutor.Tutor;
-import com.poznan.put.rest.webservice.restapi.student.Student;
 import jakarta.persistence.*;
 
 import java.util.Date;

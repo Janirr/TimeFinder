@@ -1,11 +1,6 @@
-<!-- <head>
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-</head> -->
-<div *ngIf="authService.isAuthenticated(); else login">
-  <app-header></app-header>
-  <router-outlet></router-outlet>
-</div>
+<app-header></app-header>
+<router-outlet></router-outlet>
 
-<ng-template #login>
+<ng-template>
   <app-login></app-login>
 </ng-template>

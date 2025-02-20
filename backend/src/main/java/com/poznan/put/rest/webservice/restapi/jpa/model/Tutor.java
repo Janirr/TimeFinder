@@ -1,8 +1,7 @@
-package com.poznan.put.rest.webservice.restapi.Tutor;
+package com.poznan.put.rest.webservice.restapi.jpa.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.poznan.put.rest.webservice.restapi.reservation.Reservation;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -24,14 +23,6 @@ public class Tutor {
     @JsonManagedReference
     private List<Reservation> reservationList;
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Tutor(int id, String name, String surname, String phoneNumber, String email, String password, String calendarId, String subject, List<Reservation> reservationList) {
         this.id = id;
         this.name = name;
@@ -46,6 +37,14 @@ public class Tutor {
 
     public Tutor() {
 
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getId() {

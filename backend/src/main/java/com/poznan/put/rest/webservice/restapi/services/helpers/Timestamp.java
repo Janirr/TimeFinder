@@ -1,5 +1,4 @@
-package com.poznan.put.rest.webservice.restapi.calendar;
-
+package com.poznan.put.rest.webservice.restapi.services.helpers;
 
 import java.time.LocalTime;
 

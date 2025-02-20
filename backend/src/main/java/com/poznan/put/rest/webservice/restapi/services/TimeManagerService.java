@@ -1,9 +1,13 @@
-package com.poznan.put.rest.webservice.restapi.calendar;
+package com.poznan.put.rest.webservice.restapi.services;
 
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
+import com.poznan.put.rest.webservice.restapi.configuration.CalendarConfig;
+import com.poznan.put.rest.webservice.restapi.controllers.responses.AvailableTimeResponse;
+import com.poznan.put.rest.webservice.restapi.services.helpers.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -14,13 +18,18 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-public class TimeManagerUtil {
+@Service
+public class TimeManagerService {
     public static final int NUMBER_OF_DAYS = 14;
     public static final int MINUTES_TO_ADD = 15;
-    private final CalendarConfig calendarConfig = new CalendarConfig();
-    private final Logger logger = LoggerFactory.getLogger(TimeManagerUtil.class);
+    private final Logger logger = LoggerFactory.getLogger(TimeManagerService.class);
+    private final CalendarConfig calendarConfig;
     private HashMap<LocalDate, List<Timestamp>> markedFreeTimes = new HashMap<>();
     private HashMap<LocalDate, List<Timestamp>> takenTimes = new HashMap<>();
+
+    public TimeManagerService(CalendarConfig calendarConfig) {
+        this.calendarConfig = calendarConfig;
+    }
 
     public static LocalDate getLocalDateFromDate(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -43,8 +52,8 @@ public class TimeManagerUtil {
         return days;
     }
 
-    public HashMap<LocalDate, List<AvailableTime>> getFreeTime(int tutorId, String calendarId, int minutesForLesson) {
-        HashMap<LocalDate, List<AvailableTime>> availableTime = new HashMap<>();
+    public HashMap<LocalDate, List<AvailableTimeResponse>> getFreeTime(int tutorId, String calendarId, int minutesForLesson) {
+        HashMap<LocalDate, List<AvailableTimeResponse>> availableTime = new HashMap<>();
         try {
             Date[] days = getNextDays(NUMBER_OF_DAYS);
             getCalendarEvents(tutorId, calendarId);
@@ -55,9 +64,9 @@ public class TimeManagerUtil {
         return availableTime;
     }
 
-    public void generateAvailableTimes(int minutesForLesson, HashMap<LocalDate, List<AvailableTime>> availableTime, Date[] days) {
+    public void generateAvailableTimes(int minutesForLesson, HashMap<LocalDate, List<AvailableTimeResponse>> availableTime, Date[] days) {
         for (Date date : days) {
-            List<AvailableTime> markedFreeTimesInDay = new ArrayList<>();
+            List<AvailableTimeResponse> markedFreeTimesInDay = new ArrayList<>();
             LocalDate day = getLocalDateFromDate(date);
 
             if (!markedFreeTimes.containsKey(day)) {
@@ -115,11 +124,11 @@ public class TimeManagerUtil {
         }
     }
 
-    public void generateFreeTimestamps(int minutesForLesson, List<AvailableTime> freeTimes, LocalTime minStartHour, LocalTime maxEndHour) {
+    public void generateFreeTimestamps(int minutesForLesson, List<AvailableTimeResponse> freeTimes, LocalTime minStartHour, LocalTime maxEndHour) {
         long availableMinutesForLesson = ChronoUnit.MINUTES.between(minStartHour, maxEndHour);
         while (availableMinutesForLesson >= minutesForLesson) {
             LocalTime lessonEndLocalTime = minStartHour.plusMinutes(minutesForLesson);
-            freeTimes.add(new AvailableTime(minStartHour, lessonEndLocalTime));
+            freeTimes.add(new AvailableTimeResponse(minStartHour, lessonEndLocalTime));
             minStartHour = minStartHour.plusMinutes(MINUTES_TO_ADD);
             availableMinutesForLesson = ChronoUnit.MINUTES.between(minStartHour, maxEndHour);
         }
