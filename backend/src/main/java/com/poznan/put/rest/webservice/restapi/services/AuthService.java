@@ -20,11 +20,34 @@ public class AuthService {
         this.tutorsRepository = tutorsRepository;
     }
 
-    public Student registerUser(RegisterRequest registerRequest) {
-        // Implement registration logic here
+    public Object registerUser(RegisterRequest registerRequest) {
+        if (registerRequest.isTutor()) {
+            return registerTutor(registerRequest);
+        } else {
+            return registerStudent(registerRequest);
+        }
+    }
+
+    public Student registerStudent(RegisterRequest registerRequest) {
         Student student = new Student();
-        // Set student properties from registerRequest
+        student.setEmail(registerRequest.email());
+        student.setName(registerRequest.name());
+        student.setSurname(registerRequest.surname());
+        student.setPhoneNumber(registerRequest.phoneNumber());
+        // FIXME: hashing password
+        student.setPassword(registerRequest.password());
         return studentRepository.save(student);
+    }
+
+    public Tutor registerTutor(RegisterRequest registerRequest) {
+        Tutor tutor = new Tutor();
+        tutor.setEmail(registerRequest.email());
+        tutor.setName(registerRequest.name());
+        tutor.setSurname(registerRequest.surname());
+        tutor.setPhoneNumber(registerRequest.phoneNumber());
+        // FIXME: hashing password
+        tutor.setPassword(registerRequest.password());
+        return tutorsRepository.save(tutor);
     }
 
     public Student studentLogin(LoginRequest loginRequest) {
