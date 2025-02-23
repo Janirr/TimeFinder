@@ -8,9 +8,6 @@ html, body {
 
 /* Container with background image */
 .container {
-  background-image: url("src/assets/login-bg.jpg");
-  background-size: cover;
-  background-position: center;
   width: 100vw;
   height: 100vh;
   /* Remove overflow:hidden so snackbar can be displayed above content */
@@ -60,7 +57,7 @@ html, body {
 /* Ensure snackbar doesn't go out of the view */
 .mat-snack-bar-container {
   max-width: 100%;
-  z-index: 10000; /* Ensure snackbar is above other content */
+  /*z-index: 10000; !* Ensure snackbar is above other content *!*/
 }
 
 /* Additional transition effects for snackbar appearance */
@@ -78,4 +75,12 @@ html, body {
 .mat-snack-bar-container .mat-snack-bar-item.ng-animating {
   transform: scale(0.95);
   opacity: 0.6;
+}
+
+.error-snackbar {
+  color: white !important;
+}
+
+.success-snackbar {
+  color: white !important;
 }

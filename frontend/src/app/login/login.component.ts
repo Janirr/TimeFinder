@@ -1,22 +1,22 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../auth.service';
+import {SnackBarService} from '../snack-bar.service'; // Import the SnackBarService
+import {AuthService} from '../auth.service'; // Import the AuthService
 import {Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    public authService: AuthService,
+    private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBarService: SnackBarService // Inject SnackBarService
   ) {
   }
 
@@ -37,36 +37,27 @@ export class LoginComponent implements OnInit {
 
   tutorLogin(email: string, password: string) {
     this.authService.tutorLogin(email, password).subscribe({
-      next: (response) => {
+      next: response => {
         localStorage.setItem('token', response.token);
         this.router.navigate(['/']);
       },
-      error: (error) => {
+      error: error => {
         console.error('Tutor login failed:', error);
-        this.showErrorMessage(error);
-      },
+        this.snackBarService.showError(error);
+      }
     });
   }
 
   studentLogin(email: string, password: string) {
     this.authService.login(email, password).subscribe({
-      next: (response) => {
+      next: response => {
         localStorage.setItem('token', response.token);
         this.router.navigate(['/']);
       },
-      error: (error) => {
+      error: error => {
         console.error('Student login failed:', error);
-        this.showErrorMessage(error);
-      },
-    });
-  }
-
-  private showErrorMessage(message: string) {
-    this.snackBar.open(message, 'Close', {
-      duration: 5000,
-      verticalPosition: 'bottom',
-      horizontalPosition: 'center',
-      panelClass: ['error-snackbar'],
+        this.snackBarService.showError(error);
+      }
     });
   }
 }

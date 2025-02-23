@@ -2,7 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {HttpService} from '../../http.service';
 import {UserService} from '../../user.service';
 import {AvailableTime, CalendarResponse, LESSON_TIME, LESSON_TIMES, TUTOR_ID} from '../calendar.model';
-import {Observable, tap} from 'rxjs';
+import {Observable, of, tap} from 'rxjs';
+import {SnackBarService} from "../../snack-bar.service";
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-show-calendar',
@@ -25,7 +27,7 @@ export class ShowCalendarComponent implements OnInit {
   endDateTime: any;
   formSubmitted = false;
 
-  constructor(private httpService: HttpService, public userService: UserService) {
+  constructor(private httpService: HttpService, public userService: UserService, private snackbarService: SnackBarService) {
     // this.displayCalendar();
     this.getTutors();
   }
@@ -50,6 +52,11 @@ export class ShowCalendarComponent implements OnInit {
           this.tutor = response2;
           this.tutorId = this.tutor.id;
           this.calendarId = this.tutor.calendarId;
+        }),
+        catchError(error => {
+          const errorMessage = error?.message || 'An error occurred while fetching tutor data. Please try again.';
+          this.snackbarService.showError(errorMessage);  // Show the error message
+          return of(null);  // Return an observable with a null value to continue the stream
         })
       );
   }
@@ -60,7 +67,11 @@ export class ShowCalendarComponent implements OnInit {
         // Explicitly cast the response to CalendarResponse
         this.calendarDates = new Map(Object.entries(calendarResponse));
         console.log(this.calendarDates);
-      });
+      }, catchError(error => {
+        const errorMessage = error?.message || 'An error occurred while fetching calendar. Please try again.';
+        this.snackbarService.showError(errorMessage);  // Show the error message
+        return of(null);  // Return an observable with a null value to continue the stream
+      }));
   }
 
 
@@ -100,10 +111,10 @@ export class ShowCalendarComponent implements OnInit {
 
     // Create separate date objects for startDate and endDate
     let startDate: Date = new Date(date);
-    startDate.setHours(parseInt(startUnits[0]), parseInt(startUnits[1], parseInt(startUnits[2])));
+    startDate.setHours(parseInt(startUnits[0]), parseInt(startUnits[1]), parseInt(startUnits[2]));
 
     let endDate: Date = new Date(date);
-    endDate.setHours(parseInt(endUnits[0]), parseInt(endUnits[1], parseInt(endUnits[2])));
+    endDate.setHours(parseInt(endUnits[0]), parseInt(endUnits[1]), parseInt(endUnits[2]));
 
     const event = {
       summary: 'Korepetycje',
@@ -114,12 +125,19 @@ export class ShowCalendarComponent implements OnInit {
 
     const URL = `/reservations/tutor/${this.tutorId}/calendar/${this.calendarId}`;
     console.log(event);
-    this.httpService.post(URL, event)
-      .subscribe(response => {
+
+    this.httpService.post(URL, event).subscribe(
+      response => {
         console.log('Reservation added successfully:', response);
-      }, error => {
-        console.error('Error adding reservation:', error);
-      });
+        // Optionally show a success message
+        this.snackbarService.showSuccess('Reservation added successfully!');
+      },
+      error => {
+        // If error is an object, show the message, otherwise show a default message
+        const errorMessage = error?.message || 'An error occurred while adding the reservation. Please try again.';
+        this.snackbarService.showError(errorMessage);
+      }
+    );
   }
 
   confirmReservation(userForm: any, day: any) {
