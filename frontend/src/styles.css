@@ -1,1 +1,81 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  background-color: #f4f4f9; /* Soft background color */
+}
+
+/* Container with background image */
+.container {
+  background-image: url("src/assets/login-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  /* Remove overflow:hidden so snackbar can be displayed above content */
+  overflow: visible;
+}
+
+/* Make sure snackbar is shown at the top */
+.mat-snack-bar-container {
+  top: 16px !important; /* Adjust position */
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0 16px;
+  border-radius: 8px;
+}
+
+/* Styling for the snackbar */
+.error-snackbar {
+  /*background-color: #f44336 !important; !* Red background *!*/
+  color: white !important;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+/* Position and style for the snackbar's close button */
+.error-snackbar .mat-button {
+  background: none;
+  color: white;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.error-snackbar .mat-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Ensure snackbar doesn't go out of the view */
+.mat-snack-bar-container {
+  max-width: 100%;
+  z-index: 10000; /* Ensure snackbar is above other content */
+}
+
+/* Additional transition effects for snackbar appearance */
+.mat-snack-bar-container > div {
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.mat-snack-bar-container .mat-snack-bar-item {
+  transform: scale(1);
+  opacity: 1;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.mat-snack-bar-container .mat-snack-bar-item.ng-animating {
+  transform: scale(0.95);
+  opacity: 0.6;
+}

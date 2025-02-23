@@ -22,6 +22,8 @@ import {AddPricingComponent} from './account/tutor/add-pricing/add-pricing.compo
 import {ShowPricingComponent} from './pricing/show-pricing/show-pricing.component';
 import {RegisterComponent} from './register/register.component';
 import {NotFoundComponent} from './not-found/not-found.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 registerLocaleData(localePl);
 
@@ -49,7 +51,9 @@ registerLocaleData(localePl);
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule
   ],
   providers: [{provide: LOCALE_ID, useValue: 'pl'}],
   bootstrap: [AppComponent]
