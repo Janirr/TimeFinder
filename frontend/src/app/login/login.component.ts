@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../auth.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,7 @@ import {AuthService} from '../auth.service';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, public authService: AuthService) {
+  constructor(private fb: FormBuilder, public authService: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -29,14 +30,20 @@ export class LoginComponent implements OnInit {
 
   tutorLogin(email: string, password: string) {
     this.authService.tutorLogin(email, password).subscribe({
-      next: response => localStorage.setItem('token', response.token),
+      next: response => {
+        localStorage.setItem('token', response.token);
+        this.router.navigate(['/']);
+      },
       error: error => console.error('Tutor login failed:', error)
     });
   }
 
   studentLogin(email: string, password: string) {
     this.authService.login(email, password).subscribe({
-      next: response => localStorage.setItem('token', response.token),
+      next: response => {
+        localStorage.setItem('token', response.token);
+        this.router.navigate(['/']);
+      },
       error: error => console.error('Student login failed:', error)
     });
   }

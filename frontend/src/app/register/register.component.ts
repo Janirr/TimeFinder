@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -10,7 +11,7 @@ import {AuthService} from '../auth.service';
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, public authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -33,12 +34,19 @@ export class RegisterComponent implements OnInit {
 
   register() {
     if (this.registerForm.invalid) return;
-    const {registerEmail, registerPassword, name, surname, phoneNumber, isTutor} = this.registerForm.value;
-    this.authService.register(registerEmail, registerPassword, name, surname, phoneNumber, isTutor)
+
+    const {email, password, name, surname, phoneNumber, isTutor} = this.registerForm.value;
+    this.authService.register(email, password, name, surname, phoneNumber, isTutor)
       .subscribe({
-        next: () => console.info('Registration successful'),
-        error: error => console.error('Registration failed:', error),
-        complete: () => console.info('Registration completed')
+        next: async () => { // Mark the function as async
+          console.info('Registration successful');
+          try {
+            await this.router.navigate(['/login']); // Properly handle the navigation promise
+            console.info('Navigation to login successful');
+          } catch (error) {
+            console.error('Navigation to login failed:', error);
+          }
+        },
       });
   }
 }

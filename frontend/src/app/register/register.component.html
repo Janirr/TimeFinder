@@ -42,6 +42,11 @@
             </div>
           </div>
 
+          <div class="mb-3 form-check">
+            <input class="form-check-input" formControlName="isTutor" id="isTutor" type="checkbox">
+            <label class="form-check-label" for="isTutor">Rejestruję się jako nauczyciel</label>
+          </div>
+
           <button [disabled]="registerForm.invalid" class="btn btn-primary btn-block" type="submit">Zarejestruj się
           </button>
         </form>
