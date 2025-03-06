@@ -9,9 +9,9 @@ import com.poznan.put.rest.webservice.restapi.controllers.responses.AvailableTim
 import com.poznan.put.rest.webservice.restapi.jpa.ReservationRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.TutorsRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.model.Reservation;
-import com.poznan.put.rest.webservice.restapi.jpa.model.ShortEvent;
 import com.poznan.put.rest.webservice.restapi.jpa.model.Student;
 import com.poznan.put.rest.webservice.restapi.jpa.model.Tutor;
+import com.poznan.put.rest.webservice.restapi.services.helpers.ShortEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

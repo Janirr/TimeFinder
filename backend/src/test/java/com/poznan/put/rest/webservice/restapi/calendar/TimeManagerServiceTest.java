@@ -5,7 +5,7 @@ import com.poznan.put.rest.webservice.restapi.services.TimeManagerService;
 import com.poznan.put.rest.webservice.restapi.services.helpers.Timestamp;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
@@ -19,7 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TimeManagerServiceTest {
     public static final int MINUTES_FOR_LESSON = 60;
     public static final int MINUTES_TO_ADD = 15;
-    @Mock
+
+    @InjectMocks
     private TimeManagerService timeManagerService;
 
     @Test
