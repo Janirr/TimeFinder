@@ -28,11 +28,11 @@ import java.util.List;
 
 @Configuration
 public class CalendarConfig {
+    public static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    public static final String CREDENTIALS_FILE_PATH = "/credentials.json";
     static final String APPLICATION_NAME = "TimeFinder";
-    static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     static final String TOKENS_DIRECTORY_PATH = "tokens";
     static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
-    private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
     /**
      * Creates an authorized Credential object.
@@ -62,7 +62,7 @@ public class CalendarConfig {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize(String.valueOf(tutorId));
     }
 
-    static Calendar getAuthorization(int tutorId)
+    public static Calendar getAuthorization(int tutorId)
             throws GeneralSecurityException, IOException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -71,9 +71,27 @@ public class CalendarConfig {
                 .build();
     }
 
-    public static void main(String[] args) throws GeneralSecurityException, IOException {
-        getAuthorization(1);
+    public static String getAuthorizationURL(int tutorId)
+            throws GeneralSecurityException, IOException {
+        // Load client secrets
+        InputStream in = CalendarConfig.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+        if (in == null) {
+            throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
+        }
+        GoogleClientSecrets clientSecrets =
+                GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+
+        // Build flow and create authorization URL
+        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+                GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, clientSecrets, SCOPES)
+                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
+                .setAccessType("offline")
+                .build();
+
+        // Generate the authorization URL
+        return flow.newAuthorizationUrl().setRedirectUri("http://localhost:8080/oauth-callback").build();
     }
+
 
     public List<Event> getEventsFromCalendar(int tutorId, String calendarId) throws GeneralSecurityException, IOException {
         try {

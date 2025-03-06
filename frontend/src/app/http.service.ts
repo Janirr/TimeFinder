@@ -38,4 +38,9 @@ export class HttpService {
   put(url: string) {
     return this.http.put(this.urlTemplate + url, null, this.httpOptions);
   }
+
+  getAuthorizationUrl(tutorId: number) {
+    return this.http.get<{ authUrl: string }>(`${this.urlTemplate}/calendar/authorize/${tutorId}`, this.httpOptions);
+  }
+
 }
