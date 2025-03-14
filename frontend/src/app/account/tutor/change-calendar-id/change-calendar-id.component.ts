@@ -20,6 +20,13 @@ export class ChangeCalendarIdComponent implements OnInit {
     this.getPossibleCalendarIds();
   }
 
+  authorize() {
+    this.httpService.getAuthorizationUrl(this.userService.tutor.id).subscribe(response => {
+      window.open(response.authUrl, '_blank'); // Opens in a new tab
+    });
+  }
+
+
   changeCalendarId() {
     this.httpService.put(`/tutors/${this.userService.tutor.id}/calendar/${this.calendarId}`).subscribe((response) => {
       console.log(response);
