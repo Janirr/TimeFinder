@@ -30,35 +30,34 @@ public class AuthService {
     }
 
     public Student registerStudent(RegisterRequest registerRequest) {
-        Student student = new Student();
+        final Student student = new Student();
+        if (tutorsRepository.findByEmail(registerRequest.email()).isPresent()) {
+            throw new RegisterException("Student with this email already exists");
+        }
         student.setEmail(registerRequest.email());
         student.setName(registerRequest.name());
         student.setSurname(registerRequest.surname());
+        if (tutorsRepository.findByPhoneNumber(registerRequest.phoneNumber()).isPresent()) {
+            throw new RegisterException("Student with this phone number already exists");
+        }
         student.setPhoneNumber(registerRequest.phoneNumber());
-        // FIXME: hashing password
-        student.setPassword(registerRequest.password());
+        student.setPassword(registerRequest.password()); // FIXME: hashing password
         return studentRepository.save(student);
     }
 
     public Tutor registerTutor(RegisterRequest registerRequest) {
-        Tutor tutor = new Tutor();
-
+        final Tutor tutor = new Tutor();
         tutor.setName(registerRequest.name());
         tutor.setSurname(registerRequest.surname());
-
         if (tutorsRepository.findByPhoneNumber(registerRequest.phoneNumber()).isPresent()) {
             throw new RegisterException("Tutor with this phone number already exists");
         }
         tutor.setPhoneNumber(registerRequest.phoneNumber());
-
         if (tutorsRepository.findByEmail(registerRequest.email()).isPresent()) {
             throw new RegisterException("Tutor with this email already exists");
         }
         tutor.setEmail(registerRequest.email());
-
-        // FIXME: hashing password
-        tutor.setPassword(registerRequest.password());
-
+        tutor.setPassword(registerRequest.password()); // FIXME: hashing password
         return tutorsRepository.save(tutor);
     }
 
