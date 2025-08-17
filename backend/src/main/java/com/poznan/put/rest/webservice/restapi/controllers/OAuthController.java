@@ -11,6 +11,7 @@ import com.google.api.services.calendar.Calendar;
 import com.poznan.put.rest.webservice.restapi.configuration.CalendarConfig;
 import com.poznan.put.rest.webservice.restapi.jpa.OAuthCredentialRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.model.OAuthCredential;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.Base64;
 import java.util.List;
@@ -34,21 +37,24 @@ public class OAuthController {
 
     // Handle the callback after the user is redirected from Google
     @GetMapping("/oauth-callback")
-    public String handleGoogleCallback(@RequestParam("code") String code, @RequestParam("state") String state)
-            throws GeneralSecurityException, IOException {
+    public void handleGoogleCallback(@RequestParam("code") String code, @RequestParam("state") String state,
+                                     HttpServletResponse response) throws IOException {
         String decodedState = new String(Base64.getDecoder().decode(state));
         int tutorId = Integer.parseInt(decodedState); // Assuming tutorId is an integer
 
-        // Exchange the authorization code for an access token and create the Calendar service
-        Calendar service = getCalendarService(code, tutorId);
-
-        // You can now use the service to interact with the user's Google Calendar API
         try {
-            // Fetch the calendar list as an example
+            // Exchange the authorization code for an access token and create the Calendar service
+            Calendar service = getCalendarService(code, tutorId);
+
+            // Verify the connection by fetching the calendar list
             service.calendarList().list().execute();
-            return "Successfully authenticated and connected to Google Calendar!";
+
+            // Redirect to frontend with success parameter
+            response.sendRedirect("http://localhost:4200/account?oauth=success");
         } catch (Exception e) {
-            return "Failed to connect to Google Calendar: " + e.getMessage();
+            // Redirect to frontend with error parameter
+            response.sendRedirect("http://localhost:4200/account?oauth=error&message=" +
+                    URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8));
         }
     }
 

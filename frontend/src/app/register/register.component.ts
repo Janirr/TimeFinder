@@ -20,8 +20,8 @@ export class RegisterComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
-      name: ['', Validators.required],
-      surname: ['', Validators.required],
+      name: ['', Validators.required, Validators.minLength(3)],
+      surname: ['', Validators.required, Validators.minLength(3)],
       phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]{9,}$')]],
       isTutor: [false]
     }, {validators: this.passwordsMatchValidator});
