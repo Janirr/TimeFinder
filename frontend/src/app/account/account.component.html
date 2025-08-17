@@ -1,4 +1,7 @@
 <div class="container">
-  <app-tutor *ngIf="authService.isTutorLoggedIn()"></app-tutor>
-  <app-student *ngIf="authService.isStudentLoggedIn()"></app-student>
+  @if (authService.isTutorLoggedIn()) {
+    <app-tutor></app-tutor>
+  } @if (authService.isStudentLoggedIn()) {
+  <app-student></app-student>
+}
 </div>

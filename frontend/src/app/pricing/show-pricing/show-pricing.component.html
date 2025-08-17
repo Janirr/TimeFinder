@@ -6,11 +6,11 @@
   </tr>
   </thead>
   <tbody>
-  <ng-container *ngFor="let pricing of pricings">
+  @for (pricing of pricings; track pricing) {
     <tr>
       <td>{{ pricing.level }}</td>
       <td>{{ pricing.price }}</td>
     </tr>
-  </ng-container>
+  }
   </tbody>
 </table>

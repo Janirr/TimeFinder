@@ -5,14 +5,18 @@
     <div class="mb-3">
       <label class="form-label" for="lessonTime">Czas trwania zajęć:</label>
       <select [(ngModel)]="lessonTime" [ngModelOptions]="{standalone: true}" class="form-select" id="lessonTime">
-        <option *ngFor="let time of lessonTimes" [value]="time">{{ time }} minut</option>
+        @for (time of lessonTimes; track time) {
+          <option [value]="time">{{ time }} minut</option>
+        }
       </select>
     </div>
 
     <div class="mb-3">
       <label class="form-label" for="tutor">Nauczyciel:</label>
       <select [(ngModel)]="tutorId" [ngModelOptions]="{standalone: true}" class="form-select" id="tutor">
-        <option *ngFor="let tutor of tutors" [value]="tutor.id">{{ tutor.name }} {{ tutor.surname }}</option>
+        @for (tutor of tutors; track tutor) {
+          <option [value]="tutor.id">{{ tutor.name }} {{ tutor.surname }}</option>
+        }
       </select>
     </div>
 
@@ -22,28 +26,34 @@
 
 <hr>
 
-<div *ngIf="formSubmitted">
-  <div class="container">
-    <div class="row row-cols-1 row-cols-md-6 g-6">
-      <div *ngFor="let day of calendarDates | keyvalue" class="col">
-        <div class="card text-center">
-          <div class="card-header">{{ day.key | date:'fullDate' }}</div>
-          <div class="card-body">
-            <form #userForm="ngForm" (submit)="confirmReservation(userForm, day.key)" [id]="day.key" class="form">
-              <div *ngFor="let dayValues of day.value">
-                <input [(ngModel)]="startDateTime" name="startDateTime" type="hidden">
-                <input [(ngModel)]="endDateTime" name="endDateTime" type="hidden">
-                <button
-                  (click)="userForm.value.startDateTime = dayValues.fromHour; userForm.value.endDateTime = dayValues.untilHour"
-                  class="btn btn-primary btn-block col-md-12"
-                  style="margin-top: 4px" type="submit">{{ dayValues.fromHour }}
-                </button>
+@if (formSubmitted) {
+  <div>
+    <div class="container">
+      <div class="row row-cols-1 row-cols-md-6 g-6">
+        @for (day of calendarDates | keyvalue; track day) {
+          <div class="col">
+            <div class="card text-center">
+              <div class="card-header">{{ day.key | date:'fullDate' }}</div>
+              <div class="card-body">
+                <form #userForm="ngForm" (submit)="confirmReservation(userForm, day.key)" [id]="day.key" class="form">
+                  @for (dayValues of day.value; track dayValues) {
+                    <div>
+                      <input [(ngModel)]="startDateTime" name="startDateTime" type="hidden">
+                      <input [(ngModel)]="endDateTime" name="endDateTime" type="hidden">
+                      <button
+                        (click)="userForm.value.startDateTime = dayValues.fromHour; userForm.value.endDateTime = dayValues.untilHour"
+                        class="btn btn-primary btn-block col-md-12"
+                        style="margin-top: 4px" type="submit">{{ dayValues.fromHour }}
+                      </button>
+                    </div>
+                  }
+                </form>
               </div>
-            </form>
+            </div>
           </div>
-        </div>
+        }
       </div>
     </div>
   </div>
-</div>
+}
 ```

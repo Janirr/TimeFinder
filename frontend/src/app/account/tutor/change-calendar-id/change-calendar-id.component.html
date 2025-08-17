@@ -8,8 +8,10 @@
       Id kalendarza:
     </label>
     <select [(ngModel)]="calendarId" class="form-control" id="calendarId" name="calendarId">
-      <option *ngFor="let calendar of possibleCalendarIds" [ngValue]="calendar.id">{{ calendar.summary }}
-      </option>
+      @for (calendar of possibleCalendarIds; track calendar) {
+        <option [ngValue]="calendar.id">{{ calendar.summary }}
+        </option>
+      }
     </select>
   </div>
   <button class="btn btn-primary btn-block" type="submit">Zatwierdź</button>

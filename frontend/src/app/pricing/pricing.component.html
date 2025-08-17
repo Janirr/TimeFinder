@@ -5,13 +5,17 @@
     <div class="mb-3">
       <label class="form-label" for="tutorSelect">Nauczyciel:</label>
       <select [(ngModel)]="tutorId" [ngModelOptions]="{standalone: true}" class="form-select" id="tutorSelect">
-        <option *ngFor="let tutor of tutors" [value]="tutor.id">{{ tutor.name }} {{ tutor.surname }}</option>
+        @for (tutor of tutors; track tutor) {
+          <option [value]="tutor.id">{{ tutor.name }} {{ tutor.surname }}</option>
+        }
       </select>
     </div>
     <button class="btn btn-primary btn-block" type="submit">Zobacz ceny</button>
   </form>
   <hr>
-  <div *ngIf="formSubmitted" class="mt-4">
-    <app-show-pricing [pricings]="pricings"></app-show-pricing>
-  </div>
+  @if (formSubmitted) {
+    <div class="mt-4">
+      <app-show-pricing [pricings]="pricings"></app-show-pricing>
+    </div>
+  }
 </div>

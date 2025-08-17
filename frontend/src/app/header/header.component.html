@@ -1,62 +1,66 @@
 <!-- STUDENT -->
-<nav *ngIf="authService.isStudentLoggedIn()" class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <button aria-controls="studentNavbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
-            data-bs-target="#studentNavbar" data-bs-toggle="collapse" type="button">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" routerLink="">Korepetycje Poznań</a>
-    <div class="collapse navbar-collapse" id="studentNavbar">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="calendar">Rezerwuj termin</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="reservations">Aktualne Rezerwacje</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="pricing">Cennik</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="contact">Kontakt</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="account">Konto</a>
-        </li>
-        <li class="nav-item">
-          <a (click)="logout()" class="nav-link text-end">Wyloguj się</a>
-        </li>
-      </ul>
+@if (authService.isStudentLoggedIn()) {
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <button aria-controls="studentNavbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+              data-bs-target="#studentNavbar" data-bs-toggle="collapse" type="button">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" routerLink="">Korepetycje Poznań</a>
+      <div class="collapse navbar-collapse" id="studentNavbar">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="calendar">Rezerwuj termin</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="reservations">Aktualne Rezerwacje</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="pricing">Cennik</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="contact">Kontakt</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="account">Konto</a>
+          </li>
+          <li class="nav-item">
+            <a (click)="logout()" class="nav-link text-end">Wyloguj się</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
+}
 
 <!-- TUTOR -->
-<nav *ngIf="authService.isTutorLoggedIn()" class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <button aria-controls="tutorNavbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
-            data-bs-target="#tutorNavbar" data-bs-toggle="collapse" type="button">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" routerLink="calendar">Korepetycje Poznań</a>
-    <div class="collapse navbar-collapse" id="tutorNavbar">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="reservations">Aktualne Rezerwacje</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="pricing">Cennik</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="contact">Kontakt</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="account">Konto</a>
-        </li>
-        <li class="nav-item">
-          <a (click)="logout()" class="nav-link text-end">Wyloguj się</a>
-        </li>
-      </ul>
+@if (authService.isTutorLoggedIn()) {
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <button aria-controls="tutorNavbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+              data-bs-target="#tutorNavbar" data-bs-toggle="collapse" type="button">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" routerLink="calendar">Korepetycje Poznań</a>
+      <div class="collapse navbar-collapse" id="tutorNavbar">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="reservations">Aktualne Rezerwacje</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="pricing">Cennik</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="contact">Kontakt</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="account">Konto</a>
+          </li>
+          <li class="nav-item">
+            <a (click)="logout()" class="nav-link text-end">Wyloguj się</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
+}

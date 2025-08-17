@@ -9,34 +9,42 @@
       <th>Opis</th>
     </tr>
     </thead>
-    <tbody *ngIf="authService.isTutorLoggedIn()">
-    <ng-container *ngFor="let reservation of reservations">
-      <tr *ngIf="reservation.transparency !== 'transparent'">
-        <td>{{ reservation.start.dateTime.value | date: 'dd.MM' }}</td>
-        <td>{{ reservation.start.dateTime.value | date: 'HH:mm' }}</td>
-        <td>{{ reservation.end.dateTime.value | date: 'HH:mm' }}</td>
-        <td>{{ reservation.summary }}</td>
-        <td>
-          <button [routerLink]="'/reservation'" class="btn btn-primary btn-block btn-warning" disabled>Edytuj</button>
-          <button class="btn btn-primary btn-block btn-danger" disabled>Usuń</button>
-        </td>
-      </tr>
-    </ng-container>
+    @if (authService.isTutorLoggedIn()) {
+      <tbody>
+      @for (reservation of reservations; track reservation) {
+        @if (reservation.transparency !== 'transparent') {
+          <tr>
+            <td>{{ reservation.start.dateTime.value | date: 'dd.MM' }}</td>
+            <td>{{ reservation.start.dateTime.value | date: 'HH:mm' }}</td>
+            <td>{{ reservation.end.dateTime.value | date: 'HH:mm' }}</td>
+            <td>{{ reservation.summary }}</td>
+            <td>
+              <button [routerLink]="'/reservation'" class="btn btn-primary btn-block btn-warning" disabled>Edytuj
+              </button>
+              <button class="btn btn-primary btn-block btn-danger" disabled>Usuń</button>
+            </td>
+          </tr>
+        }
+      }
+      </tbody>
+    } @if (authService.isStudentLoggedIn()) {
+    <tbody>
+    @for (reservation of studentReservations; track reservation) {
+      @if (reservation.transparency !== 'transparent') {
+        <tr>
+          <td>{{ reservation.start | date: 'dd.MM' }}</td>
+          <td>{{ reservation.start | date: 'HH:mm' }}</td>
+          <td>{{ reservation.end | date: 'HH:mm' }}</td>
+          <td>{{ reservation.summary }}</td>
+          <td>
+            <button [routerLink]="'/reservation'" class="btn btn-primary btn-block btn-warning" disabled>Edytuj</button>
+            <button class="btn btn-primary btn-block btn-danger" disabled>Usuń</button>
+          </td>
+        </tr>
+      }
+    }
     </tbody>
-    <tbody *ngIf="authService.isStudentLoggedIn()">
-    <ng-container *ngFor="let reservation of studentReservations">
-      <tr *ngIf="reservation.transparency !== 'transparent'">
-        <td>{{ reservation.start | date: 'dd.MM' }}</td>
-        <td>{{ reservation.start | date: 'HH:mm' }}</td>
-        <td>{{ reservation.end | date: 'HH:mm' }}</td>
-        <td>{{ reservation.summary }}</td>
-        <td>
-          <button [routerLink]="'/reservation'" class="btn btn-primary btn-block btn-warning" disabled>Edytuj</button>
-          <button class="btn btn-primary btn-block btn-danger" disabled>Usuń</button>
-        </td>
-      </tr>
-    </ng-container>
-    </tbody>
+  }
   </table>
   <button (click)="synchronizeWithGoogleCalendar()" class="btn btn-primary btn-block">Zsynchronizuj z kalendarzem
     Google
