@@ -12,6 +12,10 @@ export class EditReservationComponent implements OnInit {
   responseData: any;
   event: any;
   eventId = '60pjecb16di6abb46cp30b9kc9h3abb26lij2b9oc9hj8c1k74qj0e1p60';
+  lessonTime: number = 60;
+  tutor: any = null;
+  price: number = 0;
+  note: string = '';
 
   constructor(private http: HttpService) {
   }
@@ -23,11 +27,24 @@ export class EditReservationComponent implements OnInit {
   displayEvent() {
     const calendarId = 'c0cc6a538c4604e5570b325de0095a2e9c1647adfc9c4e5f7bbc5efb71c5db57@group.calendar.google.com';
 
-    this.http.get(`'/reservations/calendar/${calendarId}/event/${this.eventId}`)
+    this.http.get<any>(`'/reservations/calendar/${calendarId}/event/${this.eventId}`)
       .subscribe(response => {
-        this.event = response; // Assign the response data to the variable
+        this.event = response;
+        this.tutor = response.tutor;
+        this.price = response.price;
+        this.lessonTime = response.duration;
         console.log(response);
       });
+  }
+
+  onSubmit() {
+    // TODO: Implement form submission
+    console.log('Form submitted', this.note);
+  }
+
+  onCancel() {
+    // TODO: Implement cancellation logic
+    console.log('Cancelled');
   }
 
   formatDateTime(dateTime: string | number): string {
@@ -40,7 +57,7 @@ export class EditReservationComponent implements OnInit {
     }
 
     if (isNaN(timestamp)) {
-      return ''; // Return an empty string or handle the error as per your requirements
+      return '';
     }
 
     const dateObj = new Date(timestamp);
@@ -50,7 +67,7 @@ export class EditReservationComponent implements OnInit {
     const hours = ("0" + dateObj.getHours()).slice(-2);
     const minutes = ("0" + dateObj.getMinutes()).slice(-2);
 
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
+    return `${day}-${month}-${year} ${hours}:${minutes}`;
   }
 
 

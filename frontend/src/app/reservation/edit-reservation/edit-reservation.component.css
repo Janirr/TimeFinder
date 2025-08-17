@@ -1,0 +1,64 @@
+.reservation-container {
+  padding: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.reservation-card {
+  margin-bottom: 24px;
+}
+
+.reservation-details {
+  padding: 16px 0;
+}
+
+.mat-mdc-list {
+  margin-bottom: 24px;
+}
+
+.mat-mdc-list-item {
+  margin: 8px 0;
+}
+
+[matListItemTitle] {
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+[matListItemLine] {
+  font-size: 16px;
+  color: #2196f3;
+}
+
+.mat-icon {
+  color: #666;
+}
+
+.reservation-form {
+  margin-top: 24px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.button-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 599px) {
+  .reservation-container {
+    padding: 16px;
+  }
+
+  .button-group {
+    flex-direction: column-reverse;
+  }
+
+  .button-group button {
+    width: 100%;
+  }
+}

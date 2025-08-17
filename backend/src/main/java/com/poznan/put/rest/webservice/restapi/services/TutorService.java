@@ -38,9 +38,9 @@ public class TutorService {
                 .orElseThrow(() -> new ResourceNotFound("There is no tutor with id: " + id));
     }
 
-    public List<Event> getTutorCalendar(Long id, String calendarId) throws GeneralSecurityException, IOException {
+    public List<Event> getTutorCalendarEvents(Long id) throws GeneralSecurityException, IOException {
         Tutor tutor = getTutorById(id);
-        return calendarConfig.getEventsFromCalendar(tutor.getId(), calendarId);
+        return calendarConfig.getEventsFromCalendar(tutor.getId(), tutor.getCalendarId());
     }
 
     public List<CalendarListEntry> getTutorCalendars(Long id) throws GeneralSecurityException, IOException {
@@ -48,12 +48,12 @@ public class TutorService {
         return calendarConfig.getAllCalendarsForTutor(tutor.getId());
     }
 
-    public List<List<Event>> getTutorCalendarEvents(Long id) throws GeneralSecurityException, IOException {
+    public List<List<Event>> getTutorCalendarsEvents(Long id) throws GeneralSecurityException, IOException {
         Tutor tutor = getTutorById(id);
         List<List<Event>> events = new ArrayList<>();
         List<CalendarListEntry> calendars = calendarConfig.getAllCalendarsForTutor(tutor.getId());
         for (CalendarListEntry calendar : calendars) {
-            events.add(calendarConfig.getEventsFromCalendar(tutor.getId(), calendar.getId()));
+            events.add(calendarConfig.getEventsFromCalendar(tutor.getId(), tutor.getCalendarId()));
         }
         return events;
     }

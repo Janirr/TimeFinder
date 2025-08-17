@@ -1,0 +1,69 @@
+.student-profile {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 2fr 1fr;
+  margin-top: 16px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.profile-avatar {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #666;
+  margin-right: 16px;
+}
+
+.profile-info h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+mat-divider {
+  margin: 16px 0;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+[matListItemTitle] {
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+[matListItemLine] {
+  color: #2196f3;
+}
+
+.mat-icon {
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .student-profile {
+    grid-template-columns: 1fr;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons button {
+    width: 100%;
+  }
+}

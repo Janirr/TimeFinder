@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +19,8 @@ export class HttpService {
   constructor(private http: HttpClient) {
   }
 
-  get(url: string) {
-    return this.http.get(this.urlTemplate + url, this.httpOptions);
+  get<T>(url: string) {
+    return this.http.get<T>(this.urlTemplate + url, this.httpOptions);
   }
 
   post(url: string, data: any) {
@@ -43,4 +43,19 @@ export class HttpService {
     return this.http.get<{ authUrl: string }>(`${this.urlTemplate}/calendar/authorize/${tutorId}`, this.httpOptions);
   }
 
+  getTutorReservations() {
+    return this.get<any[]>('/reservations');
+  }
+
+  getStudentReservations() {
+    return this.get<any[]>('/reservations/student');
+  }
+
+  cancelReservation(id: string) {
+    return this.delete(`/reservations/${id}`);
+  }
+
+  updateReservation(id: string, data: any) {
+    return this.patch(`/reservations/${id}`, data);
+  }
 }
