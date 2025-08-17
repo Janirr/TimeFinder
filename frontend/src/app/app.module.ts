@@ -1,6 +1,6 @@
 import {LOCALE_ID, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {HttpClientModule} from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -27,36 +27,29 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 registerLocaleData(localePl);
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    ShowCalendarComponent,
-    EditReservationComponent,
-    PricingComponent,
-    ContactComponent,
-    ReservationsComponent,
-    LoginComponent,
-    TutorComponent,
-    AccountComponent,
-    StudentComponent,
-    ChangeCalendarIdComponent,
-    AddPricingComponent,
-    ShowPricingComponent,
-    RegisterComponent,
-    NotFoundComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatSnackBarModule
-  ],
-  providers: [{provide: LOCALE_ID, useValue: 'pl'}],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        HeaderComponent,
+        ShowCalendarComponent,
+        EditReservationComponent,
+        PricingComponent,
+        ContactComponent,
+        ReservationsComponent,
+        LoginComponent,
+        TutorComponent,
+        AccountComponent,
+        StudentComponent,
+        ChangeCalendarIdComponent,
+        AddPricingComponent,
+        ShowPricingComponent,
+        RegisterComponent,
+        NotFoundComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        MatSnackBarModule], providers: [{ provide: LOCALE_ID, useValue: 'pl' }, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {
 }
