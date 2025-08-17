@@ -3,7 +3,8 @@ import {Component} from '@angular/core';
 @Component({
   selector: 'app-tutor',
   templateUrl: './tutor.component.html',
-  styleUrls: ['./tutor.component.css']
+  styleUrls: ['./tutor.component.css'],
+  standalone: false
 })
 export class TutorComponent {
 

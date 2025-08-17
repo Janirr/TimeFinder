@@ -9,7 +9,8 @@ import {catchError} from "rxjs/operators";
 @Component({
   selector: 'app-show-calendar',
   templateUrl: './show-calendar.component.html',
-  styleUrls: ['./show-calendar.component.css']
+  styleUrls: ['./show-calendar.component.css'],
+  standalone: false
 })
 
 export class ShowCalendarComponent implements OnInit {

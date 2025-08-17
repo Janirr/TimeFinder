@@ -6,7 +6,8 @@ import {UserService} from '../user.service';
 @Component({
   selector: 'app-reservations',
   templateUrl: './reservations.component.html',
-  styleUrls: ['./reservations.component.css']
+  styleUrls: ['./reservations.component.css'],
+  standalone: false
 })
 export class ReservationsComponent implements OnInit {
   reservations: any;

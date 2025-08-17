@@ -4,7 +4,8 @@ import {HttpService} from 'src/app/http.service';
 @Component({
   selector: 'app-edit-reservation',
   templateUrl: './edit-reservation.component.html',
-  styleUrls: ['./edit-reservation.component.css']
+  styleUrls: ['./edit-reservation.component.css'],
+  standalone: false
 })
 
 export class EditReservationComponent implements OnInit {

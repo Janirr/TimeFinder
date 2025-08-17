@@ -6,7 +6,8 @@ import {UserService} from "../../../user.service";
 @Component({
   selector: 'app-change-calendar-id',
   templateUrl: './change-calendar-id.component.html',
-  styleUrls: ['./change-calendar-id.component.css']
+  styleUrls: ['./change-calendar-id.component.css'],
+  standalone: false
 })
 export class ChangeCalendarIdComponent implements OnInit {
   calendarId: string = ''

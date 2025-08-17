@@ -5,7 +5,8 @@ import {HttpService} from "../../../http.service";
 @Component({
   selector: 'app-add-pricing',
   templateUrl: './add-pricing.component.html',
-  styleUrls: ['./add-pricing.component.css']
+  styleUrls: ['./add-pricing.component.css'],
+  standalone: false
 })
 export class AddPricingComponent implements OnInit {
   pricings: any = []
