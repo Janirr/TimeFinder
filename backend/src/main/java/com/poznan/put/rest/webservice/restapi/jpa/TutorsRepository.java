@@ -15,4 +15,6 @@ public interface TutorsRepository extends JpaRepository<Tutor, Long> {
     Optional<Tutor> findBySubject(String subject);
 
     Optional<Tutor> findById(int id);
+
+    Optional<Tutor> findByPhoneNumber(String phoneNumber);
 }

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {UserService} from './user.service';
@@ -44,8 +44,7 @@ export class AuthService {
         }
       }),
       catchError((error: HttpErrorResponse) => {
-        console.error('Login failed', error);
-        return throwError(() => 'Login failed');
+        return throwError(() => JSON.parse(error.error).message);
       })
     );
   }
@@ -69,8 +68,7 @@ export class AuthService {
         }
       }),
       catchError((error: HttpErrorResponse) => {
-        console.error('Login failed', error);
-        return throwError(() => 'Login failed');
+        return throwError(() => JSON.parse(error.error).message);
       })
     );
   }
@@ -92,10 +90,8 @@ export class AuthService {
         console.log(response);
       }),
       catchError((error: HttpErrorResponse) => {
-        console.error('Register failed', error);
-        return throwError(() => 'Register failed');
-      })
-    );
+        return throwError(() => JSON.parse(error.error).message);
+      }))
   }
 
   isAuthenticated(): boolean {

@@ -18,9 +18,11 @@ public class SpringSecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .cors(Customizer.withDefaults()) // by default use a bean by the name of corsConfigurationSource
-                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-                .csrf().disable() // enable it after testing
+                .cors(Customizer.withDefaults())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/oauth-callback/**").permitAll()
+                        .anyRequest().authenticated())
+                .csrf().disable()
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }
@@ -28,7 +30,7 @@ public class SpringSecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        configuration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Collections.singletonList("*"));

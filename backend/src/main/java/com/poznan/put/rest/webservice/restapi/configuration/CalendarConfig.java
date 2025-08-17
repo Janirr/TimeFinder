@@ -17,7 +17,7 @@ import com.google.api.services.calendar.model.CalendarList;
 import com.google.api.services.calendar.model.CalendarListEntry;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
-import com.poznan.put.rest.webservice.restapi.exception.OAuthUnauthorizedException;
+import com.poznan.put.rest.webservice.restapi.exception.RegisterException;
 import com.poznan.put.rest.webservice.restapi.jpa.OAuthCredentialRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.model.OAuthCredential;
 import org.slf4j.Logger;
@@ -80,7 +80,7 @@ public class CalendarConfig {
         Optional<OAuthCredential> storedCredentials = credentialRepository.findByTutorId(tutorId);
 
         log.info("Please authorize at {}", getAuthorizationURL(tutorId));
-        storedCredentials.orElseThrow(() -> new OAuthUnauthorizedException("Could not find credentials for tutorId: " + tutorId));
+        storedCredentials.orElseThrow(() -> new RegisterException("Could not find credentials for tutorId: " + tutorId));
         OAuthCredential oAuthCredential = storedCredentials.get();
 
         // Create Credential from the stored OAuthCredential object

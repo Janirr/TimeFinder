@@ -2,6 +2,7 @@ package com.poznan.put.rest.webservice.restapi.services;
 
 import com.poznan.put.rest.webservice.restapi.controllers.requests.LoginRequest;
 import com.poznan.put.rest.webservice.restapi.controllers.requests.RegisterRequest;
+import com.poznan.put.rest.webservice.restapi.exception.RegisterException;
 import com.poznan.put.rest.webservice.restapi.jpa.StudentRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.TutorsRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.model.Student;
@@ -41,12 +42,23 @@ public class AuthService {
 
     public Tutor registerTutor(RegisterRequest registerRequest) {
         Tutor tutor = new Tutor();
-        tutor.setEmail(registerRequest.email());
+
         tutor.setName(registerRequest.name());
         tutor.setSurname(registerRequest.surname());
+
+        if (tutorsRepository.findByPhoneNumber(registerRequest.phoneNumber()).isPresent()) {
+            throw new RegisterException("Tutor with this phone number already exists");
+        }
         tutor.setPhoneNumber(registerRequest.phoneNumber());
+
+        if (tutorsRepository.findByEmail(registerRequest.email()).isPresent()) {
+            throw new RegisterException("Tutor with this email already exists");
+        }
+        tutor.setEmail(registerRequest.email());
+
         // FIXME: hashing password
         tutor.setPassword(registerRequest.password());
+
         return tutorsRepository.save(tutor);
     }
 
