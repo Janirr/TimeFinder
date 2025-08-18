@@ -24,11 +24,13 @@ public class TimeManagerService {
     public static final int MINUTES_TO_ADD = 15;
     private final Logger logger = LoggerFactory.getLogger(TimeManagerService.class);
     private final CalendarConfig calendarConfig;
+    private final TutorService tutorService;
     private HashMap<LocalDate, List<Timestamp>> markedFreeTimes = new HashMap<>();
     private HashMap<LocalDate, List<Timestamp>> takenTimes = new HashMap<>();
 
-    public TimeManagerService(CalendarConfig calendarConfig) {
+    public TimeManagerService(CalendarConfig calendarConfig, TutorService tutorService) {
         this.calendarConfig = calendarConfig;
+        this.tutorService = tutorService;
     }
 
     public static LocalDate getLocalDateFromDate(Date date) {
@@ -52,11 +54,11 @@ public class TimeManagerService {
         return days;
     }
 
-    public HashMap<LocalDate, List<AvailableTimeResponse>> getFreeTime(int tutorId, String calendarId, int minutesForLesson) {
+    public HashMap<LocalDate, List<AvailableTimeResponse>> getFreeTime(int tutorId, int minutesForLesson) {
         HashMap<LocalDate, List<AvailableTimeResponse>> availableTime = new HashMap<>();
         try {
             Date[] days = getNextDays(NUMBER_OF_DAYS);
-            getCalendarEvents(tutorId, calendarId);
+            getCalendarEvents(tutorId);
             generateAvailableTimes(minutesForLesson, availableTime, days);
         } catch (Exception e) {
             logger.error("Error in getting free time: {} {}", e.getMessage(), e.getLocalizedMessage(), e);
@@ -97,7 +99,8 @@ public class TimeManagerService {
         }
     }
 
-    public void getCalendarEvents(int tutorId, String calendarId) throws GeneralSecurityException, IOException {
+    public void getCalendarEvents(int tutorId) throws GeneralSecurityException, IOException {
+        String calendarId = tutorService.getTutorById((long) tutorId).getCalendarId();
         for (Event event : calendarConfig.getEventsFromCalendar(tutorId, calendarId)) {
             LocalDate eventDay = getLocalDateFromDate(new Date(event.getStart().getDateTime().getValue()));
             LocalTime startHour = getLocalTime(event.getStart());

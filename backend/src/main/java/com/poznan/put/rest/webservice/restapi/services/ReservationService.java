@@ -7,7 +7,6 @@ import com.google.api.services.calendar.model.EventDateTime;
 import com.poznan.put.rest.webservice.restapi.configuration.CalendarConfig;
 import com.poznan.put.rest.webservice.restapi.controllers.responses.AvailableTimeResponse;
 import com.poznan.put.rest.webservice.restapi.jpa.ReservationRepository;
-import com.poznan.put.rest.webservice.restapi.jpa.TutorsRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.model.Reservation;
 import com.poznan.put.rest.webservice.restapi.jpa.model.Student;
 import com.poznan.put.rest.webservice.restapi.jpa.model.Tutor;
@@ -26,22 +25,19 @@ import java.util.List;
 
 @Service
 public class ReservationService {
-
     private final ReservationRepository reservationRepository;
     private final CalendarConfig calendarConfig;
     private final StudentService studentService;
-    private final TutorsRepository tutorsRepository;
+    private final TutorService tutorService;
     private final TimeManagerService timeManagerService;
 
     Logger logger = LoggerFactory.getLogger(ReservationService.class);
 
-    public ReservationService(ReservationRepository reservationRepository, CalendarConfig calendarConfig,
-                              StudentService studentService, TutorsRepository tutorsRepository,
-                              TimeManagerService timeManagerService) {
+    public ReservationService(ReservationRepository reservationRepository, CalendarConfig calendarConfig, StudentService studentService, TutorService tutorService, TimeManagerService timeManagerService) {
         this.reservationRepository = reservationRepository;
         this.calendarConfig = calendarConfig;
         this.studentService = studentService;
-        this.tutorsRepository = tutorsRepository;
+        this.tutorService = tutorService;
         this.timeManagerService = timeManagerService;
     }
 
@@ -51,12 +47,13 @@ public class ReservationService {
         );
     }
 
-    public List<Event> getCalendarEventsFromCalendar(int tutorId, String calendarId) throws GeneralSecurityException, IOException {
-        return calendarConfig.getEventsFromCalendar(tutorId, calendarId);
+    public List<Event> getCalendarEventsFromCalendar(int tutorId) throws GeneralSecurityException, IOException {
+        Tutor tutor = tutorService.getTutorById((long) tutorId);
+        return calendarConfig.getEventsFromCalendar(tutorId, tutor.getCalendarId());
     }
 
-    public HashMap<LocalDate, List<AvailableTimeResponse>> getFreeTime(int tutorId, String calendarId, int minutesForLesson) {
-        return timeManagerService.getFreeTime(tutorId, calendarId, minutesForLesson);
+    public HashMap<LocalDate, List<AvailableTimeResponse>> getFreeTime(int tutorId, int minutesForLesson) {
+        return timeManagerService.getFreeTime(tutorId, minutesForLesson);
     }
 
     public List<Reservation> getAllReservationsForStudent(String studentEmail) {
@@ -71,14 +68,13 @@ public class ReservationService {
         reservationRepository.deleteById(id);
     }
 
-    public void addReservationToCalendar(int tutorId, String calendarId, ShortEvent shortEvent) throws GeneralSecurityException, IOException {
+    public void addReservationToCalendar(int tutorId, ShortEvent shortEvent) throws GeneralSecurityException, IOException {
         Event event = createEventFromShortEvent(shortEvent);
 
         Student student = studentService.findStudentByEmailOrThrowException(shortEvent.getAttendee());
-        Tutor tutor = tutorsRepository.findById(tutorId)
-                .orElseThrow(() -> new RuntimeException("There is no tutor with id: " + tutorId));
+        Tutor tutor = tutorService.getTutorById((long) tutorId);
 
-        Event googleEvent = calendarConfig.addEventToCalendar(tutorId, event, calendarId);
+        Event googleEvent = calendarConfig.addEventToCalendar(tutorId, event, tutor.getCalendarId());
         String htmlLink = googleEvent.getHtmlLink();
         logger.info("Link: {}", htmlLink);
 
@@ -86,12 +82,14 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
-    public Event getEventById(int tutorId, String calendarId, String eventId) throws GeneralSecurityException, IOException {
-        return calendarConfig.getEventById(tutorId, calendarId, eventId);
+    public Event getEventById(int tutorId, String eventId) throws GeneralSecurityException, IOException {
+        String calendarId = tutorService.getTutorById((long) tutorId).getCalendarId();
+        return calendarConfig.getEventById(tutorId, eventId, calendarId);
     }
 
-    public void synchronizeGoogleCalendarWithReservations(String calendarId, int tutorId) throws GeneralSecurityException, IOException {
-        List<Event> googleReservations = calendarConfig.getEventsFromCalendar(tutorId, calendarId);
+    public void synchronizeGoogleCalendarWithReservations(int tutorId) throws GeneralSecurityException, IOException {
+        Tutor tutorById = tutorService.getTutorById((long) tutorId);
+        List<Event> googleReservations = calendarConfig.getEventsFromCalendar(tutorId, tutorById.getCalendarId());
         List<Reservation> dbReservations = reservationRepository.findAllByTutorId(tutorId);
 
         if (googleReservations == null) {
@@ -132,7 +130,7 @@ public class ReservationService {
 
         String studentEmail = getStudentEmailFromAttendees(attendees);
         Student student = studentService.findStudentByEmailOrThrowException(studentEmail);
-        Tutor tutor = tutorsRepository.findById(tutorId).orElseThrow();
+        Tutor tutor = tutorService.getTutorById((long) tutorId);
         Reservation reservation = new Reservation(calendarEvent.getId(), new Date(start.getDateTime().getValue()), new Date(end.getDateTime().getValue()), summary, student, tutor);
         reservationRepository.save(reservation);
     }
@@ -162,5 +160,9 @@ public class ReservationService {
         event.setAttendees(attendees);
 
         return event;
+    }
+
+    public Reservation save(Reservation reservation) {
+        return reservationRepository.save(reservation);
     }
 }

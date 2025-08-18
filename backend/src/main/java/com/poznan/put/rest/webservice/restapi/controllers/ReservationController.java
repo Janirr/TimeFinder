@@ -31,15 +31,15 @@ public class ReservationController {
         return reservationService.getReservationById(reservationId);
     }
 
-    @GetMapping("/google/tutor/{tutorId}/calendar/{calendarId}")
-    public List<Event> getCalendarEventsFromCalendarByIds(@PathVariable int tutorId, @PathVariable String calendarId)
+    @GetMapping("/google/tutor/{tutorId}")
+    public List<Event> getCalendarEventsFromCalendarByIds(@PathVariable int tutorId)
             throws GeneralSecurityException, IOException {
-        return reservationService.getCalendarEventsFromCalendar(tutorId, calendarId);
+        return reservationService.getCalendarEventsFromCalendar(tutorId);
     }
 
-    @GetMapping("/tutor/{tutorId}/calendar/{calendarId}/{minutesForLesson}")
-    public HashMap<LocalDate, List<AvailableTimeResponse>> getFreeTime(@PathVariable int tutorId, @PathVariable String calendarId, @PathVariable int minutesForLesson) {
-        return reservationService.getFreeTime(tutorId, calendarId, minutesForLesson);
+    @GetMapping("/tutor/{tutorId}/{minutesForLesson}")
+    public HashMap<LocalDate, List<AvailableTimeResponse>> getFreeTime(@PathVariable int tutorId, @PathVariable int minutesForLesson) {
+        return reservationService.getFreeTime(tutorId, minutesForLesson);
     }
 
     @GetMapping
@@ -62,21 +62,21 @@ public class ReservationController {
         reservationService.deleteReservationById(id);
     }
 
-    @PostMapping("/tutor/{tutorId}/calendar/{calendarId}")
-    public void addReservationToCalendar(@PathVariable int tutorId, @PathVariable String calendarId, @RequestBody ShortEvent shortEvent)
+    @PostMapping("/tutor/{tutorId}")
+    public void addReservationToCalendar(@PathVariable int tutorId, @RequestBody ShortEvent shortEvent)
             throws GeneralSecurityException, IOException {
-        reservationService.addReservationToCalendar(tutorId, calendarId, shortEvent);
+        reservationService.addReservationToCalendar(tutorId, shortEvent);
     }
 
-    @GetMapping("/tutor/{tutorId}/calendar/{calendarId}/event/{eventId}")
-    public Event getEvent(@PathVariable String calendarId, @PathVariable int tutorId, @PathVariable String eventId)
+    @GetMapping("/tutor/{tutorId}/event/{eventId}")
+    public Event getEvent(@PathVariable int tutorId, @PathVariable String eventId)
             throws GeneralSecurityException, IOException {
-        return reservationService.getEventById(tutorId, calendarId, eventId);
+        return reservationService.getEventById(tutorId, eventId);
     }
 
-    @GetMapping("/tutor/{tutorId}/calendar/{calendarId}")
-    public void synchronizeGoogleCalendarWithReservations(@PathVariable String calendarId, @PathVariable int tutorId)
+    @GetMapping("/tutor/{tutorId}")
+    public void synchronizeGoogleCalendarWithReservations(@PathVariable int tutorId)
             throws GeneralSecurityException, IOException {
-        reservationService.synchronizeGoogleCalendarWithReservations(calendarId, tutorId);
+        reservationService.synchronizeGoogleCalendarWithReservations(tutorId);
     }
 }

@@ -10,4 +10,8 @@ import {AuthService} from "../auth.service";
 export class AccountComponent {
   constructor(public authService: AuthService) {
   }
+
+  logout() {
+    this.authService.logout();
+  }
 }

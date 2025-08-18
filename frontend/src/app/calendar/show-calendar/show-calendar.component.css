@@ -6,3 +6,95 @@ body {
   height: 100vh;
   overflow: hidden;
 }
+
+.calendar-container {
+  padding: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.calendar-card {
+  margin-bottom: 24px;
+}
+
+.calendar-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.submit-button {
+  align-self: flex-end;
+  min-width: 200px;
+}
+
+.calendar-results {
+  margin-top: 24px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.time-slot {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.time-slot:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.time-slot.selected {
+  background-color: #e3f2fd;
+  border: 2px solid #2196f3;
+}
+
+.time-slot mat-icon {
+  margin-right: 8px;
+  color: #666;
+}
+
+.no-results {
+  text-align: center;
+  padding: 48px 20px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.no-results mat-icon {
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.no-results .mat-h2 {
+  margin: 0;
+  font-weight: 500;
+}
+
+.no-results .mat-body-1 {
+  margin-top: 8px;
+}
+
+@media (max-width: 599px) {
+  .calendar-container {
+    padding: 16px;
+  }
+
+  .submit-button {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .calendar-grid {
+    grid-template-columns: 1fr;
+  }
+}

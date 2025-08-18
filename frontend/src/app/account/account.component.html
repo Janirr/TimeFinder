@@ -1,7 +1,72 @@
-<div class="container">
-  @if (authService.isTutorLoggedIn()) {
-    <app-tutor></app-tutor>
-  } @if (authService.isStudentLoggedIn()) {
-  <app-student></app-student>
-}
+<div class="account-container">
+  <mat-card class="account-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>account_circle</mat-icon>
+      <mat-card-title>Twoje konto</mat-card-title>
+      <mat-card-subtitle>
+        @if (authService.isTutorLoggedIn()) {
+          Panel nauczyciela
+        } @else {
+        Panel ucznia
+      }
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-tab-group dynamicHeight>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">person</mat-icon>
+            Profil
+          </ng-template>
+
+          @if (authService.isTutorLoggedIn()) {
+            <app-tutor></app-tutor>
+          } @else {
+          <app-student></app-student>
+        }
+        </mat-tab>
+
+        @if (authService.isTutorLoggedIn()) {
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">schedule</mat-icon>
+              Dostępność
+            </ng-template>
+            <div class="tab-content">
+              <app-change-calendar-id></app-change-calendar-id>
+            </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">payments</mat-icon>
+              Cennik
+            </ng-template>
+            <div class="tab-content">
+              <app-add-pricing></app-add-pricing>
+            </div>
+          </mat-tab>
+        }
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">settings</mat-icon>
+            Ustawienia
+          </ng-template>
+          <div class="tab-content settings-section">
+            <h3>Ustawienia konta</h3>
+            <mat-list>
+              <mat-list-item>
+                <button (click)="logout()" color="warn" mat-button>
+                  <mat-icon>exit_to_app</mat-icon>
+                  Wyloguj się
+                </button>
+              </mat-list-item>
+            </mat-list>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
 </div>

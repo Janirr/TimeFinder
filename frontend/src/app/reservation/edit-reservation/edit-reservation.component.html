@@ -1,27 +1,67 @@
-<div class="container">
-  <h1>Edytuj rezerwację</h1>
-  <form class="form">
-    <div class="form-group">
-      <label for="startDate">Start Date:</label>
-      <input [(ngModel)]="event.start.dateTime.value" [placeholder]="formatDateTime(event.start.dateTime.value)"
-             class="form-control" id="startDate"
-             name="start" type="datetime-local">
-    </div>
-    <div class="form-group">
-      <label for="endDate">End Date:</label>
-      <input [(ngModel)]="event.end.dateTime.value" [placeholder]="formatDateTime(event.end.dateTime.value)"
-             class="form-control" id="endDate"
-             name="end" type="datetime-local">
-    </div>
-    <div class="form-group">
-      <label for="summary">Summary:</label>
-      <input [(ngModel)]="event.summary" [placeholder]="event.summary" class="form-control" id="summary" name="summary"
-             type="text">
-    </div>
-    <div class="form-group">
-      <label for="id">ID:</label>
-      <input [(ngModel)]="event.id" [placeholder]="event.id" class="form-control" id="id" name="id" type="text">
-    </div>
-    <button class="btn btn-primary btn-block" type="submit">Wyślij</button>
-  </form>
+<div class="reservation-container">
+  <mat-card class="reservation-card">
+    <mat-card-header>
+      <mat-card-title>Potwierdź rezerwację</mat-card-title>
+      <mat-card-subtitle>Sprawdź szczegóły i potwierdź termin</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="reservation-details">
+        <mat-list>
+          <mat-list-item>
+            <mat-icon matListItemIcon>event</mat-icon>
+            <div matListItemTitle>Data i godzina</div>
+            <div matListItemLine>{{ event?.start | date:'medium' }}</div>
+          </mat-list-item>
+
+          <mat-divider></mat-divider>
+
+          <mat-list-item>
+            <mat-icon matListItemIcon>schedule</mat-icon>
+            <div matListItemTitle>Czas trwania</div>
+            <div matListItemLine>{{ lessonTime }} minut</div>
+          </mat-list-item>
+
+          <mat-divider></mat-divider>
+
+          <mat-list-item>
+            <mat-icon matListItemIcon>person</mat-icon>
+            <div matListItemTitle>Nauczyciel</div>
+            <div matListItemLine>{{ tutor?.name }} {{ tutor?.surname }}</div>
+          </mat-list-item>
+
+          <mat-divider></mat-divider>
+
+          <mat-list-item>
+            <mat-icon matListItemIcon>payments</mat-icon>
+            <div matListItemTitle>Cena</div>
+            <div matListItemLine>{{ price | currency:'PLN':'symbol':'1.2-2' }}</div>
+          </mat-list-item>
+        </mat-list>
+
+        <form #reservationForm="ngForm" (ngSubmit)="onSubmit()" class="reservation-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Notatka dla nauczyciela (opcjonalnie)</mat-label>
+            <textarea [(ngModel)]="note"
+                      matInput
+                      name="note"
+                      placeholder="Np. preferowany temat zajęć, poziom zaawansowania..."
+                      rows="4"></textarea>
+            <mat-icon matSuffix>note</mat-icon>
+          </mat-form-field>
+
+          <div class="button-group">
+            <button (click)="onCancel()" mat-stroked-button type="button">
+              <mat-icon>close</mat-icon>
+              Anuluj
+            </button>
+            <button color="primary" mat-raised-button type="submit">
+              <mat-icon>check_circle</mat-icon>
+              Potwierdź rezerwację
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

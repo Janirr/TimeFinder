@@ -110,6 +110,7 @@ public class CalendarConfig {
             DateTime timeMin = new DateTime(System.currentTimeMillis());
             DateTime timeMax = new DateTime(now.plusWeeks(2).toString());
 
+
             Events events = service.events().list(calendarId)
                     .setTimeMin(timeMin)
                     .setTimeMax(timeMax)
@@ -144,17 +145,15 @@ public class CalendarConfig {
         return calendarList.getItems();
     }
 
-    public Event getEventById(int tutorId, String calendarId, String eventId)
+    public Event getEventById(int tutorId, String eventId, String calendarId)
             throws GeneralSecurityException, IOException {
-        Calendar service = getAuthorization(tutorId);
-
+        final Calendar service = getAuthorization(tutorId);
         return service.events().get(calendarId, eventId).execute();
     }
 
     public Event addEventToCalendar(int tutorId, Event event, String calendarId)
             throws GeneralSecurityException, IOException {
-        Calendar service = getAuthorization(tutorId);
-
+        final Calendar service = getAuthorization(tutorId);
         return service.events().insert(calendarId, event).execute();
     }
 }

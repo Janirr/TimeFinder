@@ -1,52 +1,84 @@
-<div class="container">
-  <h1>Rezerwacje</h1>
-  <table class="table table-striped table-bordered">
-    <thead>
-    <tr>
-      <th>Dzień</th>
-      <th>Start</th>
-      <th>Koniec</th>
-      <th>Opis</th>
-    </tr>
-    </thead>
-    @if (authService.isTutorLoggedIn()) {
-      <tbody>
-      @for (reservation of reservations; track reservation) {
-        @if (reservation.transparency !== 'transparent') {
-          <tr>
-            <td>{{ reservation.start.dateTime.value | date: 'dd.MM' }}</td>
-            <td>{{ reservation.start.dateTime.value | date: 'HH:mm' }}</td>
-            <td>{{ reservation.end.dateTime.value | date: 'HH:mm' }}</td>
-            <td>{{ reservation.summary }}</td>
-            <td>
-              <button [routerLink]="'/reservation'" class="btn btn-primary btn-block btn-warning" disabled>Edytuj
-              </button>
-              <button class="btn btn-primary btn-block btn-danger" disabled>Usuń</button>
+<div class="reservations-container">
+  <mat-card class="reservations-card">
+    <mat-card-header>
+      <mat-card-title>Twoje rezerwacje</mat-card-title>
+      <mat-card-subtitle>Lista wszystkich zaplanowanych zajęć</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (reservations.length > 0) {
+        <table mat-table [dataSource]="reservations" class="reservations-table">
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCell>Data</th>
+            <td mat-cell *matCellDef="let reservation">
+              {{ reservation.start.dateTime.value | date: 'dd.MM.yyyy' }}
             </td>
-          </tr>
+          </ng-container>
+
+          <!-- Start Time Column -->
+          <ng-container matColumnDef="startTime">
+            <th mat-header-cell *matHeaderCell>Start</th>
+            <td mat-cell *matCellDef="let reservation">
+              {{ reservation.start.dateTime.value | date: 'HH:mm' }}
+            </td>
+          </ng-container>
+
+          <!-- End Time Column -->
+          <ng-container matColumnDef="endTime">
+            <th mat-header-cell *matHeaderCell>Koniec</th>
+            <td mat-cell *matCellDef="let reservation">
+              {{ reservation.end.dateTime.value | date: 'HH:mm' }}
+            </td>
+          </ng-container>
+
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCell>Opis</th>
+            <td mat-cell *matCellDef="let reservation">{{ reservation.summary }}</td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCell>Akcje</th>
+            <td mat-cell *matCellDef="let reservation">
+              @if (authService.isTutorLoggedIn()) {
+                <button mat-icon-button color="primary" [disabled]="true" matTooltip="Edytuj">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" [disabled]="true" matTooltip="Usuń">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              } @else {
+              <button mat-icon-button color="warn" (click)="cancelReservation(reservation)"
+                      matTooltip="Anuluj rezerwację">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            }
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <!-- No results text -->
+        @if (dataSource.data.length === 0) {
+          <div class="no-results">
+            <mat-icon>event_busy</mat-icon>
+            <p>Brak zaplanowanych zajęć</p>
+          </div>
         }
-      }
-      </tbody>
-    } @if (authService.isStudentLoggedIn()) {
-    <tbody>
-    @for (reservation of studentReservations; track reservation) {
-      @if (reservation.transparency !== 'transparent') {
-        <tr>
-          <td>{{ reservation.start | date: 'dd.MM' }}</td>
-          <td>{{ reservation.start | date: 'HH:mm' }}</td>
-          <td>{{ reservation.end | date: 'HH:mm' }}</td>
-          <td>{{ reservation.summary }}</td>
-          <td>
-            <button [routerLink]="'/reservation'" class="btn btn-primary btn-block btn-warning" disabled>Edytuj</button>
-            <button class="btn btn-primary btn-block btn-danger" disabled>Usuń</button>
-          </td>
-        </tr>
-      }
+      } @else {
+      <div class="no-results">
+        <mat-icon>event_busy</mat-icon>
+        <p>Brak zaplanowanych zajęć</p>
+        <button mat-raised-button color="primary" routerLink="/calendar">
+          <mat-icon>add</mat-icon>
+          Zarezerwuj termin
+        </button>
+      </div>
     }
-    </tbody>
-  }
-  </table>
-  <button (click)="synchronizeWithGoogleCalendar()" class="btn btn-primary btn-block">Zsynchronizuj z kalendarzem
-    Google
-  </button>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -1,1 +1,65 @@
-<p>student works!</p>
+<div class="student-profile">
+  <div class="profile-section">
+    <mat-card>
+      <mat-card-content>
+        <div class="profile-header">
+          <mat-icon class="profile-avatar">account_circle</mat-icon>
+          <div class="profile-info">
+            <h2>{{ userService.student?.name }} {{ userService.student?.surname }}</h2>
+            <p class="subtitle">Uczeń</p>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <mat-list>
+          <mat-list-item>
+            <mat-icon matListItemIcon>email</mat-icon>
+            <div matListItemTitle>Email</div>
+            <div matListItemLine>{{ userService.student?.email }}</div>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon matListItemIcon>phone</mat-icon>
+            <div matListItemTitle>Telefon</div>
+            <div matListItemLine>{{ userService.student?.phoneNumber }}</div>
+          </mat-list-item>
+        </mat-list>
+
+        <div class="action-buttons">
+          <button (click)="openEditDialog()" color="primary" mat-raised-button>
+            <mat-icon>edit</mat-icon>
+            Edytuj profil
+          </button>
+          <button (click)="openChangePasswordDialog()" color="warn" mat-stroked-button>
+            <mat-icon>lock</mat-icon>
+            Zmień hasło
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="statistics-section">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Statystyki</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <mat-icon matListItemIcon>event</mat-icon>
+            <div matListItemTitle>Zaplanowane zajęcia</div>
+            <div matListItemLine>{{ upcomingLessons }} lekcji</div>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon matListItemIcon>history</mat-icon>
+            <div matListItemTitle>Ukończone zajęcia</div>
+            <div matListItemLine>{{ completedLessons }} lekcji</div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

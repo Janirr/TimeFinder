@@ -32,10 +32,10 @@ public class TutorController {
         return ResponseEntity.ok(tutorService.getTutorById(id));
     }
 
-    @GetMapping("/{id}/calendar/{calendarId}")
-    public ResponseEntity<List<Event>> getTutorCalendar(@PathVariable Long id, @PathVariable String calendarId)
+    @GetMapping("/{id}/calendar/events")
+    public ResponseEntity<List<Event>> getTutorCalendar(@PathVariable Long id)
             throws GeneralSecurityException, IOException {
-        return ResponseEntity.ok(tutorService.getTutorCalendar(id, calendarId));
+        return ResponseEntity.ok(tutorService.getTutorCalendarEvents(id));
     }
 
     @GetMapping("/{id}/calendars")
@@ -47,7 +47,7 @@ public class TutorController {
     @GetMapping("/{id}/calendars/events")
     public ResponseEntity<List<List<Event>>> getTutorCalendarEvents(@PathVariable Long id)
             throws GeneralSecurityException, IOException {
-        return ResponseEntity.ok(tutorService.getTutorCalendarEvents(id));
+        return ResponseEntity.ok(tutorService.getTutorCalendarsEvents(id));
     }
 
     @GetMapping("/subject/{subject}")

@@ -5,7 +5,6 @@ import com.google.api.services.calendar.model.Event;
 import com.poznan.put.rest.webservice.restapi.configuration.CalendarConfig;
 import com.poznan.put.rest.webservice.restapi.controllers.requests.PricingRequest;
 import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
-import com.poznan.put.rest.webservice.restapi.jpa.PricingRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.TutorsRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.model.Pricing;
 import com.poznan.put.rest.webservice.restapi.jpa.model.Tutor;
@@ -16,17 +15,18 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TutorService {
     private final TutorsRepository tutorsRepository;
     private final CalendarConfig calendarConfig;
-    private final PricingRepository pricingRepository;
+    private final PricingService pricingService;
 
-    public TutorService(TutorsRepository tutorsRepository, CalendarConfig calendarConfig, PricingRepository pricingRepository) {
+    public TutorService(TutorsRepository tutorsRepository, CalendarConfig calendarConfig, PricingService pricingService) {
         this.tutorsRepository = tutorsRepository;
         this.calendarConfig = calendarConfig;
-        this.pricingRepository = pricingRepository;
+        this.pricingService = pricingService;
     }
 
     public List<Tutor> getAllTutors() {
@@ -38,9 +38,9 @@ public class TutorService {
                 .orElseThrow(() -> new ResourceNotFound("There is no tutor with id: " + id));
     }
 
-    public List<Event> getTutorCalendar(Long id, String calendarId) throws GeneralSecurityException, IOException {
+    public List<Event> getTutorCalendarEvents(Long id) throws GeneralSecurityException, IOException {
         Tutor tutor = getTutorById(id);
-        return calendarConfig.getEventsFromCalendar(tutor.getId(), calendarId);
+        return calendarConfig.getEventsFromCalendar(tutor.getId(), tutor.getCalendarId());
     }
 
     public List<CalendarListEntry> getTutorCalendars(Long id) throws GeneralSecurityException, IOException {
@@ -48,12 +48,12 @@ public class TutorService {
         return calendarConfig.getAllCalendarsForTutor(tutor.getId());
     }
 
-    public List<List<Event>> getTutorCalendarEvents(Long id) throws GeneralSecurityException, IOException {
+    public List<List<Event>> getTutorCalendarsEvents(Long id) throws GeneralSecurityException, IOException {
         Tutor tutor = getTutorById(id);
         List<List<Event>> events = new ArrayList<>();
         List<CalendarListEntry> calendars = calendarConfig.getAllCalendarsForTutor(tutor.getId());
         for (CalendarListEntry calendar : calendars) {
-            events.add(calendarConfig.getEventsFromCalendar(tutor.getId(), calendar.getId()));
+            events.add(calendarConfig.getEventsFromCalendar(tutor.getId(), tutor.getCalendarId()));
         }
         return events;
     }
@@ -71,7 +71,7 @@ public class TutorService {
 
     public List<Pricing> getPricingsForTutor(Long id) {
         Tutor tutor = getTutorById(id);
-        return pricingRepository.findAllByTutor(tutor);
+        return pricingService.findAllByTutor(tutor);
     }
 
     @Transactional
@@ -85,7 +85,23 @@ public class TutorService {
             pricing.setTutor(tutor);
             pricingArrayList.add(pricing);
         }
-        pricingRepository.deleteAllByTutor(tutor);
-        pricingRepository.saveAll(pricingArrayList);
+        pricingService.deleteAllByTutor(tutor);
+        pricingService.saveAll(pricingArrayList);
+    }
+
+    public Optional<Tutor> findByEmail(String email) {
+        return tutorsRepository.findByEmail(email);
+    }
+
+    public Optional<Tutor> findByPhoneNumber(String phoneNumber) {
+        return tutorsRepository.findByPhoneNumber(phoneNumber);
+    }
+
+    public Tutor save(Tutor tutor) {
+        return tutorsRepository.save(tutor);
+    }
+
+    public Optional<Tutor> findByEmailAndPassword(String email, String password) {
+        return tutorsRepository.findByEmailAndPassword(email, password);
     }
 }
