@@ -31,7 +31,7 @@ public class ReservationController {
         return reservationService.getReservationById(reservationId);
     }
 
-    @GetMapping("/google/tutor/{tutorId}/calendar/{calendarId}")
+    @GetMapping("/google/tutor/{tutorId}")
     public List<Event> getCalendarEventsFromCalendarByIds(@PathVariable int tutorId)
             throws GeneralSecurityException, IOException {
         return reservationService.getCalendarEventsFromCalendar(tutorId);

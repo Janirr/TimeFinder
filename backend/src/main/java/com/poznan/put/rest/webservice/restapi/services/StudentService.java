@@ -1,22 +1,22 @@
 package com.poznan.put.rest.webservice.restapi.services;
 
 import com.poznan.put.rest.webservice.restapi.exception.ResourceNotFound;
-import com.poznan.put.rest.webservice.restapi.jpa.ReservationRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.StudentRepository;
 import com.poznan.put.rest.webservice.restapi.jpa.model.Reservation;
 import com.poznan.put.rest.webservice.restapi.jpa.model.Student;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
-    private final ReservationRepository reservationRepository;
+    private final ReservationService reservationService;
 
-    public StudentService(StudentRepository studentRepository, ReservationRepository reservationRepository) {
+    public StudentService(StudentRepository studentRepository, ReservationService reservationService) {
         this.studentRepository = studentRepository;
-        this.reservationRepository = reservationRepository;
+        this.reservationService = reservationService;
     }
 
     public List<Student> getAllStudents() {
@@ -45,8 +45,14 @@ public class StudentService {
     public Reservation createReservationForStudent(int id, Reservation reservation) {
         Student student = getStudentById(id);
         reservation.setStudent(student);
-        return reservationRepository.save(reservation);
+        return reservationService.save(reservation);
     }
 
+    public Optional<Student> findByEmailAndPassword(String email, String password) {
+        return studentRepository.findByEmailAndPassword(email, password);
+    }
 
+    public Student save(Student student) {
+        return studentRepository.save(student);
+    }
 }

@@ -25,7 +25,6 @@ import java.util.List;
 
 @Service
 public class ReservationService {
-
     private final ReservationRepository reservationRepository;
     private final CalendarConfig calendarConfig;
     private final StudentService studentService;
@@ -161,5 +160,9 @@ public class ReservationService {
         event.setAttendees(attendees);
 
         return event;
+    }
+
+    public Reservation save(Reservation reservation) {
+        return reservationRepository.save(reservation);
     }
 }
