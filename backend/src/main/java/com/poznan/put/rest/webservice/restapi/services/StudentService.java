@@ -12,11 +12,9 @@ import java.util.Optional;
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
-    private final ReservationService reservationService;
 
-    public StudentService(StudentRepository studentRepository, ReservationService reservationService) {
+    public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
-        this.reservationService = reservationService;
     }
 
     public List<Student> getAllStudents() {
@@ -40,12 +38,6 @@ public class StudentService {
     public Student findStudentByEmailOrThrowException(String email) {
         return studentRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFound("There is no student with email: " + email));
-    }
-
-    public Reservation createReservationForStudent(int id, Reservation reservation) {
-        Student student = getStudentById(id);
-        reservation.setStudent(student);
-        return reservationService.save(reservation);
     }
 
     public Optional<Student> findByEmailAndPassword(String email, String password) {

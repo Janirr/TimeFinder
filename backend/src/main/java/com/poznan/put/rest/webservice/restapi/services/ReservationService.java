@@ -165,4 +165,10 @@ public class ReservationService {
     public Reservation save(Reservation reservation) {
         return reservationRepository.save(reservation);
     }
+
+    public Reservation createReservationForStudent(int studentId, Reservation reservation) {
+        Student student = studentService.getStudentById(studentId);
+        reservation.setStudent(student);
+        return save(reservation);
+    }
 }

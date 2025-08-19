@@ -2,6 +2,7 @@ package com.poznan.put.rest.webservice.restapi.controllers;
 
 import com.poznan.put.rest.webservice.restapi.jpa.model.Reservation;
 import com.poznan.put.rest.webservice.restapi.jpa.model.Student;
+import com.poznan.put.rest.webservice.restapi.services.ReservationService;
 import com.poznan.put.rest.webservice.restapi.services.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,11 @@ import java.util.List;
 @RequestMapping("/students")
 public class StudentController {
     private final StudentService studentService;
+    private final ReservationService reservationService;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, ReservationService reservationService) {
         this.studentService = studentService;
+        this.reservationService = reservationService;
     }
 
     @GetMapping
@@ -50,7 +53,7 @@ public class StudentController {
     @PostMapping("/{id}/reservations")
     public ResponseEntity<Reservation> createReservationForStudent(@PathVariable int id,
                                                                    @Valid @RequestBody Reservation reservation) {
-        Reservation savedReservation = studentService.createReservationForStudent(id, reservation);
+        Reservation savedReservation = reservationService.createReservationForStudent(id, reservation);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
