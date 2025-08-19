@@ -25,9 +25,7 @@ export class EditReservationComponent implements OnInit {
   }
 
   displayEvent() {
-    const calendarId = 'c0cc6a538c4604e5570b325de0095a2e9c1647adfc9c4e5f7bbc5efb71c5db57@group.calendar.google.com';
-
-    this.http.get<any>(`'/reservations/calendar/${calendarId}/event/${this.eventId}`)
+    this.http.get<any>(`'/reservations/event/${this.eventId}`)
       .subscribe(response => {
         this.event = response;
         this.tutor = response.tutor;

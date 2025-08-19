@@ -17,7 +17,7 @@ export class ReservationsComponent implements OnInit {
   reservations: any;
   studentReservations: any;
   tutorId: number = 1;
-  calendarId: string = 'c0cc6a538c4604e5570b325de0095a2e9c1647adfc9c4e5f7bbc5efb71c5db57@group.calendar.google.com';
+  calendarId: string = '';
   displayedColumns: string[] = ['date', 'startTime', 'endTime', 'description', 'actions'];
   dataSource = new MatTableDataSource<any>([]);
 
@@ -98,14 +98,14 @@ export class ReservationsComponent implements OnInit {
 
   synchronizeWithGoogleCalendar() {
     if (this.authService.isStudentLoggedIn()) {
-      this.httpService.get(`/reservations/tutor/${this.tutorId}/calendar/${this.calendarId}/student/${this.userService.student.email}`).subscribe(
+      this.httpService.get(`/reservations/tutor/${this.tutorId}/student/${this.userService.student.email}`).subscribe(
         response => {
           console.log(response);
           this.ngOnInit()
         }
       );
     } else {
-      this.httpService.get(`/reservations/tutor/${this.tutorId}/calendar/${this.calendarId}`).subscribe(
+      this.httpService.get(`/reservations/tutor/${this.tutorId}`).subscribe(
         response => {
           console.log(response);
           this.ngOnInit()
