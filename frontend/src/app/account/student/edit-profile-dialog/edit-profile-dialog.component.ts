@@ -26,29 +26,37 @@ import {CommonModule} from '@angular/common';
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Imię</mat-label>
           <input matInput formControlName="name" required>
-          <mat-error *ngIf="profileForm.get('name')?.hasError('required')">
-            Imię jest wymagane
-          </mat-error>
+          @if (profileForm.get('name')?.hasError('required')) {
+            <mat-error>
+              Imię jest wymagane
+            </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Nazwisko</mat-label>
           <input matInput formControlName="surname" required>
-          <mat-error *ngIf="profileForm.get('surname')?.hasError('required')">
-            Nazwisko jest wymagane
-          </mat-error>
+          @if (profileForm.get('surname')?.hasError('required')) {
+            <mat-error>
+              Nazwisko jest wymagane
+            </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Telefon</mat-label>
           <input matInput formControlName="phoneNumber" required>
           <mat-icon matSuffix>phone</mat-icon>
-          <mat-error *ngIf="profileForm.get('phoneNumber')?.hasError('required')">
-            Numer telefonu jest wymagany
-          </mat-error>
-          <mat-error *ngIf="profileForm.get('phoneNumber')?.hasError('pattern')">
-            Wprowadź poprawny numer telefonu
-          </mat-error>
+          @if (profileForm.get('phoneNumber')?.hasError('required')) {
+            <mat-error>
+              Numer telefonu jest wymagany
+            </mat-error>
+          }
+          @if (profileForm.get('phoneNumber')?.hasError('pattern')) {
+            <mat-error>
+              Wprowadź poprawny numer telefonu
+            </mat-error>
+          }
         </mat-form-field>
       </form>
     </mat-dialog-content>

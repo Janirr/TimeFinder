@@ -10,9 +10,11 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Czas trwania zajęć</mat-label>
           <mat-select [(ngModel)]="lessonTime" name="lessonTime" required>
-            <mat-option *ngFor="let time of lessonTimes" [value]="time">
-              {{ time }} minut
-            </mat-option>
+            @for (time of lessonTimes; track time) {
+              <mat-option [value]="time">
+                {{ time }} minut
+              </mat-option>
+            }
           </mat-select>
           <mat-icon matSuffix>schedule</mat-icon>
           <mat-hint>Wybierz długość lekcji</mat-hint>
@@ -21,9 +23,11 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Nauczyciel</mat-label>
           <mat-select [(ngModel)]="tutorId" name="tutorId" required>
-            <mat-option *ngFor="let tutor of tutors" [value]="tutor.id">
-              {{ tutor.name }} {{ tutor.surname }}
-            </mat-option>
+            @for (tutor of tutors; track tutor.id) {
+              <mat-option [value]="tutor.id">
+                {{ tutor.name }} {{ tutor.surname }}
+              </mat-option>
+            }
           </mat-select>
           <mat-icon matSuffix>school</mat-icon>
           <mat-hint>Wybierz nauczyciela</mat-hint>
@@ -38,33 +42,41 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card *ngIf="formSubmitted" class="calendar-results">
-    <mat-card-header>
-      <mat-card-title>Dostępne terminy</mat-card-title>
-      <mat-card-subtitle>Wybierz odpowiadający Ci termin</mat-card-subtitle>
-    </mat-card-header>
+  @if (formSubmitted) {
+    <mat-card class="calendar-results">
+      <mat-card-header>
+        <mat-card-title>Dostępne terminy</mat-card-title>
+        <mat-card-subtitle>Wybierz odpowiadający Ci termin</mat-card-subtitle>
+      </mat-card-header>
 
-    <mat-card-content>
-      <div *ngIf="events.length > 0" class="calendar-grid">
-        <mat-card (click)="onEventClick(event)" *ngFor="let event of events"
-                  [class.selected]="selectedEventId === event.id"
-                  class="time-slot">
-          <mat-card-content>
-            <div class="d-flex align-items-center">
-              <mat-icon>event</mat-icon>
-              <span class="ms-2">{{ event.start | date:'medium' }}</span>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
+      <mat-card-content>
+        @if (events?.length > 0) {
+          <div class="calendar-grid">
+            @for (event of events; track event.id) {
+              <mat-card (click)="onEventClick(event)"
+                        [class.selected]="selectedEventId === event.id"
+                        class="time-slot">
+                <mat-card-content>
+                  <div class="d-flex align-items-center">
+                    <mat-icon>event</mat-icon>
+                    <span class="ms-2">{{ event.start | date:'medium' }}</span>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        }
 
-      <div *ngIf="formSubmitted && (!events || events.length === 0)" class="no-results">
-        <mat-icon class="d-block mx-auto mb-3" style="font-size: 48px; height: 48px; width: 48px;">
-          event_busy
-        </mat-icon>
-        <p class="mat-h2">Brak dostępnych terminów</p>
-        <p class="mat-body-1">Spróbuj wybrać innego nauczyciela lub zmienić czas trwania zajęć</p>
-      </div>
-    </mat-card-content>
-  </mat-card>
+        @if (formSubmitted && (!events || events.length === 0)) {
+          <div class="no-results">
+            <mat-icon class="d-block mx-auto mb-3" style="font-size: 48px; height: 48px; width: 48px;">
+              event_busy
+            </mat-icon>
+            <p class="mat-h2">Brak dostępnych terminów</p>
+            <p class="mat-body-1">Spróbuj wybrać innego nauczyciela lub zmienić czas trwania zajęć</p>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
 </div>
